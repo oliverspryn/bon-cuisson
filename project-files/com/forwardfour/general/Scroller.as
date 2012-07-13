@@ -17,6 +17,7 @@ package com.forwardfour.general {
 	import flash.display.Sprite;
 	import flash.display.Stage;
 	import flash.events.Event;
+	import flash.events.EventDispatcher;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
 	
@@ -31,12 +32,22 @@ package com.forwardfour.general {
  * @version    1.0
 */
 
-	public class Scroller {
+	public class Scroller extends EventDispatcher {
 		
 	/**
 	 * Configuration
 	 * ----------------------------------------------------------------------------
 	*/
+	
+	/**
+	 * Set the percentage of change that the target will scroll for
+	 * each click of the up or down arrows
+	 *
+	 * @access     public
+	 * @var        Number
+	*/
+	
+		public var arrowClickScrollDelta:Number = 5;
 	
 	/**
 	 * Set the height of the up and down arrows
@@ -57,7 +68,7 @@ package com.forwardfour.general {
 		public var arrowWidth:Number = 7;
 	
 	/**
-	 * Set the color of the thumb and scroll arrows
+	 * Set the color of the thumb, track, and scroll arrows
 	 *
 	 * Prefix the hexadecimal value with a "0x"
 	 *
@@ -68,7 +79,7 @@ package com.forwardfour.general {
 		public var color:uint = 0xFFFFFF;
 		
 	/**
-	 * Set the thumb and arrows' distance from the side of the container
+	 * Set the thumb and arrow distances from the side of the container
 	 *
 	 * @access     public
 	 * @var        Number
@@ -98,6 +109,27 @@ package com.forwardfour.general {
 	*/
 	
 		public var includeArrows:Boolean = true;
+		
+	/**
+	 * Whether or not the class should add a slider track
+	 *
+	 * Defaults to false
+	 *
+	 * @access     public
+	 * @var        Boolean
+	*/
+	
+		public var includeTrack:Boolean = true;
+		
+	/**
+	 * Set the percentage of change that the target will scroll for
+	 * each minor rotation of the mouse wheel
+	 *
+	 * @access     public
+	 * @var        Number
+	*/
+	
+		public var mouseWheelScrollDelta:Number = 5;
 		
 	/**
 	 * Set the alpha property of the thumb when the mouse is not 
@@ -141,6 +173,15 @@ package com.forwardfour.general {
 		public var thumbWidth:Number = 7;
 		
 	/**
+	 * Set the width of the track
+	 *
+	 * @access     public
+	 * @var        Number
+	*/
+	
+		public var trackWidth:Number = 1;
+		
+	/**
 	 * Modified by the class, accessable by getter methods
 	 * ----------------------------------------------------------------------------
 	*/
@@ -155,7 +196,30 @@ package com.forwardfour.general {
 	 * @var        Number
 	*/
 	
-		private var privateScrollPercent:Number = 0;
+		private var _scrollPercent:Number = 0;
+		
+	/**
+	 * Dispatched events
+	 * ----------------------------------------------------------------------------
+	*/
+	
+		public static const INITIALIZED:String = "initializedScroller";
+		public static const THUMB_CREATED:String = "thumbCreated";
+		public static const UP_ARROW_CREATED:String = "upArrowCreated";
+		public static const DOWN_ARROW_CREATED:String = "downArrowCreated";
+		public static const TRACK_CREATED:String = "trackCreated";
+		public static const SCROLL_BAR_VISIBLE:String = "scrollBarVisible";
+		public static const MOUSE_OVER:String = "mouseOverScroller";
+		public static const MOUSE_OUT:String = "mouseOutScroller";
+		public static const MOUSE_UP:String = "mouseUpScroller";
+		public static const MOUSE_WHEEL:String = "mouseWheelScroller";
+		public static const MOUSE_DOWN:String = "mouseDownScroller";
+		public static const MOUSE_DOWN_THUMB:String = "mouseDownThumb";
+		public static const MOVING_THUMB:String = "movingThumb";
+		public static const MOUSE_DOWN_UP_ARROW:String = "mouseDownUpArrow";
+		public static const UP_ARROW_SCROLLING:String = "upArrowScrolling";
+		public static const MOUSE_DOWN_DOWN_ARROW:String = "mouseDownDownArrow";
+		public static const DOWN_ARROW_SCROLLING:String = "downArrowScrolling";
 	
 	/**
 	 * Class usage only
@@ -215,13 +279,21 @@ package com.forwardfour.general {
 		private var target:MovieClip;
 		
 	/**
-	 * Globalize a private instance of the thumb that is created in the 
-	 * constructor to allow interaction with this object
+	 * Globalize a private instance of the thumb that will to allow interaction
+	 * with this object
 	 *
 	 * @access     private
 	 * @var        Sprite
 	*/
 		private var thumb:Sprite;
+		
+	/**
+	 * Globalize a private instance of the track that the thumb will slide on
+	 *
+	 * @access     private
+	 * @var        Sprite
+	*/
+		private var track:Sprite;
 		
 	/**
 	 * The number of pixels from the top of the stage that the thumb may 
@@ -265,6 +337,9 @@ package com.forwardfour.general {
 	 * This method globalizes a references to the target object, container,
 	 * and stage
 	 *
+	 * Dispatched events:
+	 *  - Scroller.INITIALIZED
+	 *
 	 * @param      MovieClip   target     The MovieClip which will be scrolled
 	 * @param      MovieClip   container  The viewport movieclip, which masks the overflown content from target
 	 * @param      Stage       stageRef   The stage object from the main application
@@ -276,31 +351,41 @@ package com.forwardfour.general {
 			this.target = target;
 			this.container = container;
 			this.stageRef = stage;
+			
+		//Dispatch required events
+			super.dispatchEvent(new Event(Scroller.INITIALIZED));
 		}
 		
 	/**
 	 * A getter function which allows read-only access (to applications 
-	 * using this class)to the private privateScrollPercent instance
-	 * variable
+	 * using this class)to the private _scrollPercent instance variable
 	 *
 	 * @access     public
 	 * @return     Number
 	*/
 	
 		public function get scrollPercent():Number {
-			return this.privateScrollPercent;
+			return this._scrollPercent;
 		}
 		
 	/**
 	 * This method performs the following actions:
 	 *  - [1] checks if the configuration allows the use of arrows
 	 *  - [2] checkes to see if a scroller is needed
-	 *  - [3] if so, it creates the thumb according to configuration specs
-	 *  - [4] creates an up arrow, if an arrow is set to be created
-	 *  - [5] creates a down arrow, if an arrow is set to be created
-	 *  - [6] attaches necessary event listeners
-	 *  - [7] adds these objects to the stage
-	 *  - [8] calculates the thumb's possible range of movement
+	 *  - [3] if so, it will create a slider track, if a track is set to be created
+	 *  - [4] creates the thumb according to configuration specs
+	 *  - [5] creates an up arrow, if an arrow is set to be created
+	 *  - [6] creates a down arrow, if an arrow is set to be created
+	 *  - [7] attaches necessary event listeners
+	 *  - [8] adds these objects to the stage
+	 *  - [9] calculates the thumb's possible range of movement
+	 *
+	 * Dispatched events:
+	 *  - Scroller.THUMB_CREATED
+	 *  - Scroller.UP_ARROW_CREATED
+	 *  - Scroller.DOWN_ARROW_CREATED
+	 *  - Scroller.TRACK_CREATED
+	 *  - Scroller.SCROLL_BAR_VISIBLE
 	 *
 	 * @access     public
 	 * @return     void
@@ -313,11 +398,6 @@ package com.forwardfour.general {
 				this.arrowHeight = 0;
 				this.thumbDistanceFromArrows = 0;
 			}
-			
-		/**
-		 * Generate the thumb
-		 * ----------------------------------------------------------------------------
-		*/
 			
 		/*
 		 * Calculate the required height of the thumb
@@ -340,6 +420,11 @@ package com.forwardfour.general {
 					height = 30;
 				}
 				
+			/**
+			 * Generate the thumb
+			 * ----------------------------------------------------------------------------
+			*/
+				
 			//Create a thumb
 				this.thumb = new Sprite();
 				this.thumb.alpha = this.normalAlpha;
@@ -361,6 +446,9 @@ package com.forwardfour.general {
 						this.thumb.y = this.container.y + this.distanceFromSide + this.arrowHeight + this.thumbDistanceFromArrows;
 						break;
 				}
+				
+			//Dispatch required events
+				super.dispatchEvent(new Event(Scroller.INITIALIZED));
 				
 			/**
 			 * Generate the up arrow
@@ -401,6 +489,9 @@ package com.forwardfour.general {
 					}
 					
 					this.upButton.graphics.endFill();
+					
+				//Dispatch required events
+					super.dispatchEvent(new Event(Scroller.UP_ARROW_CREATED));
 				}
 				
 			/**
@@ -442,6 +533,43 @@ package com.forwardfour.general {
 					}
 					
 					this.downButton.graphics.endFill();
+					
+				//Dispatch required events
+					super.dispatchEvent(new Event(Scroller.DOWN_ARROW_CREATED));
+				}
+				
+			/**
+			 * Generate the track
+			 * ----------------------------------------------------------------------------
+			*/
+			
+				if (this.includeTrack) {
+				//Create a track
+					this.track = new Sprite();
+					this.track.alpha = this.normalAlpha;
+					this.track.name = "ScrollerUITrack";
+					this.track.graphics.lineStyle(this.trackWidth, this.color);
+					
+				//Place it on the stage
+					switch (this.position) {
+						case "left" : 
+							this.track.graphics.moveTo(this.container.x + (this.thumb.width / 2) + this.distanceFromSide,
+													   this.container.y + this.distanceFromSide + this.arrowHeight + this.thumbDistanceFromArrows);
+							this.track.graphics.lineTo(this.container.x + (this.thumb.width / 2) + this.distanceFromSide,
+													   this.container.y + this.container.height - (this.distanceFromSide + this.arrowHeight + this.thumbDistanceFromArrows));
+							break;
+							
+						case "right" : 
+						default : 
+							this.track.graphics.moveTo(this.container.x + this.container.width - ((this.thumb.width / 2) + this.distanceFromSide),
+													   this.container.y + this.distanceFromSide + this.arrowHeight + this.thumbDistanceFromArrows);
+							this.track.graphics.lineTo(this.container.x + this.container.width - ((this.thumb.width / 2) + this.distanceFromSide),
+													   this.container.y + this.container.height - (this.distanceFromSide + this.arrowHeight + this.thumbDistanceFromArrows));
+							break;
+					}
+					
+				//Dispatch required events
+					super.dispatchEvent(new Event(Scroller.TRACK_CREATED));
 				}
 				
 			/**
@@ -452,6 +580,7 @@ package com.forwardfour.general {
 				
 			//Add the needed event listeners
 				this.stageRef.addEventListener(MouseEvent.MOUSE_UP, mouseUpHandler);
+				this.stageRef.addEventListener(MouseEvent.MOUSE_WHEEL, mouseWheelHandler);
 				
 				this.thumb.addEventListener(MouseEvent.MOUSE_OVER, mouseOverHandler);
 				this.thumb.addEventListener(MouseEvent.MOUSE_OUT, mouseOutHandler);
@@ -467,13 +596,25 @@ package com.forwardfour.general {
 					this.downButton.addEventListener(MouseEvent.MOUSE_DOWN, mouseDownDownButtonHandler);
 				}
 				
+				if (this.includeArrows) {
+					this.track.addEventListener(MouseEvent.MOUSE_OVER, mouseOverHandler);
+					this.track.addEventListener(MouseEvent.MOUSE_OUT, mouseOutHandler);
+				}
+				
 			//Add the created objects to the container
+				if (this.includeTrack) {
+					this.stageRef.addChild(this.track);
+				}
+			
 				this.stageRef.addChild(this.thumb);
 				
 				if (this.includeArrows) {
 					this.stageRef.addChild(this.upButton);
 					this.stageRef.addChild(this.downButton);
 				}
+				
+			//Dispatch required events
+				super.dispatchEvent(new Event(Scroller.SCROLL_BAR_VISIBLE));
 				
 			//Calculate the thumb's range of movement
 				this.padding = this.distanceFromSide + this.arrowHeight + this.thumbDistanceFromArrows;
@@ -488,7 +629,10 @@ package com.forwardfour.general {
 	*/
 		
 	/**
-	 * Transition the thumb and arrows into the hover state
+	 * Transition the thumb, track, and arrows into the hover state
+	 *
+	 * Dispatched events:
+	 *  - Scroller.MOUSE_OVER
 	 *
 	 * @param      MouseEvent  e          A reference to the event that was dispatched
 	 * @access     private
@@ -502,16 +646,26 @@ package com.forwardfour.general {
 				transitionItems.push(this.upButton, this.downButton);
 			}
 			
+			if (this.includeTrack) {
+				transitionItems.push(this.track);
+			}
+			
 		//Perform the transition to the hover state view
 			TweenMax.allTo(transitionItems, 0.25, {
 							alpha : this.hoverAlpha
 						});
+						
+		//Dispatch required events
+			super.dispatchEvent(new Event(Scroller.MOUSE_OVER));
 		}
 		
 	/**
 	 * If no part of the scoller has has a pointer over it, return
 	 * it to the normal state, that is, if there the user does not have
 	 * the mouse down
+	 *
+	 * Dispatched events:
+	 *  - Scroller.MOUSE_OUT
 	 *
 	 * @param      MouseEvent  e          A reference to the event that was dispatched
 	 * @access     private
@@ -525,18 +679,29 @@ package com.forwardfour.general {
 				if (this.includeArrows) {
 					transitionItems.push(this.upButton, this.downButton);
 				}
+				
+				if (this.includeTrack) {
+					transitionItems.push(this.track);
+				}
 			
 			//Return the thumb back to the normal state
 				TweenMax.allTo(transitionItems, 0.25, {
 								alpha : this.normalAlpha
 							});
 			}
+			
+		//Dispatch required events
+			super.dispatchEvent(new Event(Scroller.MOUSE_OUT));
 		}
 		
 	/**
 	 * Stop the vertical scrolling of the thumb and target when the 
-	 * mouse is released, return the thumb and arrows to the normal
-	 * state, and remove the event listeners that initiate scrolling
+	 * mouse is released, return the thumb, track, and arrows to th
+	 * normal state, and remove the event listeners that initiate 
+	 * scrolling
+	 *
+	 * Dispatched events:
+	 *  - Scroller.MOUSE_UP
 	 *
 	 * @param      MouseEvent  e          A reference to the event that was dispatched
 	 * @access     private
@@ -550,6 +715,10 @@ package com.forwardfour.general {
 				if (this.includeArrows) {
 					transitionItems.push(this.upButton, this.downButton);
 				}
+					
+				if (this.includeTrack) {
+					transitionItems.push(this.track);
+				}
 			
 			//Return the thumb back to the normal state
 				TweenMax.allTo(transitionItems, 0.25, {
@@ -562,6 +731,63 @@ package com.forwardfour.general {
 			this.stageRef.removeEventListener(MouseEvent.MOUSE_MOVE, mouseMoveThumbHandler);
 			this.stageRef.removeEventListener(Event.ENTER_FRAME, scrollUpHandler);
 			this.stageRef.removeEventListener(Event.ENTER_FRAME, scrollDownHandler);
+			
+		//Dispatch required events
+			super.dispatchEvent(new Event(Scroller.MOUSE_UP));
+		}
+		
+	/**
+	 * Calculate the position of the thumb and target based on the 
+	 * rotation of the mouse wheel
+	 *
+	 * Dispatched events:
+	 *  - Scroller.MOUSE_WHEEL
+	 *
+	 * @param      MouseEvent  e          A reference to the event that was dispatched
+	 * @access     private
+	 * @return     void
+	*/
+		
+		private function mouseWheelHandler(e:MouseEvent):void {
+		//Decrement the scroll percentage by a given percent
+			this._scrollPercent *= 100;
+			this._scrollPercent -= (e.delta / 3) * this.mouseWheelScrollDelta; //e.delta is always either 3 or -3
+			this._scrollPercent /= 100;
+			
+		//Don't let the thumb and target go to high...
+			if (this._scrollPercent < 0) {
+				this._scrollPercent = 0;
+			}
+			
+		//... or too low :)
+			if (this._scrollPercent > 1) {
+				this._scrollPercent = 1;
+			}
+			
+		/*
+		 * Update the position of the target
+		 *	
+		 * Calculation proceeds as follows:
+		 *  - find the y-position of the container
+		 *  - find the height of the target and subtract that from the 
+		 *    height of the container (which is always smaller if a scroller
+		 *    is present). This prevents the bottom of the target from 
+		 *    scrolling up to where the top of the target was located before
+		 *    the user used the scrollbar, whenever the thumb is moved to the
+		 *    bottom
+		 *  - multiply this value by the scroll percentage value
+		 *  - subtract the multiplied value from the y position of the 
+		 *    container
+		*/
+			
+			this.target.y = this.container.y - ((this.target.height - this.container.height) * this._scrollPercent);
+			
+		//Update the position of the thumb
+			var range:Number = this.bottom - this.top;
+			this.thumb.y = this.top + (this._scrollPercent * range);
+			
+		//Dispatch required events
+			super.dispatchEvent(new Event(Scroller.MOUSE_WHEEL));
 		}
 		
 	/**
@@ -574,6 +800,10 @@ package com.forwardfour.general {
 	 * position of the stage. Also, now that the mouse is down, add an
 	 * event to listen for movement
 	 *
+	 * Dispatched events:
+	 *  - Scroller.MOUSE_DOWN
+	 *  - Scroller.MOUSE_DOWN_THUMB
+	 *
 	 * @param      MouseEvent  e          A reference to the event that was dispatched
 	 * @access     private
 	 * @return     void
@@ -584,6 +814,10 @@ package com.forwardfour.general {
 			
 		//... to move the thumb up or down
 			this.stageRef.addEventListener(MouseEvent.MOUSE_MOVE, mouseMoveThumbHandler);
+			
+		//Dispatch required events
+			super.dispatchEvent(new Event(Scroller.MOUSE_DOWN));
+			super.dispatchEvent(new Event(Scroller.MOUSE_DOWN_THUMB));
 		}
 		
 	/**
@@ -591,6 +825,9 @@ package com.forwardfour.general {
 	 * let the track go above or below the arrows (if any are present,
 	 * use the container if no arrows are displaying). Also update the 
 	 * percentage that the thumb has scrolled on its track.
+	 *
+	 * Dispatched events:
+	 *  - Scroller.MOVING_THUMB
 	 *
 	 * @param      MouseEvent  e          A reference to the event that was dispatched
 	 * @access     private
@@ -614,7 +851,7 @@ package com.forwardfour.general {
 			
 		//Calculate the percentage that the thumb has scrolled
 			var avaliableScrollRegion:Number = this.container.height - this.thumb.height - (2 * padding);
-			this.privateScrollPercent = (this.thumb.y - top) / avaliableScrollRegion;
+			this._scrollPercent = (this.thumb.y - top) / avaliableScrollRegion;
 			
 		/*
 		 * Update the position of the target
@@ -631,7 +868,10 @@ package com.forwardfour.general {
 		 *  - subtract the multiplied value from the y position of the 
 		 *    container
 		*/
-			this.target.y = this.container.y - ((this.target.height - this.container.height) * this.privateScrollPercent);
+			this.target.y = this.container.y - ((this.target.height - this.container.height) * this._scrollPercent);
+			
+		//Dispatch required events
+			super.dispatchEvent(new Event(Scroller.MOVING_THUMB));
 		}
 		
 	/**
@@ -639,33 +879,54 @@ package com.forwardfour.general {
 	 * ----------------------------------------------------------------------------
 	*/
 	
+	/**
+	 * When the scroller up arrow is clicked, add an event listener for
+	 * each new frame that the played. This will allow the user to 
+	 * scroll up by clicking and holding the up arrow
+	 *
+	 * Dispatched events:
+	 *  - Scroller.MOUSE_DOWN
+	 *  - Scroller.MOUSE_DOWN_UP_ARROW
+	 *
+	 * @param      MouseEvent  e          A reference to the event that was dispatched
+	 * @access     private
+	 * @return     void
+	*/
+	
 		private function mouseDownUpButtonHandler(e:MouseEvent):void {
 			this.stageRef.addEventListener(Event.ENTER_FRAME, scrollUpHandler);
+			
+		//Dispatch required events
+			super.dispatchEvent(new Event(Scroller.MOUSE_DOWN));
+			super.dispatchEvent(new Event(Scroller.MOUSE_DOWN_UP_ARROW));
 		}
 		
 	/**
 	 * Update the vertical position of the thumb and target, and don't
-	 * let the track go above or below the arrows (if any are present,
+	 * let the thumb go above or below the arrows (if any are present,
 	 * use the container if no arrows are displaying). Also update the 
 	 * percentage that the thumb has scrolled on its track.
+	 *
+	 * Dispatched events:
+	 *  - Scroller.UP_ARROW_SCROLLING
 	 *
 	 * @param      Event       e          A reference to the event that was dispatched
 	 * @access     private
 	 * @return     void
 	*/
 		private function scrollUpHandler(e:Event):void {
-		//Decrement the scroll percentage by 1 percent
-			this.privateScrollPercent *= 100;
-			this.privateScrollPercent -= 5;
-			this.privateScrollPercent /= 100;
+		//Decrement the scroll percentage by a given percent
+			this._scrollPercent *= 100;
+			this._scrollPercent -= this.arrowClickScrollDelta;
+			this._scrollPercent /= 100;
 			
-			if (this.privateScrollPercent < 0) {
-				this.privateScrollPercent = 0;
+			if (this._scrollPercent < 0) {
+				this._scrollPercent = 0;
 			}
 			
 		//Update the position of the thumb
 			var range:Number = this.bottom - this.top;
-			this.thumb.y = this.top + (this.privateScrollPercent * range);
+			this.thumb.y = this.top + (this._scrollPercent * range);
 			
 		//Don't let the thumb go to high...
 			if (this.thumb.y < top) {
@@ -692,7 +953,10 @@ package com.forwardfour.general {
 		 *  - subtract the multiplied value from the y position of the 
 		 *    container
 		*/
-			this.target.y = this.container.y - ((this.target.height - this.container.height) * this.privateScrollPercent);
+			this.target.y = this.container.y - ((this.target.height - this.container.height) * this._scrollPercent);
+			
+		//Dispatch required events
+			super.dispatchEvent(new Event(Scroller.UP_ARROW_SCROLLING));
 		}
 	
 	/**
@@ -700,33 +964,54 @@ package com.forwardfour.general {
 	 * ----------------------------------------------------------------------------
 	*/
 	
+	/**
+	 * When the scroller down arrow is clicked, add an event listener for
+	 * each new frame that the played. This will allow the user to 
+	 * scroll down by clicking and holding the down arrow
+	 *
+	 * Dispatched events:
+	 *  - Scroller.MOUSE_DOWN
+	 *  - Scroller.MOUSE_DOWN_DOWN_ARROW
+	 *
+	 * @param      MouseEvent  e          A reference to the event that was dispatched
+	 * @access     private
+	 * @return     void
+	*/
+	
 		private function mouseDownDownButtonHandler(e:MouseEvent):void {
 			this.stageRef.addEventListener(Event.ENTER_FRAME, scrollDownHandler);
+			
+		//Dispatch required events
+			super.dispatchEvent(new Event(Scroller.MOUSE_DOWN));
+			super.dispatchEvent(new Event(Scroller.MOUSE_DOWN_DOWN_ARROW));
 		}
 		
 	/**
 	 * Update the vertical position of the thumb and target, and don't
-	 * let the track go above or below the arrows (if any are present,
+	 * let the thumb go above or below the arrows (if any are present,
 	 * use the container if no arrows are displaying). Also update the 
 	 * percentage that the thumb has scrolled on its track.
+	 *
+	 * Dispatched events:
+	 *  - Scroller.DOWN_ARROW_SCROLLING
 	 *
 	 * @param      Event       e          A reference to the event that was dispatched
 	 * @access     private
 	 * @return     void
 	*/
 		private function scrollDownHandler(e:Event):void {
-		//Decrement the scroll percentage by 1 percent
-			this.privateScrollPercent *= 100;
-			this.privateScrollPercent += 5;
-			this.privateScrollPercent /= 100;
+		//Increment the scroll percentage by a given percent
+			this._scrollPercent *= 100;
+			this._scrollPercent += this.arrowClickScrollDelta;
+			this._scrollPercent /= 100;
 			
-			if (this.privateScrollPercent > 1) {
-				this.privateScrollPercent = 1;
+			if (this._scrollPercent > 1) {
+				this._scrollPercent = 1;
 			}
 			
 		//Update the position of the thumb
 			var range:Number = this.bottom - this.top;
-			this.thumb.y = this.top + (this.privateScrollPercent * range);
+			this.thumb.y = this.top + (this._scrollPercent * range);
 			
 		//Don't let the thumb go to high...
 			if (this.thumb.y < top) {
@@ -753,7 +1038,10 @@ package com.forwardfour.general {
 		 *  - subtract the multiplied value from the y position of the 
 		 *    container
 		*/
-			this.target.y = this.container.y - ((this.target.height - this.container.height) * this.privateScrollPercent);
+			this.target.y = this.container.y - ((this.target.height - this.container.height) * this._scrollPercent);
+			
+		//Dispatch required events
+			super.dispatchEvent(new Event(Scroller.DOWN_ARROW_SCROLLING));
 		}
 		
 	/**
@@ -761,12 +1049,19 @@ package com.forwardfour.general {
 	 * ----------------------------------------------------------------------------
 	*/
 		
+	/**
+	 * Check if the pointer is hovering over one of the scroller items
+	 *
+	 * @access     private
+	 * @return     Boolean
+	*/
+		
 		private function mouseOverScrollerElement():Boolean {
 		//Create a point for testing whether or not the scroller lies underneith it
 			var testPoint:Point = new Point(this.stageRef.mouseX, this.stageRef.mouseY);
 			
 		//Check for the names of the retrieved objects match the names given to scroller components
-			var partNames:Array = new Array("ScrollerUIThumb", "ScrollerUIUpArrow", "ScrollerUIDownArrow");
+			var partNames:Array = new Array("ScrollerUIThumb", "ScrollerUIUpArrow", "ScrollerUIDownArrow", "ScrollerUITrack");
 			var objectsUnderPoint:Array = this.stageRef.getObjectsUnderPoint(testPoint);
 			
 			for (var i:int = 0; i <= objectsUnderPoint.length - 1; i ++) {
