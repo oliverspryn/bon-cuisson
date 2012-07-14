@@ -55,7 +55,7 @@
 			this.container.mouseChildren = false;
 			
 		//Create the text field
-			var customFont:Font = Font(new LogoFont());
+			var customFont:Font = Font(new SecondaryFont());
 			var format:TextFormat = new TextFormat();
 			format.align = TextFormatAlign.CENTER;
 			format.font = customFont.fontName;
@@ -72,16 +72,8 @@
 			text.x = this.x;
 			text.y = this.y - 20; //Subtract 20px, since this will slide into place when created
 			
-		//Create a line underneith the text
-			var line:Shape = new Shape();
-			line.alpha = 0;
-			line.graphics.lineStyle(1, this.color);
-			line.graphics.moveTo(this.x, this.y + this.fontSize + 7);
-			line.graphics.lineTo(this.x + 100, this.y + this.fontSize + 7);
-			
 		//Add them to the stage
 			this.container.addChild(text);
-			this.container.addChild(line);
 			this.place.addChild(container);
 			
 		//Transition the text into view
@@ -89,12 +81,6 @@
 							alpha : 1,
 							ease : Bounce.easeOut,
 							y : this.y
-						});
-						
-		//Transition the line into view
-			TweenMax.to(line, this.animateDuration, {
-							alpha : 1,
-							ease : Linear.easeNone
 						});
 						
 		//Listen for roll over and roll outs

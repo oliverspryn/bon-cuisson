@@ -596,7 +596,7 @@ package com.forwardfour.general {
 					this.downButton.addEventListener(MouseEvent.MOUSE_DOWN, mouseDownDownButtonHandler);
 				}
 				
-				if (this.includeArrows) {
+				if (this.includeTrack) {
 					this.track.addEventListener(MouseEvent.MOUSE_OVER, mouseOverHandler);
 					this.track.addEventListener(MouseEvent.MOUSE_OUT, mouseOutHandler);
 				}
