@@ -15,4 +15,11 @@
 		<nature>com.adobe.flexbuilder.project.flexnature</nature>
 		<nature>com.adobe.flexbuilder.project.actionscriptnature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>services/FoodcategoriesService.php</name>
+			<type>1</type>
+			<location>C:/Web Development/wamp/www/Bon Cuisson/project-files/bin-debug/services/FoodcategoriesService.php</location>
+		</link>
+	</linkedResources>
 </projectDescription>

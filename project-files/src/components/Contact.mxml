@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx">
+	<fx:Script>
+		<![CDATA[
+			import flash.net.navigateToURL;
+			
+			[Bindable]
+			private var address:String = "118 Edgewood Road";
+			
+			[Bindable]
+			private var phone:String = "Tele: 724-841-0747";
+			
+			[Bindable]
+			private var email:String = "dawn@boncuisson.com";
+			
+			private function sendEmail(event:MouseEvent):void {
+				var loader:URLRequest = new URLRequest("mailto:" + this.email);
+				navigateToURL(loader, "_blank");
+			}
+		]]>
+	</fx:Script>
+	
+<!-- Include the required stylesheet -->
+	<fx:Style source="../styles/TaglineFont.css"/>
+	
+<!-- Write out the contact information -->
+	<s:RichText x="10" y="12" fontSize="15" styleName="tagline" text="{this.address}"/>
+	<s:RichText x="10" y="43" fontSize="15" styleName="tagline" text="{this.phone}"/>
+	<s:RichText x="10" y="72" buttonMode="true" click="sendEmail(event)" color="#ADEAEA"
+				fontSize="15" styleName="tagline" text="{this.email}"
+				textDecoration="none"/>
+</s:Group>

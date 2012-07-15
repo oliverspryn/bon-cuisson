@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 addedToStage="init(event)" xmlns:images="assets.images.*">
+	<fx:Script>
+		<![CDATA[
+			import com.greensock.*;
+			import com.greensock.plugins.BlurFilterPlugin;
+			
+			import flash.filters.BitmapFilterQuality;
+			import flash.filters.BlurFilter;
+			
+			import mx.events.FlexEvent;
+			
+		//Blur each of the objects within this component then fade it into clarity
+			private function init(event:Event):void {
+			//Create the blur declaration
+				var blur:BlurFilter = new BlurFilter();
+				blur.blurX = 40;
+				blur.blurY = 40;
+				blur.quality = BitmapFilterQuality.MEDIUM;
+				
+			//Apply this filter
+				line.filters = new Array(blur);
+				logo.filters = new Array(blur);
+				tagline.filters = new Array(blur);
+				
+			//Tween into these items into clarity
+				var items:Array = new Array(line, logo, tagline);
+				
+				TweenMax.allTo(items, 0.5, {
+							   		alpha : 1,
+									
+									blurFilter : {
+										blurX : 0,
+										blurY : 0
+									}
+							   });
+			}
+		]]>
+	</fx:Script>
+	
+<!-- Include the required stylesheets -->
+	<fx:Style source="../styles/LogoFont.css"/>
+	<fx:Style source="../styles/TaglineFont.css"/>
+	
+<!-- Create the logo and tagline -->
+	<s:RichText alpha="0" id="logo" x="5" y="11" styleName="logo" text="Bon Cuisson"/>
+	<images:FrenchLine alpha="0" id="line" x="10" y="54" width="385.253" height="59.7202"/>
+	<s:RichText alpha="0" id="tagline" styleName="tagline" x="211" y="104" text="by Dawn"/>
+</s:Group>
