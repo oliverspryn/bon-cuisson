@@ -18,14 +18,14 @@
  *  information at http://www.adobe.com/go/flex_security
  *
  */
-class FoodcategoriesService {
+class PagesService {
 
 	var $username = "root";
 	var $password = "Oliver99";
 	var $server = "localhost";
 	var $port = "3306";
 	var $databasename = "boncuisson";
-	var $tablename = "foodcategories";
+	var $tablename = "pages";
 
 	var $connection;
 
@@ -53,7 +53,7 @@ class FoodcategoriesService {
 	 *
 	 * @return array
 	 */
-	public function getAllFoodcategories() {
+	public function getAllPages() {
 
 		$stmt = mysqli_prepare($this->connection, "SELECT * FROM $this->tablename");		
 		$this->throwExceptionOnError();
@@ -63,12 +63,12 @@ class FoodcategoriesService {
 		
 		$rows = array();
 		
-		mysqli_stmt_bind_result($stmt, $row->id, $row->name, $row->description);
+		mysqli_stmt_bind_result($stmt, $row->id, $row->position, $row->URL, $row->type, $row->title, $row->content);
 		
 	    while (mysqli_stmt_fetch($stmt)) {
 	      $rows[] = $row;
 	      $row = new stdClass();
-	      mysqli_stmt_bind_result($stmt, $row->id, $row->name, $row->description);
+	      mysqli_stmt_bind_result($stmt, $row->id, $row->position, $row->URL, $row->type, $row->title, $row->content);
 	    }
 		
 		mysqli_stmt_free_result($stmt);
@@ -85,7 +85,7 @@ class FoodcategoriesService {
 	 * 
 	 * @return stdClass
 	 */
-	public function getFoodcategoriesByID($itemID) {
+	public function getPagesByID($itemID) {
 		
 		$stmt = mysqli_prepare($this->connection, "SELECT * FROM $this->tablename where id=?");
 		$this->throwExceptionOnError();
@@ -96,7 +96,7 @@ class FoodcategoriesService {
 		mysqli_stmt_execute($stmt);
 		$this->throwExceptionOnError();
 		
-		mysqli_stmt_bind_result($stmt, $row->id, $row->name, $row->description);
+		mysqli_stmt_bind_result($stmt, $row->id, $row->position, $row->URL, $row->type, $row->title, $row->content);
 		
 		if(mysqli_stmt_fetch($stmt)) {
 	      return $row;
@@ -113,12 +113,12 @@ class FoodcategoriesService {
 	 * 
 	 * @return stdClass
 	 */
-	public function createFoodcategories($item) {
+	public function createPages($item) {
 
-		$stmt = mysqli_prepare($this->connection, "INSERT INTO $this->tablename (name, description) VALUES (?, ?)");
+		$stmt = mysqli_prepare($this->connection, "INSERT INTO $this->tablename (position, URL, type, title, content) VALUES (?, ?, ?, ?, ?)");
 		$this->throwExceptionOnError();
 
-		mysqli_stmt_bind_param($stmt, 'ss', $item->name, $item->description);
+		mysqli_stmt_bind_param($stmt, 'issss', $item->position, $item->URL, $item->type, $item->title, $item->content);
 		$this->throwExceptionOnError();
 
 		mysqli_stmt_execute($stmt);		
@@ -140,12 +140,12 @@ class FoodcategoriesService {
 	 * @param stdClass $item
 	 * @return void
 	 */
-	public function updateFoodcategories($item) {
+	public function updatePages($item) {
 	
-		$stmt = mysqli_prepare($this->connection, "UPDATE $this->tablename SET name=?, description=? WHERE id=?");		
+		$stmt = mysqli_prepare($this->connection, "UPDATE $this->tablename SET position=?, URL=?, type=?, title=?, content=? WHERE id=?");		
 		$this->throwExceptionOnError();
 		
-		mysqli_stmt_bind_param($stmt, 'ssi', $item->name, $item->description, $item->id);		
+		mysqli_stmt_bind_param($stmt, 'issssi', $item->position, $item->URL, $item->type, $item->title, $item->content, $item->id);		
 		$this->throwExceptionOnError();
 
 		mysqli_stmt_execute($stmt);		
@@ -164,7 +164,7 @@ class FoodcategoriesService {
 	 * 
 	 * @return void
 	 */
-	public function deleteFoodcategories($itemID) {
+	public function deletePages($itemID) {
 				
 		$stmt = mysqli_prepare($this->connection, "DELETE FROM $this->tablename WHERE id = ?");
 		$this->throwExceptionOnError();
@@ -215,7 +215,7 @@ class FoodcategoriesService {
 	 * 
 	 * @return array
 	 */
-	public function getFoodcategories_paged($startIndex, $numItems) {
+	public function getPages_paged($startIndex, $numItems) {
 		
 		$stmt = mysqli_prepare($this->connection, "SELECT * FROM $this->tablename LIMIT ?, ?");
 		$this->throwExceptionOnError();
@@ -226,12 +226,12 @@ class FoodcategoriesService {
 		
 		$rows = array();
 		
-		mysqli_stmt_bind_result($stmt, $row->id, $row->name, $row->description);
+		mysqli_stmt_bind_result($stmt, $row->id, $row->position, $row->URL, $row->type, $row->title, $row->content);
 		
 	    while (mysqli_stmt_fetch($stmt)) {
 	      $rows[] = $row;
 	      $row = new stdClass();
-	      mysqli_stmt_bind_result($stmt, $row->id, $row->name, $row->description);
+	      mysqli_stmt_bind_result($stmt, $row->id, $row->position, $row->URL, $row->type, $row->title, $row->content);
 	    }
 		
 		mysqli_stmt_free_result($stmt);		

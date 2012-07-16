@@ -3,29 +3,29 @@
   <annotation name="ActionScriptGeneration">
     <item name="FullyQualifyReferences">true</item>
   </annotation>
-  <service name="FoodcategoriesService">
+  <service name="PagesService">
     <annotation name="ActionScriptGeneration">
-      <item name="Source">FoodcategoriesService</item>
+      <item name="Source">PagesService</item>
       <item name="ServiceType">RemoteObject</item>
-      <item name="Package">services.foodcategoriesservice</item>
+      <item name="Package">services.pagesservice</item>
       <item name="Endpoint">gateway.php</item>
-      <item name="Destination">FoodcategoriesService</item>
+      <item name="Destination">PagesService</item>
     </annotation>
     <annotation name="ServiceTypeGroup">
       <item name="ServiceBackendType">PHP</item>
     </annotation>
     <annotation name="ServiceConfig">
-      <item name="PHP_RELATIVE_LOCATION">Bon Cuisson/project-files/bin-debug/services/FoodcategoriesService.php</item>
+      <item name="PHP_RELATIVE_LOCATION">Bon Cuisson/project-files/bin-debug/services/PagesService.php</item>
       <item name="PHP_SERVER_ROOT">C:/Web Development/wamp/www</item>
       <item name="DEFAULT_ENTITY_PACKAGE">valueObjects</item>
       <item name="PHP_SERVICES_FOLDER">C:/Web Development/wamp/www/Bon Cuisson/project-files/bin-debug/services</item>
-      <item name="PHP_LOCATION">C:/Web Development/wamp/www/Bon Cuisson/project-files/bin-debug/services/FoodcategoriesService.php</item>
-      <item name="LINKED_FILE">FoodcategoriesService.php</item>
+      <item name="PHP_LOCATION">C:/Web Development/wamp/www/Bon Cuisson/project-files/bin-debug/services/PagesService.php</item>
+      <item name="LINKED_FILE">PagesService.php</item>
       <item name="PHP_SERVER_ROOT_URL">http://localhost/</item>
       <item name="ABSOLUTE_ENDPOINT">http://localhost/Bon Cuisson/project-files/bin-debug/gateway.php</item>
-      <item name="PHP_CLASS_NAME">FoodcategoriesService</item>
+      <item name="PHP_CLASS_NAME">PagesService</item>
     </annotation>
-    <function name="getAllFoodcategories" return-type="Foodcategories[]">
+    <function name="getAllPages" return-type="Pages[]">
       <annotation name="analyze group">
         <item name="analyzed">true</item>
       </annotation>
@@ -33,7 +33,7 @@
         <item name="returnType">opaque</item>
       </annotation>
     </function>
-    <function name="getFoodcategoriesByID" return-type="Foodcategories">
+    <function name="getPagesByID" return-type="Pages">
       <annotation name="analyze group">
         <item name="analyzed">true</item>
       </annotation>
@@ -43,7 +43,7 @@
       </annotation>
       <parameter name="itemID" type="integer"/>
     </function>
-    <function name="createFoodcategories" return-type="integer">
+    <function name="createPages" return-type="integer">
       <annotation name="analyze group">
         <item name="analyzed">true</item>
       </annotation>
@@ -51,9 +51,9 @@
         <item name="inputParams">opaque</item>
         <item name="returnType">opaque</item>
       </annotation>
-      <parameter name="item" type="Foodcategories"/>
+      <parameter name="item" type="Pages"/>
     </function>
-    <function name="updateFoodcategories" return-type="void">
+    <function name="updatePages" return-type="void">
       <annotation name="analyze group">
         <item name="analyzed">true</item>
       </annotation>
@@ -61,9 +61,9 @@
         <item name="inputParams">opaque</item>
         <item name="returnType">opaque</item>
       </annotation>
-      <parameter name="item" type="Foodcategories"/>
+      <parameter name="item" type="Pages"/>
     </function>
-    <function name="deleteFoodcategories" return-type="void">
+    <function name="deletePages" return-type="void">
       <annotation name="analyze group">
         <item name="analyzed">true</item>
       </annotation>
@@ -81,7 +81,7 @@
         <item name="returnType">opaque</item>
       </annotation>
     </function>
-    <function name="getFoodcategories_paged" return-type="Foodcategories[]">
+    <function name="getPages_paged" return-type="Pages[]">
       <annotation name="analyze group">
         <item name="analyzed">true</item>
       </annotation>
@@ -93,32 +93,32 @@
       <parameter name="numItems" type="integer"/>
     </function>
   </service>
-  <entity name="Foodcategories" persistent="true">
+  <entity name="Pages" persistent="true">
     <annotation name="EntityProperties">
-      <item name="EntityOriginalName">Foodcategories</item>
+      <item name="EntityOriginalName">Pages</item>
     </annotation>
     <annotation name="service Group">
-      <item name="service">FoodcategoriesService</item>
+      <item name="service">PagesService</item>
     </annotation>
     <annotation name="ServerProperties">
       <item name="IncludeRemoteClass">nonempty</item>
     </annotation>
     <annotation name="DataManagement">
-      <item name="create">createFoodcategories</item>
-      <item name="update">updateFoodcategories</item>
-      <item name="get">getFoodcategoriesByID</item>
-      <item name="delete">deleteFoodcategories</item>
-      <item name="fillFunc">getAllFoodcategories,getFoodcategories_paged</item>
-      <item name="managingService">FoodcategoriesService</item>
+      <item name="create">createPages</item>
+      <item name="update">updatePages</item>
+      <item name="get">getPagesByID</item>
+      <item name="delete">deletePages</item>
+      <item name="fillFunc">getAllPages,getPages_paged</item>
+      <item name="managingService">PagesService</item>
     </annotation>
-    <annotation name="getFoodcategoriesByID">
-      <item name="propertySpecifier">id,name,description</item>
+    <annotation name="getPagesByID">
+      <item name="propertySpecifier">id,position,URL,type,title,content</item>
     </annotation>
-    <annotation name="getAllFoodcategories">
-      <item name="propertySpecifier">id,name,description</item>
+    <annotation name="getAllPages">
+      <item name="propertySpecifier">id,position,URL,type,title,content</item>
     </annotation>
-    <annotation name="getFoodcategories_paged">
-      <item name="propertySpecifier">id,name,description</item>
+    <annotation name="getPages_paged">
+      <item name="propertySpecifier">id,position,URL,type,title,content</item>
       <item name="pagingEnabled">true</item>
       <item name="positionalPagingParameters">true</item>
       <item name="countOperation">count</item>
@@ -127,7 +127,10 @@
       <item name="Package">valueObjects</item>
     </annotation>
     <id name="id" type="integer"/>
-    <property name="name" type="string"/>
-    <property name="description" type="string"/>
+    <property name="position" type="integer"/>
+    <property name="URL" type="string"/>
+    <property name="type" type="string"/>
+    <property name="title" type="string"/>
+    <property name="content" type="string"/>
   </entity>
 </model>

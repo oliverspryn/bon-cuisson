@@ -1,16 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		 xmlns:s="library://ns.adobe.com/flex/spark" 
-		 xmlns:mx="library://ns.adobe.com/flex/mx">
+		 xmlns:mx="library://ns.adobe.com/flex/mx" xmlns:pagesservice="services.pagesservice.*"
+		 addedToStage="positionMenu(event)" creationComplete="initServiceCall(event)">
+	<fx:Script>
+		<![CDATA[
+			import com.greensock.TweenMax;
+			
+			import mx.controls.Alert;
+			import mx.events.FlexEvent;
+			import mx.rpc.events.FaultEvent;
+			
+		//Request the menu data from the server
+			private function initServiceCall(e:FlexEvent):void {
+				menuResponder.token = menu.getAllPages();
+			}
+			
+		//Add 10% padding to the left and right of the menu links and animate the menu background
+			private function positionMenu(e:Event):void {
+			//Animate the menu background
+				TweenMax.to(background, 0.50, {
+								onComplete : rollDown,
+								width : stage.stageWidth
+							});
+				
+			//Adjust the width of the menu
+				list.left = stage.stageWidth / 10;
+				list.right = stage.stageWidth / 10;
+			}
+			
+		//Roll the menu background down
+			private function rollDown():void {
+				TweenMax.to(background, 0.50, {
+								height : 50
+							});
+			}
+			
+		//Show an error dialog in the case of an error when communicating with the server
+			private function menu_faultHandler(e:FaultEvent):void {
+				Alert.show("Fault string: " + e.fault.faultString + "\nFault detail: " + e.fault.faultDetail, e.fault.faultCode);
+			}						
+		]]>
+	</fx:Script>
+	
 	<fx:Declarations>
-		<!-- Place non-visual elements (e.g., services, value objects) here -->
+		<s:CallResponder id="menuResponder"/>
+		<pagesservice:PagesService id="menu" showBusyCursor="true" fault="menu_faultHandler(event)"/>
 	</fx:Declarations>
 	
-	
-	
-	<s:Rect horizontalCenter="0" width="10%" height="50">
+	<s:Rect id="background" horizontalCenter="0" width="0" height="1">
 		<s:fill>
 			<s:SolidColor color="0x333333"/>
 		</s:fill>
 	</s:Rect>
+	
+	<s:List borderVisible="false" contentBackgroundAlpha="0" id="list" itemRenderer="renderers.Navigation">
+		<s:layout>
+			<s:HorizontalLayout gap="30"/>
+		</s:layout>
+		
+		<s:AsyncListView list="{menuResponder.lastResult}"/>
+	</s:List>
 </s:Group>

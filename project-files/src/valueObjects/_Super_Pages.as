@@ -1,6 +1,6 @@
 /**
  * This is a generated class and is not intended for modification.  To customize behavior
- * of this value object you may modify the generated sub-class of this class - Foodcategories.as.
+ * of this value object you may modify the generated sub-class of this class - Pages.as.
  */
 
 package valueObjects
@@ -21,7 +21,7 @@ use namespace model_internal;
 
 [Managed]
 [ExcludeClass]
-public class _Super_Foodcategories extends flash.events.EventDispatcher implements com.adobe.fiber.valueobjects.IValueObject
+public class _Super_Pages extends flash.events.EventDispatcher implements com.adobe.fiber.valueobjects.IValueObject
 {
     model_internal static function initRemoteClassAliasSingle(cz:Class) : void
     {
@@ -31,7 +31,7 @@ public class _Super_Foodcategories extends flash.events.EventDispatcher implemen
     {
     }
 
-    model_internal var _dminternal_model : _FoodcategoriesEntityMetadata;
+    model_internal var _dminternal_model : _PagesEntityMetadata;
     model_internal var _changedObjects:mx.collections.ArrayCollection = new ArrayCollection();
 
     public function getChangedObjects() : Array
@@ -49,8 +49,11 @@ public class _Super_Foodcategories extends flash.events.EventDispatcher implemen
      * properties
      */
     private var _internal_id : int;
-    private var _internal_name : String;
-    private var _internal_description : String;
+    private var _internal_position : int;
+    private var _internal_URL : String;
+    private var _internal_type : String;
+    private var _internal_title : String;
+    private var _internal_content : String;
 
     private static var emptyArray:Array = new Array();
 
@@ -62,9 +65,9 @@ public class _Super_Foodcategories extends flash.events.EventDispatcher implemen
 
     model_internal var _changeWatcherArray:Array = new Array();
 
-    public function _Super_Foodcategories()
+    public function _Super_Pages()
     {
-        _model = new _FoodcategoriesEntityMetadata(this);
+        _model = new _PagesEntityMetadata(this);
 
         // Bind to own data or source properties for cache invalidation triggering
 
@@ -81,15 +84,33 @@ public class _Super_Foodcategories extends flash.events.EventDispatcher implemen
     }
 
     [Bindable(event="propertyChange")]
-    public function get name() : String
+    public function get position() : int
     {
-        return _internal_name;
+        return _internal_position;
     }
 
     [Bindable(event="propertyChange")]
-    public function get description() : String
+    public function get URL() : String
     {
-        return _internal_description;
+        return _internal_URL;
+    }
+
+    [Bindable(event="propertyChange")]
+    public function get type() : String
+    {
+        return _internal_type;
+    }
+
+    [Bindable(event="propertyChange")]
+    public function get title() : String
+    {
+        return _internal_title;
+    }
+
+    [Bindable(event="propertyChange")]
+    public function get content() : String
+    {
+        return _internal_content;
     }
 
     public function clearAssociations() : void
@@ -109,21 +130,48 @@ public class _Super_Foodcategories extends flash.events.EventDispatcher implemen
         }
     }
 
-    public function set name(value:String) : void
+    public function set position(value:int) : void
     {
-        var oldValue:String = _internal_name;
+        var oldValue:int = _internal_position;
         if (oldValue !== value)
         {
-            _internal_name = value;
+            _internal_position = value;
         }
     }
 
-    public function set description(value:String) : void
+    public function set URL(value:String) : void
     {
-        var oldValue:String = _internal_description;
+        var oldValue:String = _internal_URL;
         if (oldValue !== value)
         {
-            _internal_description = value;
+            _internal_URL = value;
+        }
+    }
+
+    public function set type(value:String) : void
+    {
+        var oldValue:String = _internal_type;
+        if (oldValue !== value)
+        {
+            _internal_type = value;
+        }
+    }
+
+    public function set title(value:String) : void
+    {
+        var oldValue:String = _internal_title;
+        if (oldValue !== value)
+        {
+            _internal_title = value;
+        }
+    }
+
+    public function set content(value:String) : void
+    {
+        var oldValue:String = _internal_content;
+        if (oldValue !== value)
+        {
+            _internal_content = value;
         }
     }
 
@@ -187,14 +235,14 @@ public class _Super_Foodcategories extends flash.events.EventDispatcher implemen
 
     [Transient]
     [Bindable(event="propertyChange")]
-    public function get _model() : _FoodcategoriesEntityMetadata
+    public function get _model() : _PagesEntityMetadata
     {
         return model_internal::_dminternal_model;
     }
 
-    public function set _model(value : _FoodcategoriesEntityMetadata) : void
+    public function set _model(value : _PagesEntityMetadata) : void
     {
-        var oldValue : _FoodcategoriesEntityMetadata = model_internal::_dminternal_model;
+        var oldValue : _PagesEntityMetadata = model_internal::_dminternal_model;
         if (oldValue !== value)
         {
             model_internal::_dminternal_model = value;

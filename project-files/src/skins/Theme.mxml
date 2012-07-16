@@ -123,9 +123,9 @@
 
         <!--- @copy spark.components.SkinnableContainer#contentGroup -->
 		<s:Group>
-			<components:Logo id="logo" top="10"/>
-			<components:Contact id="contact" top="10"/>
-			<components:Menu top="150" left="0" right="0"/>
+			<components:Logo id="logo" top="0"/>
+			<components:Contact id="contact" top="0"/>
+			<components:Menu top="160" left="0" right="0"/>
 			<s:Group id="contentGroup" bottom="10" left="10" right="10" top="200"/>
 		</s:Group>
     </s:Group>

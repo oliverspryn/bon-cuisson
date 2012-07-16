@@ -17,9 +17,9 @@
 	</natures>
 	<linkedResources>
 		<link>
-			<name>services/FoodcategoriesService.php</name>
+			<name>services/PagesService.php</name>
 			<type>1</type>
-			<location>C:/Web Development/wamp/www/Bon Cuisson/project-files/bin-debug/services/FoodcategoriesService.php</location>
+			<location>C:/Web Development/wamp/www/Bon Cuisson/project-files/bin-debug/services/PagesService.php</location>
 		</link>
 	</linkedResources>
 </projectDescription>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+				xmlns:s="library://ns.adobe.com/flex/spark" 
+				xmlns:mx="library://ns.adobe.com/flex/mx" 
+				autoDrawBackground="false"
+				addedToStage="beginTransition(event)">
+	
+	<fx:Script>
+		<![CDATA[
+			import com.greensock.TweenMax;
+			
+		//Transition each menu item into view, one right after another. We will need a delay, so one can appear one at a time
+			private function beginTransition(e:Event):void {
+			//The delay will be calculated depending on this item's position in the menu
+				var delay:Number = 1250; //1.25 sec delay for the menu background to transition into place
+				delay += super.itemIndex * 250; //0.25 sec delay for each item appearing in the menu
+				
+				var timer:Timer = new Timer(delay, 1);
+				timer.addEventListener(TimerEvent.TIMER_COMPLETE, transitionToView);
+				timer.start();
+			}
+			
+			private function transitionToView(e:TimerEvent):void {
+			//We don't need this event listener anymore
+				e.target.removeEventListener(TimerEvent.TIMER_COMPLETE, transitionToView);
+				
+			//Tween the menu item into view
+				TweenMax.to(menuItem, 0.25, {
+								alpha : 1,
+								y : 13
+							});
+			}
+		]]>
+	</fx:Script>
+	
+<!-- Include the required stylesheet -->
+	<fx:Style source="../styles/TaglineFont.css"/>
+	
+	
+	<s:Label alpha="0" buttonMode="true" id="menuItem" styleName="tagline" text="{data.title}" />
+</s:ItemRenderer>
