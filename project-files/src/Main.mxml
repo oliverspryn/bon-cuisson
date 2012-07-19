@@ -3,6 +3,30 @@
 			   xmlns:s="library://ns.adobe.com/flex/spark"
 			   xmlns:mx="library://ns.adobe.com/flex/mx"
 			   xmlns:components="components.*"
-			   minWidth="955" minHeight="600" backgroundColor="#000000"
-			   skinClass="skins.Theme" preloader="com.forwardfour.boncussion.Preloader">
+			   minWidth="955" minHeight="600" backgroundColor="0x141414"
+			   skinClass="skins.Theme" creationComplete="init(event)">
+	<fx:Script>
+		<![CDATA[
+			import com.forwardfour.boncuisson.events.MenuEvent;
+			
+			import components.Menu;
+			
+			import mx.controls.Alert;
+			import mx.events.FlexEvent;
+			
+			import skins.Theme;
+			
+		//Add an event listener for when "links" on the menu are clicked
+			private function init(event:FlexEvent):void {
+				var skin:Theme = Theme(this.skin);
+				var menu:Menu = Menu(skin.menu);
+				menu.addEventListener(Menu.MENU_ITEM_CLICKED, navigateToPageHandler);
+			}
+			
+		//Go to a specific page
+			private function navigateToPageHandler(e:MenuEvent):void {
+				mx.controls.Alert.show(e.pageURL);
+			}
+		]]>
+	</fx:Script>
 </s:Application>

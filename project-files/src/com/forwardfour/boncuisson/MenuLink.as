@@ -1,4 +1,4 @@
-﻿package com.forwardfour.boncussion {
+﻿package com.forwardfour.boncuisson {
 	import flash.display.Shape;
 	import flash.display.Sprite;
 	import flash.display.Stage;

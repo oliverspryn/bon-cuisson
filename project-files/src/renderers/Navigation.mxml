@@ -3,23 +3,28 @@
 				xmlns:s="library://ns.adobe.com/flex/spark" 
 				xmlns:mx="library://ns.adobe.com/flex/mx" 
 				autoDrawBackground="false"
-				addedToStage="beginTransition(event)">
+				creationComplete="beginTransition(event)"
+				mouseOver="displayLightHandler(event)" mouseOut="hideLightHandler(event)">
 	
 	<fx:Script>
 		<![CDATA[
 			import com.greensock.TweenMax;
 			
-		//Transition each menu item into view, one right after another. We will need a delay, so one can appear one at a time
+		//Transition each menu item into view, one right after another. Also, center align the hover-light over the menu
 			private function beginTransition(e:Event):void {
 			//The delay will be calculated depending on this item's position in the menu
-				var delay:Number = 1250; //1.25 sec delay for the menu background to transition into place
-				delay += super.itemIndex * 250; //0.25 sec delay for each item appearing in the menu
+				var delay:Number = 1250;       //1.25 sec delay for the menu background to transition into place
+				delay += this.itemIndex * 250; //0.25 sec delay for each item appearing in the menu
 				
 				var timer:Timer = new Timer(delay, 1);
 				timer.addEventListener(TimerEvent.TIMER_COMPLETE, transitionToView);
 				timer.start();
+				
+			//Center align the hover light
+				hoverLight.x = (this.width / 2) - (hoverLight.width / 2);
 			}
 			
+		//Transition this menu item into view
 			private function transitionToView(e:TimerEvent):void {
 			//We don't need this event listener anymore
 				e.target.removeEventListener(TimerEvent.TIMER_COMPLETE, transitionToView);
@@ -30,12 +35,38 @@
 								y : 13
 							});
 			}
+			
+		//Display the hover light
+			private function displayLightHandler(event:MouseEvent):void {
+				TweenMax.to(hoverLight, 0.5, {
+								alpha : 1
+							});
+			}
+			
+		//Hide the hover light
+			private function hideLightHandler(event:MouseEvent):void {
+				TweenMax.to(hoverLight, 0.5, {
+					alpha : 0
+				});
+			}
 		]]>
 	</fx:Script>
 	
 <!-- Include the required stylesheet -->
 	<fx:Style source="../styles/TaglineFont.css"/>
 	
+<!-- Display the light above each menu item, only visible when it is hovered over -->
+	<s:Ellipse alpha="0" id="hoverLight" height="50" width="50" y="-25">
+		<s:fill>
+			<s:RadialGradient>
+				<s:entries>
+					<s:GradientEntry color="0xFFFFFF"/>
+					<s:GradientEntry alpha="0" color="0x333333"/>
+				</s:entries>
+			</s:RadialGradient>
+		</s:fill>
+	</s:Ellipse>
 	
+<!-- Display the menu item -->
 	<s:Label alpha="0" buttonMode="true" id="menuItem" styleName="tagline" text="{data.title}" />
 </s:ItemRenderer>
