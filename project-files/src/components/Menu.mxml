@@ -2,7 +2,7 @@
 <s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		 xmlns:s="library://ns.adobe.com/flex/spark" 
 		 xmlns:mx="library://ns.adobe.com/flex/mx" xmlns:pagesservice="services.pagesservice.*"
-		 addedToStage="positionMenu(event)" creationComplete="init(event)">
+		 creationComplete="init(event)">
 	<fx:Script>
 		<![CDATA[
 			import com.forwardfour.boncuisson.events.MenuEvent;
@@ -12,6 +12,9 @@
 			import mx.core.UIComponent;
 			import mx.events.FlexEvent;
 			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
+			
+			import renderers.Navigation;
 			
 			import spark.events.IndexChangeEvent;
 			
@@ -30,7 +33,17 @@
 				list.scroller.setStyle("verticalScrollPolicy", "off");
 			}
 			
-		//Add 10% padding to the left and right of the menu links, animate the menu background, and build the current page pointer
+		//Begin building the visual interface, after the data has been recieved from the server and the stage is accessable
+			private function initDisplayObjects(e:ResultEvent):void {
+				if (stage) {
+					this.positionMenu(new Event(Event.ADDED_TO_STAGE));
+				} else {
+					this.addEventListener(Event.ADDED_TO_STAGE, positionMenu);
+				}
+			}
+			
+		//Add 10% padding to the left and right of the menu links, animate the menu background,
+		//and wait until the menu has transitioned into view before displaying the pointer arrow
 			private function positionMenu(e:Event):void {
 			//Animate the menu background
 				TweenMax.to(background, 0.50, {
@@ -42,22 +55,13 @@
 				list.left = stage.stageWidth / 10;
 				list.right = stage.stageWidth / 10;
 				
-			//Construct the current page pointer arrow
-				var pointer:Shape = new Shape();
-				var color:uint = 0xFFFFFF;
-				var width:int = 7;
+			//Wait until the menu is in view before displaying the pointer arrow
+				var delay:Number = 1250;                        //1.25 sec delay for the menu background to transition into place
+				delay += menuResponder.lastResult.length * 250; //0.25 sec delay for each item appearing in the menu
 				
-				this.pointer = new UIComponent();
-				pointer.x = stage.stageWidth / 10 + list.selectedItem.width;
-				pointer.y = 50 - width;
-				pointer.graphics.beginFill(color);
-				pointer.graphics.moveTo(width / 2, 0);
-				pointer.graphics.lineTo(width, width);
-				pointer.graphics.lineTo(0, width);
-				pointer.graphics.lineTo(width / 2, 0);
-				pointer.graphics.endFill();
-				this.pointer.addChild(pointer);
-				this.addElement(this.pointer);
+				var timer:Timer = new Timer(delay, 1);
+				timer.addEventListener(TimerEvent.TIMER_COMPLETE, buildPointer);
+				timer.start();
 			}
 			
 		//Roll the menu background down
@@ -67,10 +71,40 @@
 							});
 			}
 			
+		//Build the current-menu pointer
+			private function buildPointer(e:TimerEvent):void {
+			//Remove the event listener
+				EventDispatcher(e.target).removeEventListener(e.type, buildPointer);
+				
+			//Build the pointer
+				var pointer:Shape = new Shape();
+				var color:uint = 0xFFFFFF;
+				var width:int = 7;
+				var selectedItemWidth:Number = list.dataGroup.getElementAt(list.selectedIndex).width;
+				
+				this.pointer = new UIComponent();
+				pointer.alpha = 0;
+				pointer.x = (stage.stageWidth / 10) + (selectedItemWidth / 2) - (width / 2);
+				pointer.y = 50 - width;
+				pointer.graphics.beginFill(color);
+				pointer.graphics.moveTo(width / 2, 0);
+				pointer.graphics.lineTo(width, width);
+				pointer.graphics.lineTo(0, width);
+				pointer.graphics.lineTo(width / 2, 0);
+				pointer.graphics.endFill();
+				this.pointer.addChild(pointer);
+				this.addElement(this.pointer);
+				
+			//Transition it into view
+				TweenMax.to(pointer, 0.25, {
+								alpha : 1
+							});
+			}
+			
 		//Show an error dialog in the case of an error when communicating with the server
 			private function menu_faultHandler(e:FaultEvent):void {
 				Alert.show("Fault string: " + e.fault.faultString + "\nFault detail: " + e.fault.faultDetail, e.fault.faultCode);
-			}						
+			}		
 			
 		//Let the application know that the user has selected a menu item
 			private function navigateToPageHandler(e:IndexChangeEvent):void {
@@ -79,6 +113,7 @@
 				event.menuIndex = list.selectedIndex;
 				event.pageID = menuResponder.lastResult[list.selectedIndex].id;
 				event.pageURL = menuResponder.lastResult[list.selectedIndex].URL;
+				event.pageType = menuResponder.lastResult[list.selectedIndex].type;
 				
 			//Dispatch the event
 				super.dispatchEvent(event);
@@ -89,7 +124,7 @@
 <!-- Make a request to the server for each of the menu items -->
 	<fx:Declarations>
 		<s:CallResponder id="menuResponder"/>
-		<pagesservice:PagesService id="menu" showBusyCursor="true" fault="menu_faultHandler(event)"/>
+		<pagesservice:PagesService id="menu" showBusyCursor="true" fault="menu_faultHandler(event)" result="initDisplayObjects(event)"/>
 	</fx:Declarations>
 	
 <!-- The background of the menu -->
@@ -100,7 +135,7 @@
 	</s:Rect>
 	
 <!-- The styled list which will act as the menu -->
-	<s:List borderVisible="false" contentBackgroundAlpha="0" id="list" itemRenderer="renderers.Navigation" change="navigateToPageHandler(event)">
+	<s:List borderVisible="false" contentBackgroundAlpha="0" id="list" requireSelection="true" itemRenderer="renderers.Navigation" change="navigateToPageHandler(event)">
 		<s:layout>
 			<s:HorizontalLayout gap="30"/>
 		</s:layout>

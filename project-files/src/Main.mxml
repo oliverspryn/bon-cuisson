@@ -3,30 +3,115 @@
 			   xmlns:s="library://ns.adobe.com/flex/spark"
 			   xmlns:mx="library://ns.adobe.com/flex/mx"
 			   xmlns:components="components.*"
+			   xmlns:pagesservice="services.pagesservice.*"
+			   xmlns:menuservice="services.menuservice.*"
 			   minWidth="955" minHeight="600" backgroundColor="0x141414"
-			   skinClass="skins.Theme" creationComplete="init(event)">
+			   creationComplete="init(event)" skinClass="skins.Theme">
 	<fx:Script>
 		<![CDATA[
+			import com.asual.swfaddress.*;
 			import com.forwardfour.boncuisson.events.MenuEvent;
 			
 			import components.Menu;
 			
 			import mx.controls.Alert;
 			import mx.events.FlexEvent;
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
 			
 			import skins.Theme;
 			
-		//Add an event listener for when "links" on the menu are clicked
+		//Globalize a reference to the navigation menu
+			private var menu:Menu;
+			
+		/**
+		 * Initialization
+		 * -------------------------------
+		*/
+			
+		//Add an event listener for when "links" on the menu are clicked and initialize SWFAddress
 			private function init(event:FlexEvent):void {
+			//Listen for menu clicks
 				var skin:Theme = Theme(this.skin);
-				var menu:Menu = Menu(skin.menu);
-				menu.addEventListener(Menu.MENU_ITEM_CLICKED, navigateToPageHandler);
+				this.menu = Menu(skin.menu);
+				this.menu.addEventListener(Menu.MENU_ITEM_CLICKED, menuNavigateToPageHandler);
+				
+			//Initialize SWFAddress
+				SWFAddress.addEventListener(SWFAddressEvent.INIT, initSWFAddress);
 			}
 			
-		//Go to a specific page
-			private function navigateToPageHandler(e:MenuEvent):void {
-				mx.controls.Alert.show(e.pageURL);
+		//Initialize SWFAddress and grab the page listed from the URL
+			private function initSWFAddress(e:SWFAddressEvent):void {
+			//Listen for change events
+				SWFAddress.addEventListener(SWFAddressEvent.CHANGE, URLNavigateToPageHandler);
+				
+			//Fetch the page from the URL
+				var URL:String = SWFAddress.getValue();
+				
+				if (URL == "" || URL == "/") {
+					pagesResponder.token = page.getPagesByPosition(1);
+				} else {
+					pagesResponder.token = page.getPagesByURL(URL.substring(1));
+				}
 			}
+			
+		/**
+		 * Navigation handlers
+		 * -------------------------------
+		*/
+			
+		//Go to a specific page when a menu item has been clicked
+			private function menuNavigateToPageHandler(e:MenuEvent):void {
+				SWFAddress.setValue(e.pageURL);
+				pagesResponder.token = page.getPagesByID(e.pageID);
+			}
+			
+		//Request a page when the URL has changed
+			private function URLNavigateToPageHandler(e:SWFAddressEvent):void {
+				var URL:String = SWFAddress.getValue();
+				
+				if (URL == "" || URL == "/") {
+					pagesResponder.token = page.getPagesByPosition(1);
+				} else {
+					pagesResponder.token = page.getPagesByURL(URL.substring(1));
+				}
+			}	
+			
+		/**
+		 * Loading content
+		 * -------------------------------
+		*/	
+		
+		//Show an error dialog in the case of an error when communicating with the server
+			private function pageRequestErrorHandler(e:FaultEvent):void {
+				Alert.show("Fault string: " + e.fault.faultString + "\nFault detail: " + e.fault.faultDetail, e.fault.faultCode);
+			}	
+		
+			private function setupPage(e:ResultEvent):void {
+				//Alert.show(pagesResponder.lastResult.position);
+			}
+			
+			
+			protected function list_creationCompleteHandler(event:FlexEvent):void
+			{
+				getAllMenuResult.token = menuService.getAllMenu();
+			}
+			
 		]]>
 	</fx:Script>
+	
+<!-- Make a request to the server for the page data -->
+	<fx:Declarations>
+		<pagesservice:PagesService id="page"/>
+		<s:CallResponder id="pagesResponder" fault="pageRequestErrorHandler(event)" result="setupPage(event)"/>
+		<s:CallResponder id="getAllMenuResult"/>
+		<menuservice:MenuService id="menuService"
+								 fault="Alert.show(event.fault.faultString + '\n' + event.fault.faultDetail)"
+								 showBusyCursor="true"/>
+	</fx:Declarations>
+	
+	<s:List id="list" itemRenderer="renderers.FoodMenuRenderer" creationComplete="list_creationCompleteHandler(event)" labelField="name">
+		<s:AsyncListView list="{getAllMenuResult.lastResult}"/>
+		
+	</s:List>
 </s:Application>

@@ -104,6 +104,62 @@ class PagesService {
 	      return null;
 		}
 	}
+	
+	/**
+	 * Returns the item corresponding to the value specified for the page number.
+	 *
+	 * Add authorization or any logical checks for secure access to your data 
+	 *
+	 * 
+	 * @return stdClass
+	 */
+	public function getPagesByPosition($itemPosition) {
+		
+		$stmt = mysqli_prepare($this->connection, "SELECT * FROM $this->tablename where position=?");
+		$this->throwExceptionOnError();
+		
+		mysqli_stmt_bind_param($stmt, 'i', $itemPosition);		
+		$this->throwExceptionOnError();
+		
+		mysqli_stmt_execute($stmt);
+		$this->throwExceptionOnError();
+		
+		mysqli_stmt_bind_result($stmt, $row->id, $row->position, $row->URL, $row->type, $row->title, $row->content);
+		
+		if(mysqli_stmt_fetch($stmt)) {
+	      return $row;
+		} else {
+	      return null;
+		}
+	}
+	
+	/**
+	 * Returns the item corresponding to the value specified for the page URL.
+	 *
+	 * Add authorization or any logical checks for secure access to your data 
+	 *
+	 * 
+	 * @return stdClass
+	 */
+	public function getPagesByURL($itemURL) {
+		
+		$stmt = mysqli_prepare($this->connection, "SELECT * FROM $this->tablename where URL=?");
+		$this->throwExceptionOnError();
+		
+		mysqli_stmt_bind_param($stmt, 'i', $itemURL);		
+		$this->throwExceptionOnError();
+		
+		mysqli_stmt_execute($stmt);
+		$this->throwExceptionOnError();
+		
+		mysqli_stmt_bind_result($stmt, $row->id, $row->position, $row->URL, $row->type, $row->title, $row->content);
+		
+		if(mysqli_stmt_fetch($stmt)) {
+	      return $row;
+		} else {
+	      return null;
+		}
+	}
 
 	/**
 	 * Returns the item corresponding to the value specified for the primary key.

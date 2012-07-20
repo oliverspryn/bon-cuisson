@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx">
+<!-- Include the required stylesheets -->
+	<fx:Style source="styles/TaglineFont.css"/>
+		
+<!-- Display the three phrases and associated pictures -->
+	<s:Label y="37" left="47" styleName="tagline" text="Label"/>
+	<s:Image y="37" right="0" source="{image1}"/>
+</s:Group>

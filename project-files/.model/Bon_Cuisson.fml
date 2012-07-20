@@ -25,35 +25,15 @@
       <item name="ABSOLUTE_ENDPOINT">http://localhost/Bon Cuisson/project-files/bin-debug/gateway.php</item>
       <item name="PHP_CLASS_NAME">PagesService</item>
     </annotation>
-    <function name="getAllPages" return-type="Pages[]">
+    <function name="count" return-type="integer">
       <annotation name="analyze group">
         <item name="analyzed">true</item>
       </annotation>
       <annotation name="original signature">
         <item name="returnType">opaque</item>
       </annotation>
-    </function>
-    <function name="getPagesByID" return-type="Pages">
-      <annotation name="analyze group">
-        <item name="analyzed">true</item>
-      </annotation>
-      <annotation name="original signature">
-        <item name="inputParams">opaque</item>
-        <item name="returnType">opaque</item>
-      </annotation>
-      <parameter name="itemID" type="integer"/>
     </function>
     <function name="createPages" return-type="integer">
-      <annotation name="analyze group">
-        <item name="analyzed">true</item>
-      </annotation>
-      <annotation name="original signature">
-        <item name="inputParams">opaque</item>
-        <item name="returnType">opaque</item>
-      </annotation>
-      <parameter name="item" type="Pages"/>
-    </function>
-    <function name="updatePages" return-type="void">
       <annotation name="analyze group">
         <item name="analyzed">true</item>
       </annotation>
@@ -73,7 +53,7 @@
       </annotation>
       <parameter name="itemID" type="integer"/>
     </function>
-    <function name="count" return-type="integer">
+    <function name="getAllPages" return-type="Pages[]">
       <annotation name="analyze group">
         <item name="analyzed">true</item>
       </annotation>
@@ -91,6 +71,52 @@
       </annotation>
       <parameter name="startIndex" type="integer"/>
       <parameter name="numItems" type="integer"/>
+    </function>
+    <function name="getPagesByID" return-type="Pages">
+      <annotation name="analyze group">
+        <item name="analyzed">true</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">opaque</item>
+        <item name="returnType">opaque</item>
+      </annotation>
+      <parameter name="itemID" type="integer"/>
+    </function>
+    <function name="updatePages" return-type="void">
+      <annotation name="analyze group">
+        <item name="analyzed">true</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">opaque</item>
+        <item name="returnType">opaque</item>
+      </annotation>
+      <parameter name="item" type="Pages"/>
+    </function>
+    <function name="getPagesByURL" return-type="Pages">
+      <annotation name="analyze group">
+        <item name="analyzed">true</item>
+      </annotation>
+      <annotation name="ValidProperties">
+        <item name="propertySpecifier">id,position,URL,type,title,content</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">opaque</item>
+        <item name="returnType">opaque</item>
+      </annotation>
+      <parameter name="itemURL" type="string"/>
+    </function>
+    <function name="getPagesByPosition" return-type="Pages">
+      <annotation name="analyze group">
+        <item name="analyzed">true</item>
+      </annotation>
+      <annotation name="ValidProperties">
+        <item name="propertySpecifier">id,position,URL,type,title,content</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">opaque</item>
+        <item name="returnType">opaque</item>
+      </annotation>
+      <parameter name="itemPosition" type="integer"/>
     </function>
   </service>
   <entity name="Pages" persistent="true">
@@ -110,6 +136,7 @@
       <item name="delete">deletePages</item>
       <item name="fillFunc">getAllPages,getPages_paged</item>
       <item name="managingService">PagesService</item>
+      <item name="findItem">getPagesByURL,getPagesByPosition</item>
     </annotation>
     <annotation name="getPagesByID">
       <item name="propertySpecifier">id,position,URL,type,title,content</item>
@@ -126,11 +153,148 @@
     <annotation name="ActionScriptGeneration">
       <item name="Package">valueObjects</item>
     </annotation>
+    <annotation name="getPagesByURL">
+      <item name="propertySpecifier">id,position,URL,type,title,content</item>
+    </annotation>
+    <annotation name="getPagesByPosition">
+      <item name="propertySpecifier">id,position,URL,type,title,content</item>
+    </annotation>
     <id name="id" type="integer"/>
     <property name="position" type="integer"/>
     <property name="URL" type="string"/>
     <property name="type" type="string"/>
     <property name="title" type="string"/>
     <property name="content" type="string"/>
+  </entity>
+  <service name="MenuService">
+    <annotation name="ActionScriptGeneration">
+      <item name="Source">MenuService</item>
+      <item name="ServiceType">RemoteObject</item>
+      <item name="Package">services.menuservice</item>
+      <item name="Endpoint">gateway.php</item>
+      <item name="Destination">MenuService</item>
+    </annotation>
+    <annotation name="ServiceTypeGroup">
+      <item name="ServiceBackendType">PHP</item>
+    </annotation>
+    <annotation name="ServiceConfig">
+      <item name="PHP_RELATIVE_LOCATION">Bon Cuisson/project-files/bin-debug/services/MenuService.php</item>
+      <item name="PHP_SERVER_ROOT">C:/Web Development/wamp/www</item>
+      <item name="DEFAULT_ENTITY_PACKAGE">valueObjects</item>
+      <item name="PHP_SERVICES_FOLDER">C:/Web Development/wamp/www/Bon Cuisson/project-files/bin-debug/services</item>
+      <item name="PHP_LOCATION">C:/Web Development/wamp/www/Bon Cuisson/project-files/bin-debug/services/MenuService.php</item>
+      <item name="LINKED_FILE">MenuService.php</item>
+      <item name="PHP_SERVER_ROOT_URL">http://localhost/</item>
+      <item name="ABSOLUTE_ENDPOINT">http://localhost/Bon Cuisson/project-files/bin-debug/gateway.php</item>
+      <item name="PHP_CLASS_NAME">MenuService</item>
+    </annotation>
+    <function name="getAllMenu" return-type="Menu[]">
+      <annotation name="analyze group">
+        <item name="analyzed">true</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="returnType">opaque</item>
+      </annotation>
+    </function>
+    <function name="getMenuByID" return-type="Menu">
+      <annotation name="analyze group">
+        <item name="analyzed">true</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">opaque</item>
+        <item name="returnType">opaque</item>
+      </annotation>
+      <parameter name="itemID" type="integer"/>
+    </function>
+    <function name="createMenu" return-type="integer">
+      <annotation name="analyze group">
+        <item name="analyzed">true</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">opaque</item>
+        <item name="returnType">opaque</item>
+      </annotation>
+      <parameter name="item" type="Menu"/>
+    </function>
+    <function name="updateMenu" return-type="void">
+      <annotation name="analyze group">
+        <item name="analyzed">true</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">opaque</item>
+        <item name="returnType">opaque</item>
+      </annotation>
+      <parameter name="item" type="Menu"/>
+    </function>
+    <function name="deleteMenu" return-type="void">
+      <annotation name="analyze group">
+        <item name="analyzed">true</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">opaque</item>
+        <item name="returnType">opaque</item>
+      </annotation>
+      <parameter name="itemID" type="integer"/>
+    </function>
+    <function name="count" return-type="integer">
+      <annotation name="analyze group">
+        <item name="analyzed">true</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="returnType">opaque</item>
+      </annotation>
+    </function>
+    <function name="getMenu_paged" return-type="Menu[]">
+      <annotation name="analyze group">
+        <item name="analyzed">true</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">opaque,opaque</item>
+        <item name="returnType">opaque</item>
+      </annotation>
+      <parameter name="startIndex" type="integer"/>
+      <parameter name="numItems" type="integer"/>
+    </function>
+  </service>
+  <entity name="Menu" persistent="true">
+    <annotation name="EntityProperties">
+      <item name="EntityOriginalName">Menu</item>
+    </annotation>
+    <annotation name="service Group">
+      <item name="service">MenuService</item>
+    </annotation>
+    <annotation name="ServerProperties">
+      <item name="IncludeRemoteClass">nonempty</item>
+    </annotation>
+    <annotation name="DataManagement">
+      <item name="create">createMenu</item>
+      <item name="update">updateMenu</item>
+      <item name="get">getMenuByID</item>
+      <item name="delete">deleteMenu</item>
+      <item name="fillFunc">getAllMenu,getMenu_paged</item>
+      <item name="managingService">MenuService</item>
+    </annotation>
+    <annotation name="getMenuByID">
+      <item name="propertySpecifier">id,type,price,perUnit,name,description,varations</item>
+    </annotation>
+    <annotation name="getAllMenu">
+      <item name="propertySpecifier">id,type,price,perUnit,name,description,varations</item>
+    </annotation>
+    <annotation name="getMenu_paged">
+      <item name="propertySpecifier">id,type,price,perUnit,name,description,varations</item>
+      <item name="pagingEnabled">true</item>
+      <item name="positionalPagingParameters">true</item>
+      <item name="countOperation">count</item>
+    </annotation>
+    <annotation name="ActionScriptGeneration">
+      <item name="Package">valueObjects</item>
+    </annotation>
+    <id name="id" type="integer"/>
+    <property name="type" type="string"/>
+    <property name="price" type="float"/>
+    <property name="perUnit" type="string"/>
+    <property name="name" type="string"/>
+    <property name="description" type="string"/>
+    <property name="varations" type="string"/>
   </entity>
 </model>
