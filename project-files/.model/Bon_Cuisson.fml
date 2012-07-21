@@ -275,13 +275,13 @@
       <item name="managingService">MenuService</item>
     </annotation>
     <annotation name="getMenuByID">
-      <item name="propertySpecifier">id,type,price,perUnit,name,description,varations</item>
+      <item name="propertySpecifier">id,position,type,price,perUnit,name,tagline,description,variations,imageURL</item>
     </annotation>
     <annotation name="getAllMenu">
-      <item name="propertySpecifier">id,type,price,perUnit,name,description,varations</item>
+      <item name="propertySpecifier">id,position,type,price,perUnit,name,tagline,description,variations,imageURL</item>
     </annotation>
     <annotation name="getMenu_paged">
-      <item name="propertySpecifier">id,type,price,perUnit,name,description,varations</item>
+      <item name="propertySpecifier">id,position,type,price,perUnit,name,tagline,description,variations,imageURL</item>
       <item name="pagingEnabled">true</item>
       <item name="positionalPagingParameters">true</item>
       <item name="countOperation">count</item>
@@ -290,11 +290,14 @@
       <item name="Package">valueObjects</item>
     </annotation>
     <id name="id" type="integer"/>
+    <property name="position" type="integer"/>
     <property name="type" type="string"/>
     <property name="price" type="float"/>
     <property name="perUnit" type="string"/>
     <property name="name" type="string"/>
+    <property name="tagline" type="string"/>
     <property name="description" type="string"/>
-    <property name="varations" type="string"/>
+    <property name="variations" type="string"/>
+    <property name="imageURL" type="string"/>
   </entity>
 </model>

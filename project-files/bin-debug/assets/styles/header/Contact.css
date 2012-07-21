@@ -3,13 +3,13 @@
 
 @font-face {
 	embed-as-cff: true;
-	fontFamily: "EdwardianScript";
-	src: url("../assets/fonts/itcedscr.ttf");
+	fontFamily: "LucidaCalligraphy";
+	src: url("../../fonts/lcallig.ttf");
 }
 
-.logo {
+.info {
 	color: #FFFFFF;
-	fontFamily: EdwardianScript;
+	fontFamily: LucidaCalligraphy;
 	fontLookup: embeddedCFF;
-	fontSize: 69;
+	fontSize: 15;
 }

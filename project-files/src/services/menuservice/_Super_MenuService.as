@@ -197,7 +197,7 @@ internal class _Super_MenuService extends com.adobe.fiber.services.wrapper.Remot
         _menuRPCDataManager.addManagedOperation(dmOperation);     
 
         dmQuery = new mx.data.ManagedQuery("getMenu_paged");
-        dmQuery.propertySpecifier = "id,type,price,perUnit,name,description,varations";
+        dmQuery.propertySpecifier = "id,position,type,price,perUnit,name,tagline,description,variations,imageURL";
         dmQuery.countOperation = "count";
         dmQuery.pagingEnabled = true;
         dmQuery.positionalPagingParameters = true;
@@ -209,7 +209,7 @@ internal class _Super_MenuService extends com.adobe.fiber.services.wrapper.Remot
         _menuRPCDataManager.addManagedOperation(dmOperation);     
 
         dmQuery = new mx.data.ManagedQuery("getAllMenu");
-        dmQuery.propertySpecifier = "id,type,price,perUnit,name,description,varations";
+        dmQuery.propertySpecifier = "id,position,type,price,perUnit,name,tagline,description,variations,imageURL";
         dmQuery.parameters = "";
         _menuRPCDataManager.addManagedOperation(dmQuery);
 

@@ -24,10 +24,12 @@
 			//Apply this filter
 				line.filters = new Array(blur);
 				logo.filters = new Array(blur);
-				tagline.filters = new Array(blur);
+				tagline1.filters = new Array(blur);
+				tagline2.filters = new Array(blur);
+				tagline3.filters = new Array(blur);
 				
 			//Tween into these items into clarity
-				var items:Array = new Array(line, logo, tagline);
+				var items:Array = new Array(line, logo, tagline1, tagline2, tagline3);
 				
 				TweenMax.allTo(items, 0.5, {
 							   		alpha : 1,
@@ -41,12 +43,13 @@
 		]]>
 	</fx:Script>
 	
-<!-- Include the required stylesheets -->
-	<fx:Style source="../styles/LogoFont.css"/>
-	<fx:Style source="../styles/TaglineFont.css"/>
+<!-- Include the required stylesheet -->
+	<fx:Style source="../../assets/styles/header/Logo.css"/>
 	
 <!-- Create the logo and tagline -->
-	<s:RichText alpha="0" id="logo" x="5" y="11" styleName="logo" text="Bon Cuisson"/>
+	<s:Label alpha="0" id="logo" x="5" y="11" styleName="logo" text="Bon Cuisson"/>
 	<images:FrenchLine alpha="0" id="line" x="10" y="54" width="385.253" height="59.7202"/>
-	<s:RichText alpha="0" id="tagline" styleName="tagline" x="211" y="104" text="by Dawn"/>
+	<s:Label alpha="0" id="tagline1" styleName="tagline" x="211" y="102" text="by"/>
+	<s:Label alpha="0" id="tagline2" styleName="taglineCapital" x="252" y="91" text="D"/>
+	<s:Label alpha="0" id="tagline3" styleName="tagline" x="291" y="101" text="awn"/>
 </s:Group>

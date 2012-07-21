@@ -23,12 +23,10 @@
 	</fx:Script>
 	
 <!-- Include the required stylesheet -->
-	<fx:Style source="../styles/TaglineFont.css"/>
+	<fx:Style source="../../assets/styles/header/Contact.css"/>
 	
 <!-- Write out the contact information -->
-	<s:RichText x="10" y="12" fontSize="15" styleName="tagline" text="{this.address}"/>
-	<s:RichText x="10" y="43" fontSize="15" styleName="tagline" text="{this.phone}"/>
-	<s:RichText x="10" y="72" buttonMode="true" click="sendEmail(event)" color="#ADEAEA"
-				fontSize="15" styleName="tagline" text="{this.email}"
-				textDecoration="none"/>
+	<s:RichText x="10" y="12" styleName="info" text="{this.address}"/>
+	<s:RichText x="10" y="43" styleName="info" text="{this.phone}"/>
+	<s:RichText x="10" y="72" buttonMode="true" click="sendEmail(event)" styleName="info" text="{this.email}"/>
 </s:Group>

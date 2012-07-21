@@ -49,12 +49,15 @@ public class _Super_Menu extends flash.events.EventDispatcher implements com.ado
      * properties
      */
     private var _internal_id : int;
+    private var _internal_position : int;
     private var _internal_type : String;
     private var _internal_price : Number;
     private var _internal_perUnit : String;
     private var _internal_name : String;
+    private var _internal_tagline : String;
     private var _internal_description : String;
-    private var _internal_varations : String;
+    private var _internal_variations : String;
+    private var _internal_imageURL : String;
 
     private static var emptyArray:Array = new Array();
 
@@ -87,6 +90,12 @@ public class _Super_Menu extends flash.events.EventDispatcher implements com.ado
     }
 
     [Bindable(event="propertyChange")]
+    public function get position() : int
+    {
+        return _internal_position;
+    }
+
+    [Bindable(event="propertyChange")]
     public function get type() : String
     {
         return _internal_type;
@@ -111,15 +120,27 @@ public class _Super_Menu extends flash.events.EventDispatcher implements com.ado
     }
 
     [Bindable(event="propertyChange")]
+    public function get tagline() : String
+    {
+        return _internal_tagline;
+    }
+
+    [Bindable(event="propertyChange")]
     public function get description() : String
     {
         return _internal_description;
     }
 
     [Bindable(event="propertyChange")]
-    public function get varations() : String
+    public function get variations() : String
     {
-        return _internal_varations;
+        return _internal_variations;
+    }
+
+    [Bindable(event="propertyChange")]
+    public function get imageURL() : String
+    {
+        return _internal_imageURL;
     }
 
     public function clearAssociations() : void
@@ -136,6 +157,15 @@ public class _Super_Menu extends flash.events.EventDispatcher implements com.ado
         if (oldValue !== value)
         {
             _internal_id = value;
+        }
+    }
+
+    public function set position(value:int) : void
+    {
+        var oldValue:int = _internal_position;
+        if (oldValue !== value)
+        {
+            _internal_position = value;
         }
     }
 
@@ -175,6 +205,15 @@ public class _Super_Menu extends flash.events.EventDispatcher implements com.ado
         }
     }
 
+    public function set tagline(value:String) : void
+    {
+        var oldValue:String = _internal_tagline;
+        if (oldValue !== value)
+        {
+            _internal_tagline = value;
+        }
+    }
+
     public function set description(value:String) : void
     {
         var oldValue:String = _internal_description;
@@ -184,12 +223,21 @@ public class _Super_Menu extends flash.events.EventDispatcher implements com.ado
         }
     }
 
-    public function set varations(value:String) : void
+    public function set variations(value:String) : void
     {
-        var oldValue:String = _internal_varations;
+        var oldValue:String = _internal_variations;
         if (oldValue !== value)
         {
-            _internal_varations = value;
+            _internal_variations = value;
+        }
+    }
+
+    public function set imageURL(value:String) : void
+    {
+        var oldValue:String = _internal_imageURL;
+        if (oldValue !== value)
+        {
+            _internal_imageURL = value;
         }
     }
 

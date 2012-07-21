@@ -2,27 +2,71 @@
 <s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
 				xmlns:s="library://ns.adobe.com/flex/spark" 
 				xmlns:mx="library://ns.adobe.com/flex/mx" 
-				autoDrawBackground="false" creationComplete="init(event)">
+				xmlns:images="assets.images.*"
+				autoDrawBackground="false" creationComplete="init(event)"
+				minWidth="800" width="100%">
 	<fx:Script>
 		<![CDATA[
+			import flashx.textLayout.conversion.TextConverter;
+			
 			import mx.controls.Alert;
 			import mx.events.FlexEvent;
 			
-		//Format the price
+			import spark.core.MaskType;
+			
+		//Construct either the price or the pricing variations
 			private function init(e:FlexEvent):void {
-				price.text = priceFormatter.format(data.price);
-				
+			//We only have a price to deal with
+				if (data.variations == "") {
+					price.text = priceFormatter.format(data.price);
+					price.text += data.perUnit;
+			//We have variations to format...
+				} else {
+					var variations:Object = JSON.parse(data.variations);
+					var returnString:String = "";
+					
+				//We can navigate the above object like a multi-dimensional array
+				//First object within the array is the price
+				//Second object within the array is the size
+				//Third object within the array is the suggested serving audience
+					for (var i:int = 0; i <= variations.length - 1; i++) {
+						returnString += priceFormatter.format(variations[i][0]) + " " + variations[i][1] + "<br><font size=\"10\">" + "" + variations[i][2] + "</font><br>";
+					}
+					
+					this.price.textFlow = TextConverter.importToFlow(returnString, TextConverter.TEXT_FIELD_HTML_FORMAT);
+				}
 			}
 			
 		]]>
 	</fx:Script>
 	
 	<fx:Declarations>
-		<s:CurrencyFormatter id="priceFormatter" currencySymbol="$" fractionalDigits="2" trailingZeros="true" useCurrencySymbol="true" useGrouping="true"/>
+		<s:CurrencyFormatter id="priceFormatter" currencySymbol="$ " fractionalDigits="0" trailingZeros="false" useCurrencySymbol="true" useGrouping="true"/>
 	</fx:Declarations>
 	
-	<s:Label id="title" text="{data.name}"/>
-	<s:Label id="seperator" lineBreak="explicit" maxDisplayedLines="1" left="{title.width + 5}" right="{price.width + 5}" text="................................................................................................................................................................................................................................................."/>
-	<s:Label backgroundAlpha="1" id="price" right="0" />
+<!-- Include the required stylesheet -->
+	<fx:Style source="../assets/styles/pages/Menu.css"/>
 	
+<!-- Display the header of the menu item including the name, price, tagline, and Fleur de Lis as the "bullet" item -->
+	<s:RichText id="price" left="5" styleName="price" top="7"/>
+	<images:FleurDeLis left="{width * 0.1}" />
+	<s:Label id="title" left="{(width * 0.1) + 35}" styleName="name" text="{data.name}"/>
+	<s:Label id="tagline" left="{title.x + title.width + 10}" right="0" styleName="tag" text="{data.tagline}" top="6"/>
+	
+<!-- Display the description of the menu item -->
+	<s:Label left="{(width * 0.1) + 25}" right="0" top="{tagline.height + 30}" styleName="description" text="{data.description}"/>
+	
+	<s:Image source="{data.imageURL}"/>
+	
+	<!--<s:Group id="mask" cacheAsBitmap="true">
+		<s:Ellipse id="imageFrame" width="150" height="150" rotation="325" top="{tagline.height + 30}" left="{(width * 0.1) + 25}">
+			<s:stroke>
+				<s:LinearGradientStroke weight="5">
+					<s:GradientEntry color="0x000000"/>
+					<s:GradientEntry color="0xFFFFFF"/>
+					<s:GradientEntry color="0x000000"/>
+				</s:LinearGradientStroke>
+			</s:stroke>
+		</s:Ellipse>
+	</s:Group>-->
 </s:ItemRenderer>

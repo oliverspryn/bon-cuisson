@@ -1,0 +1,31 @@
+/* CSS file */
+@namespace s "library://ns.adobe.com/flex/spark";
+@namespace mx "library://ns.adobe.com/flex/mx";
+
+@font-face {
+	embed-as-cff: true;
+	fontFamily: "LucidaCalligraphy";
+	src: url("../fonts/lcallig.ttf");
+}
+
+.name {
+	color: #FFFFFF;
+	fontFamily: LucidaCalligraphy;
+	fontLookup: embeddedCFF;
+	fontSize: 25;
+}
+
+.price, .variations {
+	color: #FFFFFF;
+	fontFamily: LucidaCalligraphy;
+	fontLookup: embeddedCFF;
+	fontSize: 12;
+}
+
+.tag, .description {
+	color: #FFFFFF;
+	fontFamily: "Times New Roman";
+	fontLookup: embeddedCFF;
+	fontSize: 20;
+	fontStyle: italic;
+}

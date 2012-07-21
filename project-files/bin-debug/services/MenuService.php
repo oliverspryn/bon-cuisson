@@ -63,12 +63,12 @@ class MenuService {
 		
 		$rows = array();
 		
-		mysqli_stmt_bind_result($stmt, $row->id, $row->type, $row->price, $row->perUnit, $row->name, $row->description, $row->varations);
+		mysqli_stmt_bind_result($stmt, $row->id, $row->position, $row->type, $row->price, $row->perUnit, $row->name, $row->tagline, $row->description, $row->variations, $row->imageURL);
 		
 	    while (mysqli_stmt_fetch($stmt)) {
 	      $rows[] = $row;
 	      $row = new stdClass();
-	      mysqli_stmt_bind_result($stmt, $row->id, $row->type, $row->price, $row->perUnit, $row->name, $row->description, $row->varations);
+	      mysqli_stmt_bind_result($stmt, $row->id, $row->position, $row->type, $row->price, $row->perUnit, $row->name, $row->tagline, $row->description, $row->variations, $row->imageURL);
 	    }
 		
 		mysqli_stmt_free_result($stmt);
@@ -96,7 +96,7 @@ class MenuService {
 		mysqli_stmt_execute($stmt);
 		$this->throwExceptionOnError();
 		
-		mysqli_stmt_bind_result($stmt, $row->id, $row->type, $row->price, $row->perUnit, $row->name, $row->description, $row->varations);
+		mysqli_stmt_bind_result($stmt, $row->id, $row->position, $row->type, $row->price, $row->perUnit, $row->name, $row->tagline, $row->description, $row->variations, $row->imageURL);
 		
 		if(mysqli_stmt_fetch($stmt)) {
 	      return $row;
@@ -115,10 +115,10 @@ class MenuService {
 	 */
 	public function createMenu($item) {
 
-		$stmt = mysqli_prepare($this->connection, "INSERT INTO $this->tablename (type, price, perUnit, name, description, varations) VALUES (?, ?, ?, ?, ?, ?)");
+		$stmt = mysqli_prepare($this->connection, "INSERT INTO $this->tablename (position, type, price, perUnit, name, tagline, description, variations, imageURL) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
 		$this->throwExceptionOnError();
 
-		mysqli_stmt_bind_param($stmt, 'sdssss', $item->type, $item->price, $item->perUnit, $item->name, $item->description, $item->varations);
+		mysqli_stmt_bind_param($stmt, 'isdssssss', $item->position, $item->type, $item->price, $item->perUnit, $item->name, $item->tagline, $item->description, $item->variations, $item->imageURL);
 		$this->throwExceptionOnError();
 
 		mysqli_stmt_execute($stmt);		
@@ -142,10 +142,10 @@ class MenuService {
 	 */
 	public function updateMenu($item) {
 	
-		$stmt = mysqli_prepare($this->connection, "UPDATE $this->tablename SET type=?, price=?, perUnit=?, name=?, description=?, varations=? WHERE id=?");		
+		$stmt = mysqli_prepare($this->connection, "UPDATE $this->tablename SET position=?, type=?, price=?, perUnit=?, name=?, tagline=?, description=?, variations=?, imageURL=? WHERE id=?");		
 		$this->throwExceptionOnError();
 		
-		mysqli_stmt_bind_param($stmt, 'sdssssi', $item->type, $item->price, $item->perUnit, $item->name, $item->description, $item->varations, $item->id);		
+		mysqli_stmt_bind_param($stmt, 'isdssssssi', $item->position, $item->type, $item->price, $item->perUnit, $item->name, $item->tagline, $item->description, $item->variations, $item->imageURL, $item->id);		
 		$this->throwExceptionOnError();
 
 		mysqli_stmt_execute($stmt);		
@@ -226,12 +226,12 @@ class MenuService {
 		
 		$rows = array();
 		
-		mysqli_stmt_bind_result($stmt, $row->id, $row->type, $row->price, $row->perUnit, $row->name, $row->description, $row->varations);
+		mysqli_stmt_bind_result($stmt, $row->id, $row->position, $row->type, $row->price, $row->perUnit, $row->name, $row->tagline, $row->description, $row->variations, $row->imageURL);
 		
 	    while (mysqli_stmt_fetch($stmt)) {
 	      $rows[] = $row;
 	      $row = new stdClass();
-	      mysqli_stmt_bind_result($stmt, $row->id, $row->type, $row->price, $row->perUnit, $row->name, $row->description, $row->varations);
+	      mysqli_stmt_bind_result($stmt, $row->id, $row->position, $row->type, $row->price, $row->perUnit, $row->name, $row->tagline, $row->description, $row->variations, $row->imageURL);
 	    }
 		
 		mysqli_stmt_free_result($stmt);		

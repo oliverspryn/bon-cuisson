@@ -53,7 +53,7 @@
 	</fx:Script>
 	
 <!-- Include the required stylesheet -->
-	<fx:Style source="../styles/TaglineFont.css"/>
+	<fx:Style source="../assets/styles/header/Menu.css"/>
 	
 <!-- Display the light above each menu item, only visible when it is hovered over -->
 	<s:Ellipse alpha="0" id="hoverLight" height="50" width="50" y="-25">
@@ -68,5 +68,5 @@
 	</s:Ellipse>
 	
 <!-- Display the menu item -->
-	<s:Label alpha="0" buttonMode="true" id="menuItem" styleName="tagline" text="{data.title}" />
+	<s:Label alpha="0" buttonMode="true" id="menuItem" styleName="link" text="{data.title}" />
 </s:ItemRenderer>

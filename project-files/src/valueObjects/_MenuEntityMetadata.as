@@ -20,14 +20,14 @@ internal class _MenuEntityMetadata extends com.adobe.fiber.valueobjects.Abstract
 {
     private static var emptyArray:Array = new Array();
 
-    model_internal static var allProperties:Array = new Array("id", "type", "price", "perUnit", "name", "description", "varations");
+    model_internal static var allProperties:Array = new Array("id", "position", "type", "price", "perUnit", "name", "tagline", "description", "variations", "imageURL");
     model_internal static var allAssociationProperties:Array = new Array();
     model_internal static var allRequiredProperties:Array = new Array("id");
-    model_internal static var allAlwaysAvailableProperties:Array = new Array("id", "type", "price", "perUnit", "name", "description", "varations");
+    model_internal static var allAlwaysAvailableProperties:Array = new Array("id", "position", "type", "price", "perUnit", "name", "tagline", "description", "variations", "imageURL");
     model_internal static var guardedProperties:Array = new Array();
-    model_internal static var dataProperties:Array = new Array("id", "type", "price", "perUnit", "name", "description", "varations");
+    model_internal static var dataProperties:Array = new Array("id", "position", "type", "price", "perUnit", "name", "tagline", "description", "variations", "imageURL");
     model_internal static var sourceProperties:Array = emptyArray
-    model_internal static var nonDerivedProperties:Array = new Array("id", "type", "price", "perUnit", "name", "description", "varations");
+    model_internal static var nonDerivedProperties:Array = new Array("id", "position", "type", "price", "perUnit", "name", "tagline", "description", "variations", "imageURL");
     model_internal static var derivedProperties:Array = new Array();
     model_internal static var collectionProperties:Array = new Array();
     model_internal static var collectionBaseMap:Object;
@@ -48,12 +48,15 @@ internal class _MenuEntityMetadata extends com.adobe.fiber.valueobjects.Abstract
             // dependents map
             model_internal::dependentsOnMap = new Object();
             model_internal::dependentsOnMap["id"] = new Array();
+            model_internal::dependentsOnMap["position"] = new Array();
             model_internal::dependentsOnMap["type"] = new Array();
             model_internal::dependentsOnMap["price"] = new Array();
             model_internal::dependentsOnMap["perUnit"] = new Array();
             model_internal::dependentsOnMap["name"] = new Array();
+            model_internal::dependentsOnMap["tagline"] = new Array();
             model_internal::dependentsOnMap["description"] = new Array();
-            model_internal::dependentsOnMap["varations"] = new Array();
+            model_internal::dependentsOnMap["variations"] = new Array();
+            model_internal::dependentsOnMap["imageURL"] = new Array();
 
             // collection base map
             model_internal::collectionBaseMap = new Object();
@@ -62,12 +65,15 @@ internal class _MenuEntityMetadata extends com.adobe.fiber.valueobjects.Abstract
         // Property type Map
         model_internal::propertyTypeMap = new Object();
         model_internal::propertyTypeMap["id"] = "int";
+        model_internal::propertyTypeMap["position"] = "int";
         model_internal::propertyTypeMap["type"] = "String";
         model_internal::propertyTypeMap["price"] = "Number";
         model_internal::propertyTypeMap["perUnit"] = "String";
         model_internal::propertyTypeMap["name"] = "String";
+        model_internal::propertyTypeMap["tagline"] = "String";
         model_internal::propertyTypeMap["description"] = "String";
-        model_internal::propertyTypeMap["varations"] = "String";
+        model_internal::propertyTypeMap["variations"] = "String";
+        model_internal::propertyTypeMap["imageURL"] = "String";
 
         model_internal::_instance = value;
     }
@@ -304,6 +310,12 @@ internal class _MenuEntityMetadata extends com.adobe.fiber.valueobjects.Abstract
     }
 
     [Bindable(event="propertyChange")]
+    public function get isPositionAvailable():Boolean
+    {
+        return true;
+    }
+
+    [Bindable(event="propertyChange")]
     public function get isTypeAvailable():Boolean
     {
         return true;
@@ -328,13 +340,25 @@ internal class _MenuEntityMetadata extends com.adobe.fiber.valueobjects.Abstract
     }
 
     [Bindable(event="propertyChange")]
+    public function get isTaglineAvailable():Boolean
+    {
+        return true;
+    }
+
+    [Bindable(event="propertyChange")]
     public function get isDescriptionAvailable():Boolean
     {
         return true;
     }
 
     [Bindable(event="propertyChange")]
-    public function get isVarationsAvailable():Boolean
+    public function get isVariationsAvailable():Boolean
+    {
+        return true;
+    }
+
+    [Bindable(event="propertyChange")]
+    public function get isImageURLAvailable():Boolean
     {
         return true;
     }
@@ -351,6 +375,12 @@ internal class _MenuEntityMetadata extends com.adobe.fiber.valueobjects.Abstract
 
     [Bindable(event="propertyChange")]   
     public function get idStyle():com.adobe.fiber.styles.Style
+    {
+        return model_internal::_nullStyle;
+    }
+
+    [Bindable(event="propertyChange")]   
+    public function get positionStyle():com.adobe.fiber.styles.Style
     {
         return model_internal::_nullStyle;
     }
@@ -380,13 +410,25 @@ internal class _MenuEntityMetadata extends com.adobe.fiber.valueobjects.Abstract
     }
 
     [Bindable(event="propertyChange")]   
+    public function get taglineStyle():com.adobe.fiber.styles.Style
+    {
+        return model_internal::_nullStyle;
+    }
+
+    [Bindable(event="propertyChange")]   
     public function get descriptionStyle():com.adobe.fiber.styles.Style
     {
         return model_internal::_nullStyle;
     }
 
     [Bindable(event="propertyChange")]   
-    public function get varationsStyle():com.adobe.fiber.styles.Style
+    public function get variationsStyle():com.adobe.fiber.styles.Style
+    {
+        return model_internal::_nullStyle;
+    }
+
+    [Bindable(event="propertyChange")]   
+    public function get imageURLStyle():com.adobe.fiber.styles.Style
     {
         return model_internal::_nullStyle;
     }
