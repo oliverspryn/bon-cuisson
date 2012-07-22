@@ -26,5 +26,10 @@
 			<type>1</type>
 			<location>C:/Web Development/wamp/www/Bon Cuisson/project-files/bin-debug/services/PagesService.php</location>
 		</link>
+		<link>
+			<name>services/ReviewsService.php</name>
+			<type>1</type>
+			<location>C:/Web Development/wamp/www/Bon Cuisson/project-files/bin-debug/services/ReviewsService.php</location>
+		</link>
 	</linkedResources>
 </projectDescription>

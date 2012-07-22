@@ -6,15 +6,19 @@
 			   xmlns:pagesservice="services.pagesservice.*"
 			   xmlns:menuservice="services.menuservice.*"
 			   minWidth="955" minHeight="600" backgroundColor="0x141414"
-			   creationComplete="init(event)" skinClass="skins.Theme">
+			   creationComplete="init(event)" skinClass="skins.Theme" xmlns:pages="components.pages.*" xmlns:reviewsservice="services.reviewsservice.*">
 	<fx:Script>
 		<![CDATA[
 			import com.asual.swfaddress.*;
 			import com.forwardfour.boncuisson.events.MenuEvent;
+			import com.greensock.TweenMax;
+			import com.greensock.plugins.VisiblePlugin;
 			
 			import components.header.Menu;
+			import components.pages.FoodMenu;
 			
 			import mx.controls.Alert;
+			import mx.core.IVisualElement;
 			import mx.events.FlexEvent;
 			import mx.rpc.events.FaultEvent;
 			import mx.rpc.events.ResultEvent;
@@ -23,6 +27,9 @@
 			
 		//Globalize a reference to the navigation menu
 			private var menu:Menu;
+			
+		//Globalize a reference to the page content
+			private var pageObject:*; //This reference will be various types, so just make a general object
 			
 		/**
 		 * Initialization
@@ -38,19 +45,6 @@
 				
 			//Initialize SWFAddress
 				SWFAddress.addEventListener(SWFAddressEvent.INIT, initSWFAddress);
-				
-				if (stage) {
-					this.initBody(new Event(Event.ADDED_TO_STAGE));
-				} else {
-					this.addEventListener(Event.ADDED_TO_STAGE, initBody);
-				}
-			}
-			
-		//Layout the width of the body
-			private function initBody(e:Event):void {
-				//list.left = stage.stageWidth * 0.1;
-				//list.right = stage.stageWidth * 0.1;
-				//list.width = stage.stageWidth * 0.8;
 			}
 			
 		//Initialize SWFAddress and grab the page listed from the URL
@@ -96,41 +90,63 @@
 		*/	
 		
 		//Show an error dialog in the case of an error when communicating with the server
-			private function pageRequestErrorHandler(e:FaultEvent):void {
+			private function requestErrorHandler(e:FaultEvent):void {
 				Alert.show("Fault string: " + e.fault.faultString + "\nFault detail: " + e.fault.faultDetail, e.fault.faultCode);
 			}	
 		
-			private function setupPage(e:ResultEvent):void {
-				//Alert.show(pagesResponder.lastResult.position);
+		//Determine what kind of page will be constructed
+			private function determinePage(e:ResultEvent):void {
+				var pageType:String = pagesResponder.lastResult.type;
+				
+			//We will need to know the type of page to build
+				switch(pageType) {
+					case "menu" : 
+						menuResponder.token = menuFetch.getMenuByType(pagesResponder.lastResult.category);
+						break;
+					
+					case "lunch" : 
+						break;
+					
+					case "reviews" : 
+						reviewsResponder.token = reviews.getAllReviews();
+						break;
+					
+					case "home" : 
+					default : 
+						break;
+				}
 			}
 			
-			
-			protected function list_creationCompleteHandler(event:FlexEvent):void
-			{
-				getAllMenuResult.token = menuService.getAllMenu();
+		//Using the data that was fetched from the "menuFetch" service, construct the page of type menu
+			private function constructMenu(e:ResultEvent):void {
+			//Transition the existing page out of view
+				
+				
+				this.pageObject = new FoodMenu();
+				this.pageObject.alpha = 0;
+				this.pageObject.y = 20;
+				//this.pageObject.visible = false; //White text and alpha 0 don't mix
+				this.pageObject.data = menuResponder.lastResult;
+				addElement(this.pageObject);
+				
+			//Tween the new menu into place
+				TweenMax.to(this.pageObject, 0.75, {
+								alpha : 1,
+								y : 0
+							});
 			}
-			
 		]]>
 	</fx:Script>
 	
 <!-- Make a request to the server for the page data -->
 	<fx:Declarations>
 		<pagesservice:PagesService id="page"/>
-		<s:CallResponder id="pagesResponder" fault="pageRequestErrorHandler(event)" result="setupPage(event)"/>
-		<s:CallResponder id="getAllMenuResult"/>
-		<menuservice:MenuService id="menuService"
-								 fault="Alert.show(event.fault.faultString + '\n' + event.fault.faultDetail)"
-								 showBusyCursor="true"/>
-	</fx:Declarations>
-	
-	<s:layout>
-		<s:BasicLayout/>
-	</s:layout>
-	
-	<s:List id="list" chromeColor="0x141414" width="90%" top="10" borderVisible="false" contentBackgroundAlpha="0"
-			creationComplete="list_creationCompleteHandler(event)"
-			itemRenderer="renderers.FoodMenuRenderer" labelField="name">
-		<s:AsyncListView list="{getAllMenuResult.lastResult}"/>
+		<s:CallResponder id="pagesResponder" fault="requestErrorHandler(event)" result="determinePage(event)"/>
 		
-	</s:List>
+		<menuservice:MenuService id="menuFetch"/>
+		<s:CallResponder id="menuResponder" fault="requestErrorHandler(event)" result="constructMenu(event)"/>
+		
+		<reviewsservice:ReviewsService id="reviews"/>
+		<s:CallResponder id="reviewsResponder" fault="requestErrorHandler(event)" result="constructMenu(event)"/>
+	</fx:Declarations>
 </s:Application>

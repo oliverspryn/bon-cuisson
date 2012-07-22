@@ -21,6 +21,9 @@
 		//The event that is dispatched during a menu item click
 			public static const MENU_ITEM_CLICKED:String = "menuItemClicked";
 			
+			//The event that is dispatched when the menu has finished rendering
+			public static const MENU_RENDER_COMPLETE:String = "menuRenderComplete";
+			
 		//A reference to the current page pointer arrow
 			private var pointer:UIComponent;
 			
@@ -71,7 +74,7 @@
 							});
 			}
 			
-		//Build the current-menu pointer
+		//Build the current-menu pointer and position it according to the selected page
 			private function buildPointer(e:TimerEvent):void {
 			//Remove the event listener
 				EventDispatcher(e.target).removeEventListener(e.type, buildPointer);
@@ -79,7 +82,7 @@
 			//Build the pointer
 				var pointer:Shape = new Shape();
 				var color:uint = 0xFFFFFF;
-				var width:int = 7;
+				var width:int = 10;
 				var selectedItemWidth:Number = list.dataGroup.getElementAt(list.selectedIndex).width;
 				
 				this.pointer = new UIComponent();
@@ -97,8 +100,14 @@
 				
 			//Transition it into view
 				TweenMax.to(pointer, 0.25, {
-								alpha : 1
+								alpha : 1,
+								onComplete : menuRendered
 							});
+			}
+			
+		//Dispatch an event showing that the menu has rendered
+			private function menuRendered():void {
+				super.dispatchEvent(new Event(Menu.MENU_RENDER_COMPLETE));
 			}
 			
 		//Show an error dialog in the case of an error when communicating with the server

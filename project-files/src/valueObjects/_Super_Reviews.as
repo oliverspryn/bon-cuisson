@@ -1,6 +1,6 @@
 /**
  * This is a generated class and is not intended for modification.  To customize behavior
- * of this value object you may modify the generated sub-class of this class - Pages.as.
+ * of this value object you may modify the generated sub-class of this class - Reviews.as.
  */
 
 package valueObjects
@@ -21,7 +21,7 @@ use namespace model_internal;
 
 [Managed]
 [ExcludeClass]
-public class _Super_Pages extends flash.events.EventDispatcher implements com.adobe.fiber.valueobjects.IValueObject
+public class _Super_Reviews extends flash.events.EventDispatcher implements com.adobe.fiber.valueobjects.IValueObject
 {
     model_internal static function initRemoteClassAliasSingle(cz:Class) : void
     {
@@ -31,7 +31,7 @@ public class _Super_Pages extends flash.events.EventDispatcher implements com.ad
     {
     }
 
-    model_internal var _dminternal_model : _PagesEntityMetadata;
+    model_internal var _dminternal_model : _ReviewsEntityMetadata;
     model_internal var _changedObjects:mx.collections.ArrayCollection = new ArrayCollection();
 
     public function getChangedObjects() : Array
@@ -49,12 +49,10 @@ public class _Super_Pages extends flash.events.EventDispatcher implements com.ad
      * properties
      */
     private var _internal_id : int;
-    private var _internal_position : int;
-    private var _internal_URL : String;
-    private var _internal_type : String;
-    private var _internal_title : String;
-    private var _internal_content : String;
-    private var _internal_category : String;
+    private var _internal_timestamp : int;
+    private var _internal_name : String;
+    private var _internal_rating : int;
+    private var _internal_review : String;
 
     private static var emptyArray:Array = new Array();
 
@@ -66,9 +64,9 @@ public class _Super_Pages extends flash.events.EventDispatcher implements com.ad
 
     model_internal var _changeWatcherArray:Array = new Array();
 
-    public function _Super_Pages()
+    public function _Super_Reviews()
     {
-        _model = new _PagesEntityMetadata(this);
+        _model = new _ReviewsEntityMetadata(this);
 
         // Bind to own data or source properties for cache invalidation triggering
 
@@ -85,39 +83,27 @@ public class _Super_Pages extends flash.events.EventDispatcher implements com.ad
     }
 
     [Bindable(event="propertyChange")]
-    public function get position() : int
+    public function get timestamp() : int
     {
-        return _internal_position;
+        return _internal_timestamp;
     }
 
     [Bindable(event="propertyChange")]
-    public function get URL() : String
+    public function get name() : String
     {
-        return _internal_URL;
+        return _internal_name;
     }
 
     [Bindable(event="propertyChange")]
-    public function get type() : String
+    public function get rating() : int
     {
-        return _internal_type;
+        return _internal_rating;
     }
 
     [Bindable(event="propertyChange")]
-    public function get title() : String
+    public function get review() : String
     {
-        return _internal_title;
-    }
-
-    [Bindable(event="propertyChange")]
-    public function get content() : String
-    {
-        return _internal_content;
-    }
-
-    [Bindable(event="propertyChange")]
-    public function get category() : String
-    {
-        return _internal_category;
+        return _internal_review;
     }
 
     public function clearAssociations() : void
@@ -137,57 +123,39 @@ public class _Super_Pages extends flash.events.EventDispatcher implements com.ad
         }
     }
 
-    public function set position(value:int) : void
+    public function set timestamp(value:int) : void
     {
-        var oldValue:int = _internal_position;
+        var oldValue:int = _internal_timestamp;
         if (oldValue !== value)
         {
-            _internal_position = value;
+            _internal_timestamp = value;
         }
     }
 
-    public function set URL(value:String) : void
+    public function set name(value:String) : void
     {
-        var oldValue:String = _internal_URL;
+        var oldValue:String = _internal_name;
         if (oldValue !== value)
         {
-            _internal_URL = value;
+            _internal_name = value;
         }
     }
 
-    public function set type(value:String) : void
+    public function set rating(value:int) : void
     {
-        var oldValue:String = _internal_type;
+        var oldValue:int = _internal_rating;
         if (oldValue !== value)
         {
-            _internal_type = value;
+            _internal_rating = value;
         }
     }
 
-    public function set title(value:String) : void
+    public function set review(value:String) : void
     {
-        var oldValue:String = _internal_title;
+        var oldValue:String = _internal_review;
         if (oldValue !== value)
         {
-            _internal_title = value;
-        }
-    }
-
-    public function set content(value:String) : void
-    {
-        var oldValue:String = _internal_content;
-        if (oldValue !== value)
-        {
-            _internal_content = value;
-        }
-    }
-
-    public function set category(value:String) : void
-    {
-        var oldValue:String = _internal_category;
-        if (oldValue !== value)
-        {
-            _internal_category = value;
+            _internal_review = value;
         }
     }
 
@@ -251,14 +219,14 @@ public class _Super_Pages extends flash.events.EventDispatcher implements com.ad
 
     [Transient]
     [Bindable(event="propertyChange")]
-    public function get _model() : _PagesEntityMetadata
+    public function get _model() : _ReviewsEntityMetadata
     {
         return model_internal::_dminternal_model;
     }
 
-    public function set _model(value : _PagesEntityMetadata) : void
+    public function set _model(value : _ReviewsEntityMetadata) : void
     {
-        var oldValue : _PagesEntityMetadata = model_internal::_dminternal_model;
+        var oldValue : _ReviewsEntityMetadata = model_internal::_dminternal_model;
         if (oldValue !== value)
         {
             model_internal::_dminternal_model = value;

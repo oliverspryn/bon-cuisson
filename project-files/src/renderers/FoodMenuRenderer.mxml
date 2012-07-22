@@ -13,9 +13,21 @@
 			import mx.events.FlexEvent;
 			
 			import spark.core.MaskType;
+			import spark.filters.DropShadowFilter;
 			
-		//Construct either the price or the pricing variations
+		//Format the name to includ a " : " after it if there is a tagline, construct either the price or the pricing variations,
+		//and assign the <s:Image> a source, if there is one 
 			private function init(e:FlexEvent):void {
+			//Add a ":" after the name if a tagline exists
+				if (data.tagline != "") {
+					title.text += " : ";
+				}
+				
+			//Assign the <s:Image> a source
+				if (data.imageURL != "") {
+					image.source = data.imageURL;
+				}
+				
 			//We only have a price to deal with
 				if (data.variations == "") {
 					price.text = priceFormatter.format(data.price);
@@ -35,6 +47,13 @@
 					
 					this.price.textFlow = TextConverter.importToFlow(returnString, TextConverter.TEXT_FIELD_HTML_FORMAT);
 				}
+				
+			//Add a drop shadow to the <s:Image>
+				var shadow:spark.filters.DropShadowFilter = new spark.filters.DropShadowFilter();
+				shadow.alpha = 45;
+				shadow.blurX = 10;
+				shadow.blurY = 10;
+				image.filters = new Array(shadow);
 			}
 			
 		]]>
@@ -53,20 +72,7 @@
 	<s:Label id="title" left="{(width * 0.1) + 35}" styleName="name" text="{data.name}"/>
 	<s:Label id="tagline" left="{title.x + title.width + 10}" right="0" styleName="tag" text="{data.tagline}" top="6"/>
 	
-<!-- Display the description of the menu item -->
-	<s:Label left="{(width * 0.1) + 25}" right="0" top="{tagline.height + 30}" styleName="description" text="{data.description}"/>
-	
-	<s:Image source="{data.imageURL}"/>
-	
-	<!--<s:Group id="mask" cacheAsBitmap="true">
-		<s:Ellipse id="imageFrame" width="150" height="150" rotation="325" top="{tagline.height + 30}" left="{(width * 0.1) + 25}">
-			<s:stroke>
-				<s:LinearGradientStroke weight="5">
-					<s:GradientEntry color="0x000000"/>
-					<s:GradientEntry color="0xFFFFFF"/>
-					<s:GradientEntry color="0x000000"/>
-				</s:LinearGradientStroke>
-			</s:stroke>
-		</s:Ellipse>
-	</s:Group>-->
+<!-- Display the description and associated image (if any) of the menu item -->
+	<s:Image id="image" left="{(width * 0.1) + 35}" top="{tagline.height + 35}" maxWidth="300"/>
+	<s:Label left="{image.x + image.width + 15}" right="0" top="{tagline.height + 35}" styleName="description" text="{data.description}"/>
 </s:ItemRenderer>

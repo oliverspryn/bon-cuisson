@@ -63,12 +63,12 @@ class PagesService {
 		
 		$rows = array();
 		
-		mysqli_stmt_bind_result($stmt, $row->id, $row->position, $row->URL, $row->type, $row->title, $row->content);
+		mysqli_stmt_bind_result($stmt, $row->id, $row->position, $row->URL, $row->type, $row->title, $row->content, $row->category);
 		
 	    while (mysqli_stmt_fetch($stmt)) {
 	      $rows[] = $row;
 	      $row = new stdClass();
-	      mysqli_stmt_bind_result($stmt, $row->id, $row->position, $row->URL, $row->type, $row->title, $row->content);
+	      mysqli_stmt_bind_result($stmt, $row->id, $row->position, $row->URL, $row->type, $row->title, $row->content, $row->category);
 	    }
 		
 		mysqli_stmt_free_result($stmt);
@@ -96,7 +96,7 @@ class PagesService {
 		mysqli_stmt_execute($stmt);
 		$this->throwExceptionOnError();
 		
-		mysqli_stmt_bind_result($stmt, $row->id, $row->position, $row->URL, $row->type, $row->title, $row->content);
+		mysqli_stmt_bind_result($stmt, $row->id, $row->position, $row->URL, $row->type, $row->title, $row->content, $row->category);
 		
 		if(mysqli_stmt_fetch($stmt)) {
 	      return $row;
@@ -106,7 +106,7 @@ class PagesService {
 	}
 	
 	/**
-	 * Returns the item corresponding to the value specified for the page number.
+	 * Returns the item corresponding to the value specified for the position.
 	 *
 	 * Add authorization or any logical checks for secure access to your data 
 	 *
@@ -115,7 +115,7 @@ class PagesService {
 	 */
 	public function getPagesByPosition($itemPosition) {
 		
-		$stmt = mysqli_prepare($this->connection, "SELECT * FROM $this->tablename where position=?");
+		$stmt = mysqli_prepare($this->connection, "SELECT * FROM $this->tablename where position=?");	
 		$this->throwExceptionOnError();
 		
 		mysqli_stmt_bind_param($stmt, 'i', $itemPosition);		
@@ -124,7 +124,7 @@ class PagesService {
 		mysqli_stmt_execute($stmt);
 		$this->throwExceptionOnError();
 		
-		mysqli_stmt_bind_result($stmt, $row->id, $row->position, $row->URL, $row->type, $row->title, $row->content);
+		mysqli_stmt_bind_result($stmt, $row->id, $row->position, $row->URL, $row->type, $row->title, $row->content, $row->category);
 		
 		if(mysqli_stmt_fetch($stmt)) {
 	      return $row;
@@ -134,7 +134,7 @@ class PagesService {
 	}
 	
 	/**
-	 * Returns the item corresponding to the value specified for the page URL.
+	 * Returns the item corresponding to the value specified for the URL.
 	 *
 	 * Add authorization or any logical checks for secure access to your data 
 	 *
@@ -143,16 +143,16 @@ class PagesService {
 	 */
 	public function getPagesByURL($itemURL) {
 		
-		$stmt = mysqli_prepare($this->connection, "SELECT * FROM $this->tablename where URL=?");
+		$stmt = mysqli_prepare($this->connection, "SELECT * FROM $this->tablename where URL=?");	
 		$this->throwExceptionOnError();
 		
-		mysqli_stmt_bind_param($stmt, 'i', $itemURL);		
+		mysqli_stmt_bind_param($stmt, 's', $itemURL);		
 		$this->throwExceptionOnError();
 		
 		mysqli_stmt_execute($stmt);
 		$this->throwExceptionOnError();
 		
-		mysqli_stmt_bind_result($stmt, $row->id, $row->position, $row->URL, $row->type, $row->title, $row->content);
+		mysqli_stmt_bind_result($stmt, $row->id, $row->position, $row->URL, $row->type, $row->title, $row->content, $row->category);
 		
 		if(mysqli_stmt_fetch($stmt)) {
 	      return $row;
@@ -171,10 +171,10 @@ class PagesService {
 	 */
 	public function createPages($item) {
 
-		$stmt = mysqli_prepare($this->connection, "INSERT INTO $this->tablename (position, URL, type, title, content) VALUES (?, ?, ?, ?, ?)");
+		$stmt = mysqli_prepare($this->connection, "INSERT INTO $this->tablename (position, URL, type, title, content, category) VALUES (?, ?, ?, ?, ?, ?)");
 		$this->throwExceptionOnError();
 
-		mysqli_stmt_bind_param($stmt, 'issss', $item->position, $item->URL, $item->type, $item->title, $item->content);
+		mysqli_stmt_bind_param($stmt, 'isssss', $item->position, $item->URL, $item->type, $item->title, $item->content, $item->category);
 		$this->throwExceptionOnError();
 
 		mysqli_stmt_execute($stmt);		
@@ -198,10 +198,10 @@ class PagesService {
 	 */
 	public function updatePages($item) {
 	
-		$stmt = mysqli_prepare($this->connection, "UPDATE $this->tablename SET position=?, URL=?, type=?, title=?, content=? WHERE id=?");		
+		$stmt = mysqli_prepare($this->connection, "UPDATE $this->tablename SET position=?, URL=?, type=?, title=?, content=?, category=? WHERE id=?");		
 		$this->throwExceptionOnError();
 		
-		mysqli_stmt_bind_param($stmt, 'issssi', $item->position, $item->URL, $item->type, $item->title, $item->content, $item->id);		
+		mysqli_stmt_bind_param($stmt, 'isssssi', $item->position, $item->URL, $item->type, $item->title, $item->content, $item->category, $item->id);		
 		$this->throwExceptionOnError();
 
 		mysqli_stmt_execute($stmt);		
@@ -282,12 +282,12 @@ class PagesService {
 		
 		$rows = array();
 		
-		mysqli_stmt_bind_result($stmt, $row->id, $row->position, $row->URL, $row->type, $row->title, $row->content);
+		mysqli_stmt_bind_result($stmt, $row->id, $row->position, $row->URL, $row->type, $row->title, $row->content, $row->category);
 		
 	    while (mysqli_stmt_fetch($stmt)) {
 	      $rows[] = $row;
 	      $row = new stdClass();
-	      mysqli_stmt_bind_result($stmt, $row->id, $row->position, $row->URL, $row->type, $row->title, $row->content);
+	      mysqli_stmt_bind_result($stmt, $row->id, $row->position, $row->URL, $row->type, $row->title, $row->content, $row->category);
 	    }
 		
 		mysqli_stmt_free_result($stmt);		

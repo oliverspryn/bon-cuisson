@@ -104,6 +104,41 @@ class MenuService {
 	      return null;
 		}
 	}
+	
+	/**
+	 * Returns the item corresponding to the value specified for the menu type.
+	 *
+	 * Add authorization or any logical checks for secure access to your data 
+	 *
+	 * 
+	 * @return stdClass
+	 */
+	public function getMenuByType($itemType) {
+		
+		$stmt = mysqli_prepare($this->connection, "SELECT * FROM $this->tablename where type=?");
+		$this->throwExceptionOnError();
+		
+		mysqli_stmt_bind_param($stmt, 's', $itemType);		
+		$this->throwExceptionOnError();
+		
+		mysqli_stmt_execute($stmt);
+		$this->throwExceptionOnError();
+		
+		$rows = array();
+		
+		mysqli_stmt_bind_result($stmt, $row->id, $row->position, $row->type, $row->price, $row->perUnit, $row->name, $row->tagline, $row->description, $row->variations, $row->imageURL);
+		
+	    while (mysqli_stmt_fetch($stmt)) {
+	      $rows[] = $row;
+	      $row = new stdClass();
+	      mysqli_stmt_bind_result($stmt, $row->id, $row->position, $row->type, $row->price, $row->perUnit, $row->name, $row->tagline, $row->description, $row->variations, $row->imageURL);
+	    }
+		
+		mysqli_stmt_free_result($stmt);
+	    mysqli_close($this->connection);
+	
+	    return $rows;
+	}
 
 	/**
 	 * Returns the item corresponding to the value specified for the primary key.

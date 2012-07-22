@@ -16,31 +16,31 @@ import mx.events.PropertyChangeEvent;
 use namespace model_internal;
 
 [ExcludeClass]
-internal class _PagesEntityMetadata extends com.adobe.fiber.valueobjects.AbstractEntityMetadata
+internal class _ReviewsEntityMetadata extends com.adobe.fiber.valueobjects.AbstractEntityMetadata
 {
     private static var emptyArray:Array = new Array();
 
-    model_internal static var allProperties:Array = new Array("id", "position", "URL", "type", "title", "content", "category");
+    model_internal static var allProperties:Array = new Array("id", "timestamp", "name", "rating", "review");
     model_internal static var allAssociationProperties:Array = new Array();
     model_internal static var allRequiredProperties:Array = new Array("id");
-    model_internal static var allAlwaysAvailableProperties:Array = new Array("id", "position", "URL", "type", "title", "content", "category");
+    model_internal static var allAlwaysAvailableProperties:Array = new Array("id", "timestamp", "name", "rating", "review");
     model_internal static var guardedProperties:Array = new Array();
-    model_internal static var dataProperties:Array = new Array("id", "position", "URL", "type", "title", "content", "category");
+    model_internal static var dataProperties:Array = new Array("id", "timestamp", "name", "rating", "review");
     model_internal static var sourceProperties:Array = emptyArray
-    model_internal static var nonDerivedProperties:Array = new Array("id", "position", "URL", "type", "title", "content", "category");
+    model_internal static var nonDerivedProperties:Array = new Array("id", "timestamp", "name", "rating", "review");
     model_internal static var derivedProperties:Array = new Array();
     model_internal static var collectionProperties:Array = new Array();
     model_internal static var collectionBaseMap:Object;
-    model_internal static var entityName:String = "Pages";
+    model_internal static var entityName:String = "Reviews";
     model_internal static var dependentsOnMap:Object;
     model_internal static var dependedOnServices:Array = new Array();
     model_internal static var propertyTypeMap:Object;
 
 
-    model_internal var _instance:_Super_Pages;
+    model_internal var _instance:_Super_Reviews;
     model_internal static var _nullStyle:com.adobe.fiber.styles.Style = new com.adobe.fiber.styles.Style();
 
-    public function _PagesEntityMetadata(value : _Super_Pages)
+    public function _ReviewsEntityMetadata(value : _Super_Reviews)
     {
         // initialize property maps
         if (model_internal::dependentsOnMap == null)
@@ -48,12 +48,10 @@ internal class _PagesEntityMetadata extends com.adobe.fiber.valueobjects.Abstrac
             // dependents map
             model_internal::dependentsOnMap = new Object();
             model_internal::dependentsOnMap["id"] = new Array();
-            model_internal::dependentsOnMap["position"] = new Array();
-            model_internal::dependentsOnMap["URL"] = new Array();
-            model_internal::dependentsOnMap["type"] = new Array();
-            model_internal::dependentsOnMap["title"] = new Array();
-            model_internal::dependentsOnMap["content"] = new Array();
-            model_internal::dependentsOnMap["category"] = new Array();
+            model_internal::dependentsOnMap["timestamp"] = new Array();
+            model_internal::dependentsOnMap["name"] = new Array();
+            model_internal::dependentsOnMap["rating"] = new Array();
+            model_internal::dependentsOnMap["review"] = new Array();
 
             // collection base map
             model_internal::collectionBaseMap = new Object();
@@ -62,12 +60,10 @@ internal class _PagesEntityMetadata extends com.adobe.fiber.valueobjects.Abstrac
         // Property type Map
         model_internal::propertyTypeMap = new Object();
         model_internal::propertyTypeMap["id"] = "int";
-        model_internal::propertyTypeMap["position"] = "int";
-        model_internal::propertyTypeMap["URL"] = "String";
-        model_internal::propertyTypeMap["type"] = "String";
-        model_internal::propertyTypeMap["title"] = "String";
-        model_internal::propertyTypeMap["content"] = "String";
-        model_internal::propertyTypeMap["category"] = "String";
+        model_internal::propertyTypeMap["timestamp"] = "int";
+        model_internal::propertyTypeMap["name"] = "String";
+        model_internal::propertyTypeMap["rating"] = "int";
+        model_internal::propertyTypeMap["review"] = "String";
 
         model_internal::_instance = value;
     }
@@ -120,7 +116,7 @@ internal class _PagesEntityMetadata extends com.adobe.fiber.valueobjects.Abstrac
     override public function getDependants(propertyName:String):Array
     {
        if (model_internal::nonDerivedProperties.indexOf(propertyName) == -1)
-            throw new Error(propertyName + " is not a data property of entity Pages");
+            throw new Error(propertyName + " is not a data property of entity Reviews");
             
        return model_internal::dependentsOnMap[propertyName] as Array;  
     }
@@ -138,7 +134,7 @@ internal class _PagesEntityMetadata extends com.adobe.fiber.valueobjects.Abstrac
     override public function getCollectionBase(propertyName:String):String
     {
         if (model_internal::collectionProperties.indexOf(propertyName) == -1)
-            throw new Error(propertyName + " is not a collection property of entity Pages");
+            throw new Error(propertyName + " is not a collection property of entity Reviews");
 
         return model_internal::collectionBaseMap[propertyName];
     }
@@ -146,7 +142,7 @@ internal class _PagesEntityMetadata extends com.adobe.fiber.valueobjects.Abstrac
     override public function getPropertyType(propertyName:String):String
     {
         if (model_internal::allProperties.indexOf(propertyName) == -1)
-            throw new Error(propertyName + " is not a property of Pages");
+            throw new Error(propertyName + " is not a property of Reviews");
 
         return model_internal::propertyTypeMap[propertyName];
     }
@@ -160,7 +156,7 @@ internal class _PagesEntityMetadata extends com.adobe.fiber.valueobjects.Abstrac
     {
         if (model_internal::allProperties.indexOf(propertyName) == -1)
         {
-            throw new Error(propertyName + " does not exist for entity Pages");
+            throw new Error(propertyName + " does not exist for entity Reviews");
         }
 
         return model_internal::_instance[propertyName];
@@ -170,7 +166,7 @@ internal class _PagesEntityMetadata extends com.adobe.fiber.valueobjects.Abstrac
     {
         if (model_internal::nonDerivedProperties.indexOf(propertyName) == -1)
         {
-            throw new Error(propertyName + " is not a modifiable property of entity Pages");
+            throw new Error(propertyName + " is not a modifiable property of entity Reviews");
         }
 
         model_internal::_instance[propertyName] = value;
@@ -202,7 +198,7 @@ internal class _PagesEntityMetadata extends com.adobe.fiber.valueobjects.Abstrac
     {
         if (model_internal::allProperties.indexOf(propertyName) == -1)
         {
-            throw new Error(propertyName + " does not exist for entity Pages");
+            throw new Error(propertyName + " does not exist for entity Reviews");
         }
 
         if (model_internal::allAlwaysAvailableProperties.indexOf(propertyName) != -1)
@@ -304,37 +300,25 @@ internal class _PagesEntityMetadata extends com.adobe.fiber.valueobjects.Abstrac
     }
 
     [Bindable(event="propertyChange")]
-    public function get isPositionAvailable():Boolean
+    public function get isTimestampAvailable():Boolean
     {
         return true;
     }
 
     [Bindable(event="propertyChange")]
-    public function get isURLAvailable():Boolean
+    public function get isNameAvailable():Boolean
     {
         return true;
     }
 
     [Bindable(event="propertyChange")]
-    public function get isTypeAvailable():Boolean
+    public function get isRatingAvailable():Boolean
     {
         return true;
     }
 
     [Bindable(event="propertyChange")]
-    public function get isTitleAvailable():Boolean
-    {
-        return true;
-    }
-
-    [Bindable(event="propertyChange")]
-    public function get isContentAvailable():Boolean
-    {
-        return true;
-    }
-
-    [Bindable(event="propertyChange")]
-    public function get isCategoryAvailable():Boolean
+    public function get isReviewAvailable():Boolean
     {
         return true;
     }
@@ -356,37 +340,25 @@ internal class _PagesEntityMetadata extends com.adobe.fiber.valueobjects.Abstrac
     }
 
     [Bindable(event="propertyChange")]   
-    public function get positionStyle():com.adobe.fiber.styles.Style
+    public function get timestampStyle():com.adobe.fiber.styles.Style
     {
         return model_internal::_nullStyle;
     }
 
     [Bindable(event="propertyChange")]   
-    public function get URLStyle():com.adobe.fiber.styles.Style
+    public function get nameStyle():com.adobe.fiber.styles.Style
     {
         return model_internal::_nullStyle;
     }
 
     [Bindable(event="propertyChange")]   
-    public function get typeStyle():com.adobe.fiber.styles.Style
+    public function get ratingStyle():com.adobe.fiber.styles.Style
     {
         return model_internal::_nullStyle;
     }
 
     [Bindable(event="propertyChange")]   
-    public function get titleStyle():com.adobe.fiber.styles.Style
-    {
-        return model_internal::_nullStyle;
-    }
-
-    [Bindable(event="propertyChange")]   
-    public function get contentStyle():com.adobe.fiber.styles.Style
-    {
-        return model_internal::_nullStyle;
-    }
-
-    [Bindable(event="propertyChange")]   
-    public function get categoryStyle():com.adobe.fiber.styles.Style
+    public function get reviewStyle():com.adobe.fiber.styles.Style
     {
         return model_internal::_nullStyle;
     }

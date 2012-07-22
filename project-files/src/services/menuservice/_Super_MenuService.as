@@ -161,6 +161,9 @@ internal class _Super_MenuService extends com.adobe.fiber.services.wrapper.Remot
         operation = new mx.rpc.remoting.Operation(null, "getMenu_paged");
          operation.resultElementType = valueObjects.Menu;
         operations["getMenu_paged"] = operation;
+        operation = new mx.rpc.remoting.Operation(null, "getMenuByType");
+         operation.resultElementType = valueObjects.Menu;
+        operations["getMenuByType"] = operation;
 
         _serviceControl.operations = operations;
         _serviceControl.convertResultHandler = com.adobe.serializers.utility.TypeUtility.convertResultHandler;
@@ -183,6 +186,11 @@ internal class _Super_MenuService extends com.adobe.fiber.services.wrapper.Remot
 
         var dmOperation : mx.data.ManagedOperation;
         var dmQuery : mx.data.ManagedQuery;
+
+        dmQuery = new mx.data.ManagedQuery("getMenuByType");
+        dmQuery.propertySpecifier = "id,position,type,price,perUnit,name,tagline,description,variations,imageURL";
+        dmQuery.parameters = "itemType";
+        _menuRPCDataManager.addManagedOperation(dmQuery);
 
         dmOperation = new mx.data.ManagedOperation("updateMenu", "update");
         dmOperation.parameters = "item";
@@ -350,6 +358,24 @@ internal class _Super_MenuService extends com.adobe.fiber.services.wrapper.Remot
     {
         var _internal_operation:mx.rpc.AbstractOperation = _serviceControl.getOperation("getMenu_paged");
 		var _internal_token:mx.rpc.AsyncToken = _internal_operation.send() ;
+        return _internal_token;
+    }
+     
+    /**
+      * This method is a generated wrapper used to call the 'getMenuByType' operation. It returns an mx.rpc.AsyncToken whose 
+      * result property will be populated with the result of the operation when the server response is received. 
+      * To use this result from MXML code, define a CallResponder component and assign its token property to this method's return value. 
+      * You can then bind to CallResponder.lastResult or listen for the CallResponder.result or fault events.
+      *
+      * @see mx.rpc.AsyncToken
+      * @see mx.rpc.CallResponder 
+      *
+      * @return an mx.rpc.AsyncToken whose result property will be populated with the result of the operation when the server response is received.
+      */
+    public function getMenuByType(itemType:String) : mx.rpc.AsyncToken
+    {
+        var _internal_operation:mx.rpc.AbstractOperation = _serviceControl.getOperation("getMenuByType");
+		var _internal_token:mx.rpc.AsyncToken = _internal_operation.send(itemType) ;
         return _internal_token;
     }
      

@@ -1,8 +1,8 @@
 /**
  * This is a generated class and is not intended for modification.  To customize behavior
- * of this service wrapper you may modify the generated sub-class of this class - PagesService.as.
+ * of this service wrapper you may modify the generated sub-class of this class - ReviewsService.as.
  */
-package services.pagesservice
+package services.reviewsservice
 {
 import com.adobe.fiber.core.model_internal;
 import com.adobe.fiber.services.wrapper.RemoteObjectServiceWrapper;
@@ -21,25 +21,25 @@ import mx.rpc.AbstractOperation;
 import mx.rpc.AsyncToken;
 import mx.rpc.remoting.Operation;
 import mx.rpc.remoting.RemoteObject;
-import valueObjects.Pages;
+import valueObjects.Reviews;
 
 import mx.collections.ItemResponder;
 import com.adobe.fiber.valueobjects.AvailablePropertyIterator;
 
 [ExcludeClass]
-internal class _Super_PagesService extends com.adobe.fiber.services.wrapper.RemoteObjectServiceWrapper
+internal class _Super_ReviewsService extends com.adobe.fiber.services.wrapper.RemoteObjectServiceWrapper
 {
-    private var _pagesRPCDataManager : mx.data.RPCDataManager;
+    private var _reviewsRPCDataManager : mx.data.RPCDataManager;
     private var managersArray : Array = new Array();
 
-    public const DATA_MANAGER_PAGES : String = "Pages";
+    public const DATA_MANAGER_REVIEWS : String = "Reviews";
 
     public function getDataManager(dataManagerName:String) : mx.data.RPCDataManager
     {
         switch (dataManagerName)
         {
-             case (DATA_MANAGER_PAGES):
-                return _pagesRPCDataManager;
+             case (DATA_MANAGER_REVIEWS):
+                return _reviewsRPCDataManager;
             default:
                 return null;
         }
@@ -74,7 +74,7 @@ internal class _Super_PagesService extends com.adobe.fiber.services.wrapper.Remo
      */
     public function commit(itemsOrCollections:Array=null, cascadeCommit:Boolean=false):mx.rpc.AsyncToken
     {
-        return _pagesRPCDataManager.dataStore.commit(itemsOrCollections, cascadeCommit);
+        return _reviewsRPCDataManager.dataStore.commit(itemsOrCollections, cascadeCommit);
     }
 
     /**
@@ -102,7 +102,7 @@ internal class _Super_PagesService extends com.adobe.fiber.services.wrapper.Remo
         if (itemsOrCollections == null)
         {
             // Revert all changes
-            return _pagesRPCDataManager.dataStore.revertChanges();
+            return _reviewsRPCDataManager.dataStore.revertChanges();
         }
         else
         {
@@ -119,7 +119,7 @@ internal class _Super_PagesService extends com.adobe.fiber.services.wrapper.Remo
                 }
                 else if (changeItem is mx.collections.ListCollectionView)
                 {
-                    anyChangeItemReverted ||= _pagesRPCDataManager.dataStore.revertChangesForCollection(mx.collections.ListCollectionView(changeItem));
+                    anyChangeItemReverted ||= _reviewsRPCDataManager.dataStore.revertChangesForCollection(mx.collections.ListCollectionView(changeItem));
                 }
                 else
                 {
@@ -131,105 +131,87 @@ internal class _Super_PagesService extends com.adobe.fiber.services.wrapper.Remo
     }
 
     // Constructor
-    public function _Super_PagesService()
+    public function _Super_ReviewsService()
     {
         // initialize service control
         _serviceControl = new mx.rpc.remoting.RemoteObject();
 
         // initialize RemoteClass alias for all entities returned by functions of this service
-        valueObjects.Pages._initRemoteClassAlias();
+        valueObjects.Reviews._initRemoteClassAlias();
 
         var operations:Object = new Object();
         var operation:mx.rpc.remoting.Operation;
 
-        operation = new mx.rpc.remoting.Operation(null, "getAllPages");
-         operation.resultElementType = valueObjects.Pages;
-        operations["getAllPages"] = operation;
-        operation = new mx.rpc.remoting.Operation(null, "getPagesByID");
-         operation.resultType = valueObjects.Pages;
-        operations["getPagesByID"] = operation;
-        operation = new mx.rpc.remoting.Operation(null, "createPages");
+        operation = new mx.rpc.remoting.Operation(null, "getAllReviews");
+         operation.resultElementType = valueObjects.Reviews;
+        operations["getAllReviews"] = operation;
+        operation = new mx.rpc.remoting.Operation(null, "getReviewsByID");
+         operation.resultType = valueObjects.Reviews;
+        operations["getReviewsByID"] = operation;
+        operation = new mx.rpc.remoting.Operation(null, "createReviews");
          operation.resultType = int;
-        operations["createPages"] = operation;
-        operation = new mx.rpc.remoting.Operation(null, "updatePages");
-        operations["updatePages"] = operation;
-        operation = new mx.rpc.remoting.Operation(null, "deletePages");
-        operations["deletePages"] = operation;
+        operations["createReviews"] = operation;
+        operation = new mx.rpc.remoting.Operation(null, "updateReviews");
+        operations["updateReviews"] = operation;
+        operation = new mx.rpc.remoting.Operation(null, "deleteReviews");
+        operations["deleteReviews"] = operation;
         operation = new mx.rpc.remoting.Operation(null, "count");
          operation.resultType = int;
         operations["count"] = operation;
-        operation = new mx.rpc.remoting.Operation(null, "getPages_paged");
-         operation.resultElementType = valueObjects.Pages;
-        operations["getPages_paged"] = operation;
-        operation = new mx.rpc.remoting.Operation(null, "getPagesByPosition");
-         operation.resultType = valueObjects.Pages;
-        operations["getPagesByPosition"] = operation;
-        operation = new mx.rpc.remoting.Operation(null, "getPagesByURL");
-         operation.resultType = valueObjects.Pages;
-        operations["getPagesByURL"] = operation;
+        operation = new mx.rpc.remoting.Operation(null, "getReviews_paged");
+         operation.resultElementType = valueObjects.Reviews;
+        operations["getReviews_paged"] = operation;
 
         _serviceControl.operations = operations;
         _serviceControl.convertResultHandler = com.adobe.serializers.utility.TypeUtility.convertResultHandler;
-        _serviceControl.source = "PagesService";
+        _serviceControl.source = "ReviewsService";
         _serviceControl.endpoint = "gateway.php";
         var managedAssociation : mx.data.ManagedAssociation;
         var managedAssocsArray : Array;
-        // initialize Pages data manager
-        _pagesRPCDataManager = new mx.data.RPCDataManager();
-        managersArray.push(_pagesRPCDataManager);
+        // initialize Reviews data manager
+        _reviewsRPCDataManager = new mx.data.RPCDataManager();
+        managersArray.push(_reviewsRPCDataManager);
 
         managedAssocsArray = new Array();
 
-        _pagesRPCDataManager.destination = "pagesRPCDataManager";
-        _pagesRPCDataManager.service = _serviceControl;        
-        _pagesRPCDataManager.identities =  "id";      
-        _pagesRPCDataManager.itemClass = valueObjects.Pages; 
+        _reviewsRPCDataManager.destination = "reviewsRPCDataManager";
+        _reviewsRPCDataManager.service = _serviceControl;        
+        _reviewsRPCDataManager.identities =  "id";      
+        _reviewsRPCDataManager.itemClass = valueObjects.Reviews; 
 
 
 
         var dmOperation : mx.data.ManagedOperation;
         var dmQuery : mx.data.ManagedQuery;
 
-        dmQuery = new mx.data.ManagedQuery("getPages_paged");
-        dmQuery.propertySpecifier = "id,position,URL,type,title,content,category";
+        dmOperation = new mx.data.ManagedOperation("deleteReviews", "delete");
+        dmOperation.parameters = "id";
+        _reviewsRPCDataManager.addManagedOperation(dmOperation);     
+
+        dmOperation = new mx.data.ManagedOperation("getReviewsByID", "get");
+        dmOperation.parameters = "id";
+        _reviewsRPCDataManager.addManagedOperation(dmOperation);     
+
+        dmQuery = new mx.data.ManagedQuery("getReviews_paged");
+        dmQuery.propertySpecifier = "id,timestamp,name,rating,review";
         dmQuery.countOperation = "count";
         dmQuery.pagingEnabled = true;
         dmQuery.positionalPagingParameters = true;
         dmQuery.parameters = "startIndex,numItems";
-        _pagesRPCDataManager.addManagedOperation(dmQuery);
+        _reviewsRPCDataManager.addManagedOperation(dmQuery);
 
-        dmQuery = new mx.data.ManagedQuery("getAllPages");
-        dmQuery.propertySpecifier = "id,position,URL,type,title,content,category";
+        dmOperation = new mx.data.ManagedOperation("createReviews", "create");
+        dmOperation.parameters = "item";
+        _reviewsRPCDataManager.addManagedOperation(dmOperation);     
+
+        dmQuery = new mx.data.ManagedQuery("getAllReviews");
+        dmQuery.propertySpecifier = "id,timestamp,name,rating,review";
         dmQuery.parameters = "";
-        _pagesRPCDataManager.addManagedOperation(dmQuery);
+        _reviewsRPCDataManager.addManagedOperation(dmQuery);
 
-        dmOperation = new mx.data.ManagedOperation("createPages", "create");
+        dmOperation = new mx.data.ManagedOperation("updateReviews", "update");
         dmOperation.parameters = "item";
-        _pagesRPCDataManager.addManagedOperation(dmOperation);     
-
-        dmQuery = new mx.data.ManagedQuery("getPagesByURL");
-        dmQuery.propertySpecifier = "id,position,URL,type,title,content,category";
-        dmQuery.parameters = "itemURL";
-        dmQuery.type="findItem";
-        _pagesRPCDataManager.addManagedOperation(dmQuery);
-
-        dmOperation = new mx.data.ManagedOperation("getPagesByID", "get");
-        dmOperation.parameters = "id";
-        _pagesRPCDataManager.addManagedOperation(dmOperation);     
-
-        dmOperation = new mx.data.ManagedOperation("deletePages", "delete");
-        dmOperation.parameters = "id";
-        _pagesRPCDataManager.addManagedOperation(dmOperation);     
-
-        dmQuery = new mx.data.ManagedQuery("getPagesByPosition");
-        dmQuery.propertySpecifier = "id,position,URL,type,title,content,category";
-        dmQuery.parameters = "itemPosition";
-        dmQuery.type="findItem";
-        _pagesRPCDataManager.addManagedOperation(dmQuery);
-
-        dmOperation = new mx.data.ManagedOperation("updatePages", "update");
-        dmOperation.parameters = "item";
-        _pagesRPCDataManager.addManagedOperation(dmOperation);     
+        _reviewsRPCDataManager.addManagedOperation(dmOperation);     
 
         _serviceControl.managers = managersArray;
 
@@ -240,13 +222,13 @@ internal class _Super_PagesService extends com.adobe.fiber.services.wrapper.Remo
     //init initialization routine here, child class to override
     protected function preInitializeService():void
     {
-        destination = "PagesService";
+        destination = "ReviewsService";
       
     }
     
 
     /**
-      * This method is a generated wrapper used to call the 'getAllPages' operation. It returns an mx.rpc.AsyncToken whose 
+      * This method is a generated wrapper used to call the 'getAllReviews' operation. It returns an mx.rpc.AsyncToken whose 
       * result property will be populated with the result of the operation when the server response is received. 
       * To use this result from MXML code, define a CallResponder component and assign its token property to this method's return value. 
       * You can then bind to CallResponder.lastResult or listen for the CallResponder.result or fault events.
@@ -256,15 +238,15 @@ internal class _Super_PagesService extends com.adobe.fiber.services.wrapper.Remo
       *
       * @return an mx.rpc.AsyncToken whose result property will be populated with the result of the operation when the server response is received.
       */
-    public function getAllPages() : mx.rpc.AsyncToken
+    public function getAllReviews() : mx.rpc.AsyncToken
     {
-        var _internal_operation:mx.rpc.AbstractOperation = _serviceControl.getOperation("getAllPages");
+        var _internal_operation:mx.rpc.AbstractOperation = _serviceControl.getOperation("getAllReviews");
 		var _internal_token:mx.rpc.AsyncToken = _internal_operation.send() ;
         return _internal_token;
     }
      
     /**
-      * This method is a generated wrapper used to call the 'getPagesByID' operation. It returns an mx.data.ItemReference whose 
+      * This method is a generated wrapper used to call the 'getReviewsByID' operation. It returns an mx.data.ItemReference whose 
       * result property will be populated with the result of the operation when the server response is received. 
       * To use this result from MXML code, define a CallResponder component and assign its token property to this method's return value. 
       * You can then bind to CallResponder.lastResult or listen for the CallResponder.result or fault events.
@@ -274,15 +256,15 @@ internal class _Super_PagesService extends com.adobe.fiber.services.wrapper.Remo
       *
       * @return an mx.data.ItemReference whose result property will be populated with the result of the operation when the server response is received.
       */
-    public function getPagesByID(itemID:int) : mx.data.ItemReference
+    public function getReviewsByID(itemID:int) : mx.data.ItemReference
     {
-        var _internal_operation:mx.rpc.AbstractOperation = _serviceControl.getOperation("getPagesByID");
+        var _internal_operation:mx.rpc.AbstractOperation = _serviceControl.getOperation("getReviewsByID");
 		var _internal_token:mx.data.ItemReference = _internal_operation.send(itemID) as mx.data.ItemReference;
         return _internal_token;
     }
      
     /**
-      * This method is a generated wrapper used to call the 'createPages' operation. It returns an mx.data.ItemReference whose 
+      * This method is a generated wrapper used to call the 'createReviews' operation. It returns an mx.data.ItemReference whose 
       * result property will be populated with the result of the operation when the server response is received. 
       * To use this result from MXML code, define a CallResponder component and assign its token property to this method's return value. 
       * You can then bind to CallResponder.lastResult or listen for the CallResponder.result or fault events.
@@ -292,15 +274,15 @@ internal class _Super_PagesService extends com.adobe.fiber.services.wrapper.Remo
       *
       * @return an mx.data.ItemReference whose result property will be populated with the result of the operation when the server response is received.
       */
-    public function createPages(item:valueObjects.Pages) : mx.data.ItemReference
+    public function createReviews(item:valueObjects.Reviews) : mx.data.ItemReference
     {
-        var _internal_operation:mx.rpc.AbstractOperation = _serviceControl.getOperation("createPages");
+        var _internal_operation:mx.rpc.AbstractOperation = _serviceControl.getOperation("createReviews");
 		var _internal_token:mx.data.ItemReference = _internal_operation.send(item) as mx.data.ItemReference;
         return _internal_token;
     }
      
     /**
-      * This method is a generated wrapper used to call the 'updatePages' operation. It returns an mx.data.ItemReference whose 
+      * This method is a generated wrapper used to call the 'updateReviews' operation. It returns an mx.data.ItemReference whose 
       * result property will be populated with the result of the operation when the server response is received. 
       * To use this result from MXML code, define a CallResponder component and assign its token property to this method's return value. 
       * You can then bind to CallResponder.lastResult or listen for the CallResponder.result or fault events.
@@ -310,15 +292,15 @@ internal class _Super_PagesService extends com.adobe.fiber.services.wrapper.Remo
       *
       * @return an mx.data.ItemReference whose result property will be populated with the result of the operation when the server response is received.
       */
-    public function updatePages(item:valueObjects.Pages) : mx.data.ItemReference
+    public function updateReviews(item:valueObjects.Reviews) : mx.data.ItemReference
     {
-        var _internal_operation:mx.rpc.AbstractOperation = _serviceControl.getOperation("updatePages");
+        var _internal_operation:mx.rpc.AbstractOperation = _serviceControl.getOperation("updateReviews");
 		var _internal_token:mx.data.ItemReference = _internal_operation.send(item) as mx.data.ItemReference;
         return _internal_token;
     }
      
     /**
-      * This method is a generated wrapper used to call the 'deletePages' operation. It returns an mx.rpc.AsyncToken whose 
+      * This method is a generated wrapper used to call the 'deleteReviews' operation. It returns an mx.rpc.AsyncToken whose 
       * result property will be populated with the result of the operation when the server response is received. 
       * To use this result from MXML code, define a CallResponder component and assign its token property to this method's return value. 
       * You can then bind to CallResponder.lastResult or listen for the CallResponder.result or fault events.
@@ -328,9 +310,9 @@ internal class _Super_PagesService extends com.adobe.fiber.services.wrapper.Remo
       *
       * @return an mx.rpc.AsyncToken whose result property will be populated with the result of the operation when the server response is received.
       */
-    public function deletePages(itemID:int) : mx.rpc.AsyncToken
+    public function deleteReviews(itemID:int) : mx.rpc.AsyncToken
     {
-        var _internal_operation:mx.rpc.AbstractOperation = _serviceControl.getOperation("deletePages");
+        var _internal_operation:mx.rpc.AbstractOperation = _serviceControl.getOperation("deleteReviews");
 		var _internal_token:mx.rpc.AsyncToken = _internal_operation.send(itemID) ;
         return _internal_token;
     }
@@ -354,7 +336,7 @@ internal class _Super_PagesService extends com.adobe.fiber.services.wrapper.Remo
     }
      
     /**
-      * This method is a generated wrapper used to call the 'getPages_paged' operation. It returns an mx.rpc.AsyncToken whose 
+      * This method is a generated wrapper used to call the 'getReviews_paged' operation. It returns an mx.rpc.AsyncToken whose 
       * result property will be populated with the result of the operation when the server response is received. 
       * To use this result from MXML code, define a CallResponder component and assign its token property to this method's return value. 
       * You can then bind to CallResponder.lastResult or listen for the CallResponder.result or fault events.
@@ -364,46 +346,10 @@ internal class _Super_PagesService extends com.adobe.fiber.services.wrapper.Remo
       *
       * @return an mx.rpc.AsyncToken whose result property will be populated with the result of the operation when the server response is received.
       */
-    public function getPages_paged() : mx.rpc.AsyncToken
+    public function getReviews_paged() : mx.rpc.AsyncToken
     {
-        var _internal_operation:mx.rpc.AbstractOperation = _serviceControl.getOperation("getPages_paged");
+        var _internal_operation:mx.rpc.AbstractOperation = _serviceControl.getOperation("getReviews_paged");
 		var _internal_token:mx.rpc.AsyncToken = _internal_operation.send() ;
-        return _internal_token;
-    }
-     
-    /**
-      * This method is a generated wrapper used to call the 'getPagesByPosition' operation. It returns an mx.rpc.AsyncToken whose 
-      * result property will be populated with the result of the operation when the server response is received. 
-      * To use this result from MXML code, define a CallResponder component and assign its token property to this method's return value. 
-      * You can then bind to CallResponder.lastResult or listen for the CallResponder.result or fault events.
-      *
-      * @see mx.rpc.AsyncToken
-      * @see mx.rpc.CallResponder 
-      *
-      * @return an mx.rpc.AsyncToken whose result property will be populated with the result of the operation when the server response is received.
-      */
-    public function getPagesByPosition(itemPosition:int) : mx.rpc.AsyncToken
-    {
-        var _internal_operation:mx.rpc.AbstractOperation = _serviceControl.getOperation("getPagesByPosition");
-		var _internal_token:mx.rpc.AsyncToken = _internal_operation.send(itemPosition) ;
-        return _internal_token;
-    }
-     
-    /**
-      * This method is a generated wrapper used to call the 'getPagesByURL' operation. It returns an mx.rpc.AsyncToken whose 
-      * result property will be populated with the result of the operation when the server response is received. 
-      * To use this result from MXML code, define a CallResponder component and assign its token property to this method's return value. 
-      * You can then bind to CallResponder.lastResult or listen for the CallResponder.result or fault events.
-      *
-      * @see mx.rpc.AsyncToken
-      * @see mx.rpc.CallResponder 
-      *
-      * @return an mx.rpc.AsyncToken whose result property will be populated with the result of the operation when the server response is received.
-      */
-    public function getPagesByURL(itemURL:String) : mx.rpc.AsyncToken
-    {
-        var _internal_operation:mx.rpc.AbstractOperation = _serviceControl.getOperation("getPagesByURL");
-		var _internal_token:mx.rpc.AsyncToken = _internal_operation.send(itemURL) ;
         return _internal_token;
     }
      
