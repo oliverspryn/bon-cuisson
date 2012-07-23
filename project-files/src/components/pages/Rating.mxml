@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 currentState="one">
+	<s:states>
+		<s:State name="one"/>
+		<s:State name="two"/>
+		<s:State name="three"/>
+		<s:State name="four"/>
+		<s:State name="five"/>
+	</s:states>
+	
+	<s:HGroup includeIn="one">
+		<s:Image source="@Embed('../../assets/images/cupcake.png')"/>
+		<s:Image source="@Embed('../../assets/images/cupcake_bw.png')"/>
+		<s:Image source="@Embed('../../assets/images/cupcake_bw.png')"/>
+		<s:Image source="@Embed('../../assets/images/cupcake_bw.png')"/>
+		<s:Image source="@Embed('../../assets/images/cupcake_bw.png')"/>
+	</s:HGroup>
+	
+	<s:HGroup includeIn="two">
+		<s:Image source="@Embed('../../assets/images/cupcake.png')"/>
+		<s:Image source="@Embed('../../assets/images/cupcake.png')"/>
+		<s:Image source="@Embed('../../assets/images/cupcake_bw.png')"/>
+		<s:Image source="@Embed('../../assets/images/cupcake_bw.png')"/>
+		<s:Image source="@Embed('../../assets/images/cupcake_bw.png')"/>
+	</s:HGroup>
+	
+	<s:HGroup includeIn="three">
+		<s:Image source="@Embed('../../assets/images/cupcake.png')"/>
+		<s:Image source="@Embed('../../assets/images/cupcake.png')"/>
+		<s:Image source="@Embed('../../assets/images/cupcake.png')"/>
+		<s:Image source="@Embed('../../assets/images/cupcake_bw.png')"/>
+		<s:Image source="@Embed('../../assets/images/cupcake_bw.png')"/>
+	</s:HGroup>
+
+	<s:HGroup includeIn="four">
+		<s:Image source="@Embed('../../assets/images/cupcake.png')"/>
+		<s:Image source="@Embed('../../assets/images/cupcake.png')"/>
+		<s:Image source="@Embed('../../assets/images/cupcake.png')"/>
+		<s:Image source="@Embed('../../assets/images/cupcake.png')"/>
+		<s:Image source="@Embed('../../assets/images/cupcake_bw.png')"/>
+	</s:HGroup>
+	
+	<s:HGroup includeIn="five">
+		<s:Image source="@Embed('../../assets/images/cupcake.png')"/>
+		<s:Image source="@Embed('../../assets/images/cupcake.png')"/>
+		<s:Image source="@Embed('../../assets/images/cupcake.png')"/>
+		<s:Image source="@Embed('../../assets/images/cupcake.png')"/>
+		<s:Image source="@Embed('../../assets/images/cupcake.png')"/>
+	</s:HGroup>
+</s:Group>

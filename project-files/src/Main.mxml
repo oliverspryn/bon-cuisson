@@ -17,6 +17,8 @@
 			import components.header.Menu;
 			import components.pages.FoodMenu;
 			
+			import flash.utils.setTimeout;
+			
 			import mx.controls.Alert;
 			import mx.core.IVisualElement;
 			import mx.events.FlexEvent;
@@ -25,11 +27,17 @@
 			
 			import skins.Theme;
 			
+			import spark.components.Group;
+			
 		//Globalize a reference to the navigation menu
 			private var menu:Menu;
 			
 		//Globalize a reference to the page content
-			private var pageObject:*; //This reference will be various types, so just make a general object
+			private var pageObject:* = null; //This reference will be various types, so just make a general object
+			
+		//Globalize a reference to the page which will be transitioning into place
+		//which is only used while the old page is transitioning out
+			private var newPageObject:* = null; //This reference will be various types, so just make a general object
 			
 		/**
 		 * Initialization
@@ -102,6 +110,7 @@
 				switch(pageType) {
 					case "menu" : 
 						menuResponder.token = menuFetch.getMenuByType(pagesResponder.lastResult.category);
+						this.newPageObject = menuPage;
 						break;
 					
 					case "lunch" : 
@@ -109,31 +118,73 @@
 					
 					case "reviews" : 
 						reviewsResponder.token = reviews.getAllReviews();
+						this.newPageObject = reviewsPage;
 						break;
 					
 					case "home" : 
 					default : 
 						break;
 				}
+				
 			}
 			
 		//Using the data that was fetched from the "menuFetch" service, construct the page of type menu
 			private function constructMenu(e:ResultEvent):void {
 			//Transition the existing page out of view
+				if (this.pageObject != null) {
+					TweenMax.to(this.pageObject, 0.75, {
+						alpha : 0,
+						onComplete : hideAll,
+						y : 20
+					});
+				}
 				
+				var timer:Timer = new Timer(1000, 1);
+				timer.addEventListener(TimerEvent.TIMER_COMPLETE, transitionIn);
+				timer.start();
+			}
+			
+		//For some reason, setting the alpha to 0 on components with lots of child objects
+		//doesn't always work as excpected when the tweening process has finished, so set
+		//the visibility to 0 to ensure all components are hidden
+			private function hideAll():void {
+				if (this.pageObject != null) {
+					this.pageObject.visible = false;
+				}
+			}
+			
+			private function transitionIn(e:TimerEvent):void {				
+			//Hand over the new page reference to the current page referernce
+				this.pageObject = this.newPageObject;
 				
-				this.pageObject = new FoodMenu();
-				this.pageObject.alpha = 0;
-				this.pageObject.y = 20;
-				//this.pageObject.visible = false; //White text and alpha 0 don't mix
-				this.pageObject.data = menuResponder.lastResult;
-				addElement(this.pageObject);
+			//Which data service is holding the server data?
+				var pageType:String = pagesResponder.lastResult.type;
+				
+				switch(pageType) {
+					case "menu" : 
+						this.pageObject.data = menuResponder.lastResult;
+						break;
+					
+					case "lunch" : 
+						break;
+					
+					case "reviews" : 
+						this.pageObject.data = reviewsResponder.lastResult;
+						break;
+					
+					case "home" : 
+					default : 
+						break;
+				}
+				
+			//Make sure the new component is not hidden
+				this.pageObject.visible = true;
 				
 			//Tween the new menu into place
 				TweenMax.to(this.pageObject, 0.75, {
-								alpha : 1,
-								y : 0
-							});
+					alpha : 1,
+					y : 0
+				});
 			}
 		]]>
 	</fx:Script>
@@ -149,4 +200,7 @@
 		<reviewsservice:ReviewsService id="reviews"/>
 		<s:CallResponder id="reviewsResponder" fault="requestErrorHandler(event)" result="constructMenu(event)"/>
 	</fx:Declarations>
+	
+	<pages:FoodMenu id="menuPage" alpha="0" y="20" visible="false"/>
+	<pages:Reviews id="reviewsPage" alpha="0" y="20" visible="false"/>
 </s:Application>
