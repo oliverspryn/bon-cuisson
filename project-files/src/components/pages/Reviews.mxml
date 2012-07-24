@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		 xmlns:s="library://ns.adobe.com/flex/spark" 
-		 xmlns:mx="library://ns.adobe.com/flex/mx">
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 width="100%" height="100%" xmlns:pages="components.pages.*">
 <!-- Create an outward facing public variable which will pass data to the reviews component -->
 	<fx:Script>
 		<![CDATA[
@@ -10,7 +11,17 @@
 		]]>
 	</fx:Script>
 	
-	<s:List dataProvider="{data}" contentBackgroundAlpha="0" borderVisible="false" itemRenderer="renderers.ReviewRenderer">
+	<s:VGroup gap="15" width="90%" left="{width * 0.1}">
+	<!-- Display the list of reviews -->
+		<s:List contentBackgroundAlpha="0" borderVisible="false"
+				itemRenderer="renderers.ReviewRenderer" dataProvider="{data}"
+				top="10" minHeight="1">
+			<s:layout>
+				<s:VerticalLayout useVirtualLayout="false" requestedMinRowCount="1"/>
+			</s:layout>
+		</s:List>
 		
-	</s:List>
+	<!-- Display the review entry form -->
+		<pages:ReviewForm width="90%" />
+	</s:VGroup>
 </s:Group>

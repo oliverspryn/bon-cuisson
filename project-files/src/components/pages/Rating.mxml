@@ -2,8 +2,105 @@
 <s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		 xmlns:s="library://ns.adobe.com/flex/spark" 
 		 xmlns:mx="library://ns.adobe.com/flex/mx"
-		 currentState="one">
+		 currentState="zero" width="100" height="20">
+	<fx:Script>
+		<![CDATA[
+		//Set whether or not this component is used for preview only
+			public var preview:Boolean= false;
+			
+		//Allow outside access to the currently selected rating
+			public function get current():int {
+				switch (this._current) {
+					case "zero" : 
+						return 0;
+						break;
+					
+					case "one" : 
+						return 1;
+						break;
+					
+					case "two" : 
+						return 2;
+						break;
+					
+					case "three" : 
+						return 3;
+						break;
+					
+					case "four" : 
+						return 4;
+						break;
+					
+					case "five" : 
+						return 5;
+						break;
+				}
+				
+				return 0; //Just because Flash Build gets upset if we don't do this -_-
+			}
+			
+		//Set the current value of the rating
+			public function set current(value:int):void {
+				switch (value) {
+					case 0 : 
+						this.currentState = "zero";
+						this._current = "zero";
+						break;
+					
+					case 1 : 
+						this.currentState = "one";
+						this._current = "one";
+						break;
+					
+					case 2 : 
+						this.currentState = "two";
+						this._current = "two";
+						break;
+					
+					case 3 : 
+						this.currentState = "three";
+						this._current = "three";
+						break;
+					
+					case 4 : 
+						this.currentState = "four";
+						this._current = "four";
+						break;
+					
+					case 5 : 
+						this.currentState = "five";
+						this._current = "five";
+						break;
+				}
+			}
+			
+		//Keep a record of the current rating
+			private var _current:String = "zero";
+			
+		//Jump to a different state on hover, and revert to the previous rating on mouse out if no rating is selected
+			private function ratingPreview(state:String):void {
+				if (!this.preview) {
+					this.currentState = state;
+				}
+			}
+			
+			private function ratingRevert():void {
+				if (!this.preview) {
+					this.currentState = this._current;
+				}
+			}
+			
+			private function ratingSelect():void {
+				if (!this.preview) {
+					this._current = this.currentState;
+				}
+			}
+		]]>
+	</fx:Script>
+	
+<!-- Each state indicates the possible rating that this component supports -->
 	<s:states>
+		<s:State name="zero"/>
 		<s:State name="one"/>
 		<s:State name="two"/>
 		<s:State name="three"/>
@@ -11,43 +108,46 @@
 		<s:State name="five"/>
 	</s:states>
 	
-	<s:HGroup includeIn="one">
-		<s:Image source="@Embed('../../assets/images/cupcake.png')"/>
-		<s:Image source="@Embed('../../assets/images/cupcake_bw.png')"/>
-		<s:Image source="@Embed('../../assets/images/cupcake_bw.png')"/>
-		<s:Image source="@Embed('../../assets/images/cupcake_bw.png')"/>
-		<s:Image source="@Embed('../../assets/images/cupcake_bw.png')"/>
-	</s:HGroup>
-	
-	<s:HGroup includeIn="two">
-		<s:Image source="@Embed('../../assets/images/cupcake.png')"/>
-		<s:Image source="@Embed('../../assets/images/cupcake.png')"/>
-		<s:Image source="@Embed('../../assets/images/cupcake_bw.png')"/>
-		<s:Image source="@Embed('../../assets/images/cupcake_bw.png')"/>
-		<s:Image source="@Embed('../../assets/images/cupcake_bw.png')"/>
-	</s:HGroup>
-	
-	<s:HGroup includeIn="three">
-		<s:Image source="@Embed('../../assets/images/cupcake.png')"/>
-		<s:Image source="@Embed('../../assets/images/cupcake.png')"/>
-		<s:Image source="@Embed('../../assets/images/cupcake.png')"/>
-		<s:Image source="@Embed('../../assets/images/cupcake_bw.png')"/>
-		<s:Image source="@Embed('../../assets/images/cupcake_bw.png')"/>
-	</s:HGroup>
-
-	<s:HGroup includeIn="four">
-		<s:Image source="@Embed('../../assets/images/cupcake.png')"/>
-		<s:Image source="@Embed('../../assets/images/cupcake.png')"/>
-		<s:Image source="@Embed('../../assets/images/cupcake.png')"/>
-		<s:Image source="@Embed('../../assets/images/cupcake.png')"/>
-		<s:Image source="@Embed('../../assets/images/cupcake_bw.png')"/>
-	</s:HGroup>
-	
-	<s:HGroup includeIn="five">
-		<s:Image source="@Embed('../../assets/images/cupcake.png')"/>
-		<s:Image source="@Embed('../../assets/images/cupcake.png')"/>
-		<s:Image source="@Embed('../../assets/images/cupcake.png')"/>
-		<s:Image source="@Embed('../../assets/images/cupcake.png')"/>
-		<s:Image source="@Embed('../../assets/images/cupcake.png')"/>
+<!-- Align the rating icons horizontally -->
+	<s:HGroup gap="0">
+	<!-- Cake one -->
+		<s:Image source="@Embed('../../assets/images/cupcake_bw.png')"
+				 includeIn="zero"
+				 mouseOver="{ratingPreview('one')}"/>
+		<s:Image source="@Embed('../../assets/images/cupcake.png')"
+				 includeIn="one,two,three,four,five"
+				 mouseOver="{ratingPreview('one')}" mouseOut="{ratingRevert()}" click="{ratingSelect()}"/>
+		
+	<!-- Cake two -->
+		<s:Image source="@Embed('../../assets/images/cupcake_bw.png')"
+				 includeIn="zero,one"
+				 mouseOver="{ratingPreview('two')}"/>
+		<s:Image source="@Embed('../../assets/images/cupcake.png')"
+				 includeIn="two,three,four,five"
+				 mouseOver="{ratingPreview('two')}" mouseOut="{ratingRevert()}" click="{ratingSelect()}"/>
+		
+	<!-- Cake three -->
+		<s:Image source="@Embed('../../assets/images/cupcake_bw.png')"
+				 includeIn="zero,one,two"
+				 mouseOver="{ratingPreview('three')}"/>
+		<s:Image source="@Embed('../../assets/images/cupcake.png')"
+				 includeIn="three,four,five"
+				 mouseOver="{ratingPreview('three')}" mouseOut="{ratingRevert()}" click="{ratingSelect()}"/>
+		
+	<!-- Cake four -->
+		<s:Image source="@Embed('../../assets/images/cupcake_bw.png')"
+				 includeIn="zero,one,two,three"
+				 mouseOver="{ratingPreview('four')}"/>
+		<s:Image source="@Embed('../../assets/images/cupcake.png')"
+				 includeIn="four,five"
+				 mouseOver="{ratingPreview('four')}" mouseOut="{ratingRevert()}" click="{ratingSelect()}"/>
+		
+	<!-- Cake five -->
+		<s:Image source="@Embed('../../assets/images/cupcake_bw.png')"
+				 includeIn="zero,one,two,three,four"
+				 mouseOver="{ratingPreview('five')}"/>
+		<s:Image source="@Embed('../../assets/images/cupcake.png')"
+				 includeIn="five"
+				 mouseOver="{ratingPreview('five')}" mouseOut="{ratingRevert()}" click="{ratingSelect()}"/>
 	</s:HGroup>
 </s:Group>

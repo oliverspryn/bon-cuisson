@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Form xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		xmlns:s="library://ns.adobe.com/flex/spark" 
+		xmlns:mx="library://ns.adobe.com/flex/mx" xmlns:pages="components.pages.*"
+		width="100%" height="100%" left="{width * 0.1}" xmlns:reviewsservice="services.reviewsservice.*">
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.controls.Alert;
+			import mx.core.Application;
+			import mx.core.FlexGlobals;
+			import mx.rpc.events.FaultEvent;
+			import mx.validators.Validator;
+			
+			import services.reviewsservice.ReviewsService;
+			
+			import valueObjects.Reviews;
+			
+		//Validate the form, and send the data to the server, if validation passed
+			private function validate(e:MouseEvent):void {
+			//We can't create multiple instances of ReviewsService, so reference the one in Main.mxmxl
+				var mainAppRef:Main = Main(FlexGlobals.topLevelApplication);
+				var reviewsService:ReviewsService = mainAppRef.reviews;
+				
+			//Validate the data
+				var validationCheck:Array = Validator.validateAll(new Array(reviewerValidator, reviewValidator));
+				
+				if (validationCheck.length == 0) {
+					var timestamp:Date = new Date();
+					var newReview:valueObjects.Reviews = new valueObjects.Reviews();
+					newReview.timestamp = int(Math.round(timestamp.getTime() / 1000));
+					newReview.name = reviewer.text;
+					newReview.rating = rating.current;
+					newReview.review = review.text;
+					
+					sendReviewResponder.token = reviewsService.createReviews(newReview);
+				} else {
+					Alert.show("We need a bit more information in the review form.", "Not quite");
+				}
+			}
+			
+		//Show an error dialog in the case of an error when communicating with the server
+			private function sendReviewErrorHandler(e:FaultEvent):void {
+				Alert.show("Fault string: " + e.fault.faultString + "\nFault detail: " + e.fault.faultDetail, e.fault.faultCode);
+			}
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+	<!-- Validator components -->
+		<mx:StringValidator id="reviewerValidator"
+							source="{reviewer}" property="text"
+							triggerEvent=""
+							requiredFieldError="We'll need your name"/>
+		
+		<mx:StringValidator id="reviewValidator"
+							source="{review}" property="text"
+							triggerEvent=""
+							requiredFieldError="Can you leave review?"/>
+		
+	<!-- Use the reviews service from the main application to send data -->
+		<!--<reviewsservice:ReviewsService id="sendReview" fault="sendReviewErrorHandler(event)"/>-->
+		<s:CallResponder id="sendReviewResponder"/>
+	</fx:Declarations>
+	
+<!-- Include the required style sheet -->
+	<fx:Style source="../../assets/styles/pages/ReviewStyles.css"/>
+	
+	<s:FormItem label="Name:" styleName="label">
+		<s:TextInput id="reviewer" styleName="input"/>
+	</s:FormItem>
+	
+	<s:FormItem label="Rating:" styleName="label">
+		<pages:Rating id="rating"/>
+	</s:FormItem>
+	
+	<s:FormItem label="Review:" styleName="label">
+		<s:TextArea id="review" styleName="input" height="200" width="320"/>
+	</s:FormItem>
+	
+	<s:FormItem label="">
+		<s:Button click="validate(event)" id="submit" label="Share" styleName="button"/>
+	</s:FormItem>
+</s:Form>

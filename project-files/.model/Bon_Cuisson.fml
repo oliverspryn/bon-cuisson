@@ -412,7 +412,7 @@
       <item name="EntityOriginalName">Reviews</item>
     </annotation>
     <annotation name="service Group">
-      <item name="service">ReviewsService</item>
+      <item name="service">ReviewsService,ReviewsServiceDummy</item>
     </annotation>
     <annotation name="ServerProperties">
       <item name="IncludeRemoteClass">nonempty</item>
