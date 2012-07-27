@@ -3,15 +3,19 @@
 				xmlns:s="library://ns.adobe.com/flex/spark" 
 				xmlns:mx="library://ns.adobe.com/flex/mx" 
 				autoDrawBackground="false"
-				creationComplete="beginTransition(event)"
+				creationComplete="init(event)"
 				mouseOver="displayLightHandler(event)" mouseOut="hideLightHandler(event)">
 	
 	<fx:Script>
 		<![CDATA[
+			import com.asual.swfaddress.SWFAddress;
 			import com.greensock.TweenMax;
 			
+			import spark.components.List;
+			
 		//Transition each menu item into view, one right after another. Also, center align the hover-light over the menu
-			private function beginTransition(e:Event):void {
+		//and check to see if this menu item should be selected
+			private function init(e:Event):void {
 			//The delay will be calculated depending on this item's position in the menu
 				var delay:Number = 1250;       //1.25 sec delay for the menu background to transition into place
 				delay += this.itemIndex * 250; //0.25 sec delay for each item appearing in the menu
@@ -22,6 +26,13 @@
 				
 			//Center align the hover light
 				hoverLight.x = (this.width / 2) - (hoverLight.width / 2);
+				
+			//Should this menu item be selected?
+				var URL:String = SWFAddress.getValue().substr(1);
+				
+				if ((URL == "" && data.position == 1) || (URL != "" && URL == data.URL)) {
+					List(owner).selectedIndex = data.position - 1;
+				}
 			}
 			
 		//Transition this menu item into view

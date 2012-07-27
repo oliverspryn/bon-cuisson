@@ -16,24 +16,38 @@
 			
 			import valueObjects.Reviews;
 			
-		//Validate the form, and send the data to the server, if validation passed
+		//We need to globalize a reference to the rating, and update it just before we send it to the server
+			[Bindable]
+			private var ratingValue:int;
+			
+		//Allow components to be able to access this data
+			public var reviewData:Object;
+			
+		//Validate the form, and send the data to the server, if validation passed,
+		//share this event with the application, reset the form, and given a confirmation
 			private function validate(e:MouseEvent):void {
-			//We can't create multiple instances of ReviewsService, so reference the one in Main.mxmxl
-				var mainAppRef:Main = Main(FlexGlobals.topLevelApplication);
-				var reviewsService:ReviewsService = mainAppRef.reviews;
-				
 			//Validate the data
 				var validationCheck:Array = Validator.validateAll(new Array(reviewerValidator, reviewValidator));
 				
 				if (validationCheck.length == 0) {
-					var timestamp:Date = new Date();
-					var newReview:valueObjects.Reviews = new valueObjects.Reviews();
-					newReview.timestamp = int(Math.round(timestamp.getTime() / 1000));
-					newReview.name = reviewer.text;
-					newReview.rating = rating.current;
-					newReview.review = review.text;
+				//Send the data to the server
+					this.ratingValue = rating.current;
+					sendReviewResponder.token = sendReview.send();
 					
-					sendReviewResponder.token = reviewsService.createReviews(newReview);
+				//Dispatch the event
+					var date:Date = new Date();
+					this.reviewData = new Object();
+					this.reviewData.id = 999; // Just make up some ID, since the review list will expect to see it
+					this.reviewData.timestamp = int(Math.round(date.getTime() / 1000));
+					this.reviewData.name = reviewer.text;
+					this.reviewData.rating = this.ratingValue;
+					this.reviewData.review = review.text;
+					super.dispatchEvent(new Event("reviewProcessed"));
+					
+				//Reset the form
+					reviewer.text = "";
+					rating.current = 0;
+					review.text = "";
 				} else {
 					Alert.show("We need a bit more information in the review form.", "Not quite");
 				}
@@ -45,6 +59,10 @@
 			}
 		]]>
 	</fx:Script>
+	
+	<fx:Metadata>
+		[Event(name="reviewProcessed", type="flash.events.Event")]
+	</fx:Metadata>
 	
 	<fx:Declarations>
 	<!-- Validator components -->
@@ -59,8 +77,14 @@
 							requiredFieldError="Can you leave review?"/>
 		
 	<!-- Use the reviews service from the main application to send data -->
-		<!--<reviewsservice:ReviewsService id="sendReview" fault="sendReviewErrorHandler(event)"/>-->
-		<s:CallResponder id="sendReviewResponder"/>
+		<s:CallResponder id="sendReviewResponder" fault="sendReviewErrorHandler(event)"/>
+		<s:HTTPService id="sendReview" url="services/ReviewProcessor.php" useProxy="false" method="POST">
+			<s:request xmlns="">
+				<reviewer>{reviewer.text}</reviewer>
+				<rating>{this.ratingValue}</rating>
+				<review>{review.text}</review>
+			</s:request>
+		</s:HTTPService>
 	</fx:Declarations>
 	
 <!-- Include the required style sheet -->

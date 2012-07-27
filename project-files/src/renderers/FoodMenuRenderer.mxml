@@ -3,7 +3,8 @@
 				xmlns:s="library://ns.adobe.com/flex/spark" 
 				xmlns:mx="library://ns.adobe.com/flex/mx" 
 				xmlns:images="assets.images.*"
-				autoDrawBackground="false" creationComplete="init(event)"
+				autoDrawBackground="false"
+				dataChange="init(event)"
 				minWidth="800" width="100%">
 	<fx:Script>
 		<![CDATA[
@@ -17,7 +18,7 @@
 			
 		//Format the name to includ a " : " after it if there is a tagline, construct either the price or the pricing variations,
 		//and assign the <s:Image> a source, if there is one 
-			private function init(e:FlexEvent):void {
+			private function init(e:Event):void {
 			//Add a ":" after the name if a tagline exists
 				if (data.tagline != "") {
 					title.text += " : ";

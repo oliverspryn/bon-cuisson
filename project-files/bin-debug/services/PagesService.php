@@ -55,7 +55,7 @@ class PagesService {
 	 */
 	public function getAllPages() {
 
-		$stmt = mysqli_prepare($this->connection, "SELECT * FROM $this->tablename");		
+		$stmt = mysqli_prepare($this->connection, "SELECT * FROM $this->tablename ORDER BY position ASC");		
 		$this->throwExceptionOnError();
 		
 		mysqli_stmt_execute($stmt);

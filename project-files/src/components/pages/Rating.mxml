@@ -43,8 +43,13 @@
 			public function set current(value:int):void {
 				switch (value) {
 					case 0 : 
-						this.currentState = "zero";
-						this._current = "zero";
+						if (!this.preview) {
+							this.currentState = "zero";
+							this._current = "zero";
+						} else {
+							this.currentState = "none";
+						}
+							
 						break;
 					
 					case 1 : 
@@ -100,6 +105,7 @@
 	
 <!-- Each state indicates the possible rating that this component supports -->
 	<s:states>
+		<s:State name="none"/>
 		<s:State name="zero"/>
 		<s:State name="one"/>
 		<s:State name="two"/>

@@ -11,5 +11,6 @@
 	color: #FFFFFF;
 	fontFamily: LucidaCalligraphy;
 	fontLookup: embeddedCFF;
-	fontSize: 25;
+	fontSize: 14;
+	textAlign: center;
 }

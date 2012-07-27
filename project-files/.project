@@ -17,6 +17,16 @@
 	</natures>
 	<linkedResources>
 		<link>
+			<name>services/HomeService.php</name>
+			<type>1</type>
+			<location>C:/Web Development/wamp/www/Bon Cuisson/project-files/bin-debug/services/HomeService.php</location>
+		</link>
+		<link>
+			<name>services/LunchesService.php</name>
+			<type>1</type>
+			<location>C:/Web Development/wamp/www/Bon Cuisson/project-files/bin-debug/services/LunchesService.php</location>
+		</link>
+		<link>
 			<name>services/MenuService.php</name>
 			<type>1</type>
 			<location>C:/Web Development/wamp/www/Bon Cuisson/project-files/bin-debug/services/MenuService.php</location>

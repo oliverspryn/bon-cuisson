@@ -2,13 +2,15 @@
 <s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		 xmlns:s="library://ns.adobe.com/flex/spark" 
 		 xmlns:mx="library://ns.adobe.com/flex/mx" xmlns:pagesservice="services.pagesservice.*"
-		 creationComplete="init(event)">
+		 creationComplete="init(event)"
+		 width="100%">
 	<fx:Script>
 		<![CDATA[
 			import com.forwardfour.boncuisson.events.MenuEvent;
 			import com.greensock.TweenMax;
 			
 			import mx.controls.Alert;
+			import mx.core.IVisualElement;
 			import mx.core.UIComponent;
 			import mx.events.FlexEvent;
 			import mx.rpc.events.FaultEvent;
@@ -21,11 +23,47 @@
 		//The event that is dispatched during a menu item click
 			public static const MENU_ITEM_CLICKED:String = "menuItemClicked";
 			
-			//The event that is dispatched when the menu has finished rendering
+		//The event that is dispatched when the menu has finished rendering
 			public static const MENU_RENDER_COMPLETE:String = "menuRenderComplete";
 			
+		//For some reason, the PagesService request is fired each time the user clicks on the menu
+		//so prevent the cascade of events that are triggered on success of the service call by
+		//keeping track of the first one
+			private var hasMenuItems:Boolean = false;
+			
 		//A reference to the current page pointer arrow
-			private var pointer:UIComponent;
+			private var pointer:UIComponent = null;
+			
+		//For some reason, once the pointer is created and placed, the center of its coordinate
+		//system becomes the spot where it was originally placed. For example, if the pointer
+		//was placed at 123, 45; then the "x", relative to it, is 0, but relative to the stage
+		//is still 123. We need to keep track of this original x location (we don't care about
+		//the y location) in order to do calculations and slide it around on the menu when
+		//different menu items are selected. GRRRR *releases steam*
+			private var xOriginal:Number;
+			
+		//Slide the arrow to a new menu item
+			public function set selected(item:Number):void {
+			//Don't do anything if the pointer has not be created, it will be placed in the correct spot ;)
+				if (this.pointer != null) {
+					item --; //Subtract one to convert to the array zero-based notatation
+					list.selectedIndex = item;
+					
+					var width:int = 10; //Width of the pointer
+					var selectedItem:IVisualElement = list.dataGroup.getElementAt(list.selectedIndex);
+					var selectedItemX:Number = selectedItem.x;
+					var selectedItemWidth:Number = selectedItem.width;
+					var xPos:Number = (stage.stageWidth / 10) + selectedItemX + (selectedItemWidth / 2) - (width / 2);
+					
+				//Why are we doing this? Its really stupid. See the comment above the xOriginal declaration
+					xPos = xPos - this.xOriginal; //Yes, we'll need negatives
+					
+				//Tween the pointer to the proper place
+					TweenMax.to(this.pointer, 1, {
+									x : xPos
+								});
+				}
+			}
 			
 		//Request the menu data from the server and hide the menu scrollbars
 			private function init(e:Event):void {
@@ -38,16 +76,20 @@
 			
 		//Begin building the visual interface, after the data has been recieved from the server and the stage is accessable
 			private function initDisplayObjects(e:ResultEvent):void {
-				if (stage) {
-					this.positionMenu(new Event(Event.ADDED_TO_STAGE));
-				} else {
-					this.addEventListener(Event.ADDED_TO_STAGE, positionMenu);
+				if (!this.hasMenuItems) {
+					this.hasMenuItems = true;
+					
+					if (stage) {
+						this.positionMenu(new Event(Event.ADDED_TO_STAGE));
+					} else {
+						this.addEventListener(Event.ADDED_TO_STAGE, positionMenu);
+					}
 				}
 			}
 			
 		//Add 10% padding to the left and right of the menu links, animate the menu background,
 		//and wait until the menu has transitioned into view before displaying the pointer arrow
-			private function positionMenu(e:Event):void {
+			private function positionMenu(e:Event):void {				
 			//Animate the menu background
 				TweenMax.to(background, 0.50, {
 								onComplete : rollDown,
@@ -70,7 +112,7 @@
 		//Roll the menu background down
 			private function rollDown():void {
 				TweenMax.to(background, 0.50, {
-								height : 50
+								height : 40
 							});
 			}
 			
@@ -82,13 +124,15 @@
 			//Build the pointer
 				var pointer:Shape = new Shape();
 				var color:uint = 0xFFFFFF;
-				var width:int = 10;
-				var selectedItemWidth:Number = list.dataGroup.getElementAt(list.selectedIndex).width;
+				var width:int = 10; //Width of the pointer
+				var selectedItem:IVisualElement = list.dataGroup.getElementAt(list.selectedIndex);
+				var selectedItemX:Number = selectedItem.x;
+				var selectedItemWidth:Number = selectedItem.width;
 				
 				this.pointer = new UIComponent();
 				pointer.alpha = 0;
-				pointer.x = (stage.stageWidth / 10) + (selectedItemWidth / 2) - (width / 2);
-				pointer.y = 50 - width;
+				pointer.x = (stage.stageWidth / 10) + selectedItemX + (selectedItemWidth / 2) - (width / 2);
+				pointer.y = 40 - width;
 				pointer.graphics.beginFill(color);
 				pointer.graphics.moveTo(width / 2, 0);
 				pointer.graphics.lineTo(width, width);
@@ -97,6 +141,9 @@
 				pointer.graphics.endFill();
 				this.pointer.addChild(pointer);
 				this.addElement(this.pointer);
+				
+			//Why are we doing this? Its really stupid. See the comment above the xOriginal declaration
+				this.xOriginal = pointer.x;
 				
 			//Transition it into view
 				TweenMax.to(pointer, 0.25, {
@@ -144,7 +191,8 @@
 	</s:Rect>
 	
 <!-- The styled list which will act as the menu -->
-	<s:List borderVisible="false" contentBackgroundAlpha="0" id="list" requireSelection="true" itemRenderer="renderers.Navigation" change="navigateToPageHandler(event)">
+	<s:List borderVisible="false" contentBackgroundAlpha="0" id="list" requireSelection="true"
+			itemRenderer="renderers.Navigation" change="navigateToPageHandler(event)">
 		<s:layout>
 			<s:HorizontalLayout gap="30"/>
 		</s:layout>

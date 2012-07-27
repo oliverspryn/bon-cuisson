@@ -5,8 +5,14 @@
 			   xmlns:components="components.*"
 			   xmlns:pagesservice="services.pagesservice.*"
 			   xmlns:menuservice="services.menuservice.*"
+			   xmlns:pages="components.pages.*"
+			   xmlns:reviewsservice="services.reviewsservice.*"
+			   xmlns:homeservice="services.homeservice.*"
+			   xmlns:lunchesservice="services.lunchesservice.*"
+			   xmlns:header="components.header.*"
 			   minWidth="955" minHeight="600" backgroundColor="0x141414"
-			   creationComplete="init(event)" skinClass="skins.Theme" xmlns:pages="components.pages.*" xmlns:reviewsservice="services.reviewsservice.*">
+			   creationComplete="init(event)"
+			   skinClass="skins.Theme" preloader="com.forwardfour.boncuisson.Preloader">
 	<fx:Script>
 		<![CDATA[
 			import com.asual.swfaddress.*;
@@ -29,9 +35,6 @@
 			
 			import spark.components.Group;
 			
-		//Globalize a reference to the navigation menu
-			private var menu:Menu;
-			
 		//Globalize a reference to the page content
 			private var pageObject:* = null; //This reference will be various types, so just make a general object
 			
@@ -47,8 +50,6 @@
 		//Add an event listener for when "links" on the menu are clicked and initialize SWFAddress
 			private function init(event:FlexEvent):void {
 			//Listen for menu clicks
-				var skin:Theme = Theme(this.skin);
-				this.menu = Menu(skin.menu);
 				this.menu.addEventListener(Menu.MENU_ITEM_CLICKED, menuNavigateToPageHandler);
 				
 			//Initialize SWFAddress
@@ -114,6 +115,8 @@
 						break;
 					
 					case "lunch" : 
+						lunchesResponder.token = lunchesFetch.getAllLunches();
+						this.newPageObject = lunchesPage;
 						break;
 					
 					case "reviews" : 
@@ -122,6 +125,8 @@
 						break;
 					
 					case "home" : 
+						homeResponder.token = homeFetch.getHomeByID(1);
+						this.newPageObject = homePage;
 					default : 
 						break;
 				}
@@ -147,12 +152,16 @@
 		//For some reason, setting the alpha to 0 on components with lots of child objects
 		//doesn't always work as excpected when the tweening process has finished, so set
 		//the visibility to 0 to ensure all components are hidden
+		//Also explicity set the height to 0
 			private function hideAll():void {
 				if (this.pageObject != null) {
 					this.pageObject.visible = false;
+					//this.pageObject.height = 0;
 				}
 			}
 			
+		//Slide the new page into place, pass it the data it needs, and select the relavent
+		//menu item
 			private function transitionIn(e:TimerEvent):void {				
 			//Hand over the new page reference to the current page referernce
 				this.pageObject = this.newPageObject;
@@ -166,6 +175,7 @@
 						break;
 					
 					case "lunch" : 
+						this.pageObject.data = lunchesResponder.lastResult;
 						break;
 					
 					case "reviews" : 
@@ -174,17 +184,26 @@
 					
 					case "home" : 
 					default : 
+						this.pageObject.data = homeResponder.lastResult;
 						break;
 				}
 				
 			//Make sure the new component is not hidden
 				this.pageObject.visible = true;
 				
+			//Reset the height of the current component
+				//this.pageObject.height = NaN;
+				//this.pageObject.invalidateSize();
+				//this.pageObject.height = this.pageObject.measuredHeight;
+				
 			//Tween the new menu into place
 				TweenMax.to(this.pageObject, 0.75, {
 					alpha : 1,
 					y : 0
 				});
+				
+			//Select the relavent menu item
+				menu.selected = pagesResponder.lastResult.position;
 			}
 		]]>
 	</fx:Script>
@@ -194,13 +213,27 @@
 		<pagesservice:PagesService id="page"/>
 		<s:CallResponder id="pagesResponder" fault="requestErrorHandler(event)" result="determinePage(event)"/>
 		
+		<homeservice:HomeService id="homeFetch"/>
+		<s:CallResponder id="homeResponder" fault="requestErrorHandler(event)" result="constructMenu(event)"/>
+		
 		<menuservice:MenuService id="menuFetch"/>
 		<s:CallResponder id="menuResponder" fault="requestErrorHandler(event)" result="constructMenu(event)"/>
+		
+		<lunchesservice:LunchesService id="lunchesFetch"/>
+		<s:CallResponder id="lunchesResponder" fault="requestErrorHandler(event)" result="constructMenu(event)"/>
 		
 		<reviewsservice:ReviewsService id="reviews"/>
 		<s:CallResponder id="reviewsResponder" fault="requestErrorHandler(event)" result="constructMenu(event)"/>
 	</fx:Declarations>
 	
-	<pages:FoodMenu id="menuPage" alpha="0" y="20" visible="false"/>
-	<pages:Reviews id="reviewsPage" alpha="0" y="20" visible="false"/>
+<!-- Include the navigation menu -->
+	<header:Menu id="menu" top="0" left="-10" right="0"/>
+	
+<!-- We'll use these components as we need them -->
+	<s:Group width="100%" top="60">
+		<pages:Home id="homePage" alpha="0" y="20" visible="false"/>
+		<pages:FoodMenu id="menuPage" alpha="0" y="20" visible="false"/>
+		<pages:Lunches id="lunchesPage" alpha="0" y="20" visible="false"/>
+		<pages:Reviews id="reviewsPage" alpha="0" y="20" visible="false"/>
+	</s:Group>
 </s:Application>

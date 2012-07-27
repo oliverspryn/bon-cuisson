@@ -8,20 +8,31 @@
 		<![CDATA[
 			[Bindable]
 			public var data:*; //Yeah, the lastResult property of the CallResponder isn't strongly typed
+			
+		//When the data has been processed an submitted to the server, add it to the list
+			private function processedHandler(event:Event):void {
+				this.data.addItem(this.form.reviewData);
+			}
 		]]>
 	</fx:Script>
 	
-	<s:VGroup gap="15" width="90%" left="{width * 0.1}">
+<!-- Include the required style sheet -->
+	<fx:Style source="../../assets/styles/pages/ReviewStyles.css"/>
+	
+	<s:VGroup gap="55" width="90%" left="{width * 0.1}">
 	<!-- Display the list of reviews -->
-		<s:List contentBackgroundAlpha="0" borderVisible="false"
+		<s:List contentBackgroundAlpha="0" borderVisible="false" id="reviews"
 				itemRenderer="renderers.ReviewRenderer" dataProvider="{data}"
-				top="10" minHeight="1">
+				top="10" minHeight="1" width="100%">
 			<s:layout>
-				<s:VerticalLayout useVirtualLayout="false" requestedMinRowCount="1"/>
+				<s:VerticalLayout useVirtualLayout="false" requestedMinRowCount="1" gap="35"/>
 			</s:layout>
 		</s:List>
 		
 	<!-- Display the review entry form -->
-		<pages:ReviewForm width="90%" />
+		<s:VGroup>
+			<s:Label styleName="h1" text="I would love to hear from you:"/>
+			<pages:ReviewForm id="form" width="90%" reviewProcessed="processedHandler(event)"/>
+		</s:VGroup>
 	</s:VGroup>
 </s:Group>

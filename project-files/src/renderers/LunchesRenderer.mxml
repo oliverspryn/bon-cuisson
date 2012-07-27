@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+				xmlns:s="library://ns.adobe.com/flex/spark" 
+				xmlns:mx="library://ns.adobe.com/flex/mx" 
+				xmlns:images="assets.images.*"
+				autoDrawBackground="false" creationComplete="init(event)"
+				minWidth="800" width="100%">
+	<fx:Script>
+		<![CDATA[
+			import mx.events.FlexEvent;
+			
+		//Format the name serving date to a user-readable value 
+			private function init(e:FlexEvent):void {				
+				serving.text = dateFormatter.format(data.serving * 1000);
+			}
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<s:DateTimeFormatter id="dateFormatter" dateTimePattern="M-d-yy"/>
+	</fx:Declarations>
+	
+<!-- Include the required stylesheet -->
+	<fx:Style source="../assets/styles/pages/LunchesStyles.css"/>
+	
+<!-- Display the header of the menu item including the name and serving date -->
+	<s:RichText id="serving" left="5" styleName="serving" top="7"/>
+	<s:Label id="title" left="{width * 0.1}" styleName="name" text="{data.name}"/>
+	
+<!-- Display the description and associated image (if any) of the menu item -->
+	<s:Label left="{(width * 0.1) + 35}" right="0" top="{title.height + 15}" styleName="description" text="{data.description}"/>
+</s:ItemRenderer>
