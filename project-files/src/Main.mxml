@@ -10,12 +10,13 @@
 			   xmlns:homeservice="services.homeservice.*"
 			   xmlns:lunchesservice="services.lunchesservice.*"
 			   xmlns:header="components.header.*"
-			   minWidth="955" minHeight="600" backgroundColor="0x141414"
-			   creationComplete="init(event)"
+			   minWidth="955" minHeight="600"
+			   creationComplete="init(event)" backgroundColor="0x141414"
 			   skinClass="skins.Theme" preloader="com.forwardfour.boncuisson.Preloader">
 	<fx:Script>
 		<![CDATA[
 			import com.asual.swfaddress.*;
+			import com.forwardfour.Config;
 			import com.forwardfour.boncuisson.events.MenuEvent;
 			import com.greensock.TweenMax;
 			import com.greensock.plugins.VisiblePlugin;
@@ -42,6 +43,8 @@
 		//which is only used while the old page is transitioning out
 			private var newPageObject:* = null; //This reference will be various types, so just make a general object
 			
+			public var config:Config = new Config();
+			
 		/**
 		 * Initialization
 		 * -------------------------------
@@ -49,6 +52,9 @@
 			
 		//Add an event listener for when "links" on the menu are clicked and initialize SWFAddress
 			private function init(event:FlexEvent):void {
+			//Set the configuration for the main application
+				//bac
+				
 			//Listen for menu clicks
 				this.menu.addEventListener(Menu.MENU_ITEM_CLICKED, menuNavigateToPageHandler);
 				

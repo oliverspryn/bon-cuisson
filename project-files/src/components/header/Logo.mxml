@@ -2,35 +2,34 @@
 <s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		 xmlns:s="library://ns.adobe.com/flex/spark" 
 		 xmlns:mx="library://ns.adobe.com/flex/mx"
-		 addedToStage="init(event)" xmlns:images="assets.images.*">
+		 xmlns:images="assets.images.*"
+		 addedToStage="init(event)" creationComplete="configure(event)">
 	<fx:Script>
-		<![CDATA[
-			import com.greensock.*;
-			import com.greensock.plugins.BlurFilterPlugin;
+		<![CDATA[			
+			import com.greensock.TweenMax;
 			
 			import flash.filters.BitmapFilterQuality;
 			import flash.filters.BlurFilter;
 			
+			import mx.core.FlexGlobals;
 			import mx.events.FlexEvent;
 			
-		//Blur each of the objects within this component then fade it into clarity
-			private function init(event:Event):void {
+		//Blur each of the objects within this component then fade them into clarity
+			private function init(e:Event):void {
 			//Create the blur declaration
 				var blur:BlurFilter = new BlurFilter();
 				blur.blurX = 40;
 				blur.blurY = 40;
 				blur.quality = BitmapFilterQuality.MEDIUM;
 				
-			//Apply this filter
-				line.filters = new Array(blur);
-				logo.filters = new Array(blur);
-				tagline1.filters = new Array(blur);
-				tagline2.filters = new Array(blur);
-				tagline3.filters = new Array(blur);
+			//Apply this filter to each item
+				var items:Array = new Array(logo, line, tagline1, tagline2, tagline3);
+				
+				for (var i:int = 0; i <= items.length - 1; i ++) {
+					items[i].filters = new Array(blur);
+				}
 				
 			//Tween into these items into clarity
-				var items:Array = new Array(line, logo, tagline1, tagline2, tagline3);
-				
 				TweenMax.allTo(items, 0.5, {
 							   		alpha : 1,
 									
@@ -40,6 +39,15 @@
 									}
 							   });
 			}
+			
+		//Use the configuration class to set the values for each of the logo elements
+			private function configure(e:FlexEvent):void {
+				var main:Main = Main(FlexGlobals.topLevelApplication);
+				
+				logo.text = main.config.companyName;
+				tagline2.text = main.config.by.substr(0, 1);
+				tagline3.text = main.config.by.substr(1);
+			}
 		]]>
 	</fx:Script>
 	
@@ -47,9 +55,9 @@
 	<fx:Style source="../../assets/styles/header/Logo.css"/>
 	
 <!-- Create the logo and tagline -->
-	<s:Label alpha="0" id="logo" x="5" y="11" styleName="logo" text="Bon Cuisson"/>
-	<images:FrenchLine alpha="0" id="line" x="10" y="54" width="385.253" height="59.7202"/>
-	<s:Label alpha="0" id="tagline1" styleName="tagline" x="211" y="102" text="by"/>
-	<s:Label alpha="0" id="tagline2" styleName="taglineCapital" x="252" y="91" text="D"/>
-	<s:Label alpha="0" id="tagline3" styleName="tagline" x="291" y="101" text="awn"/>
+	<s:Label alpha="0" id="logo" styleName="logo" x="5" y="11"/>
+	<images:FrenchLine alpha="0" height="59.7202" id="line" width="385.253" x="10" y="54"/>
+	<s:Label alpha="0" id="tagline1" styleName="byTagline" text="by" x="225" y="109"/>
+	<s:Label alpha="0" id="tagline2" styleName="taglineCapital" x="252" y="91"/>
+	<s:Label alpha="0" id="tagline3" styleName="tagline" x="291" y="101"/>
 </s:Group>

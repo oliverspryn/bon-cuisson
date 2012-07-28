@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 creationComplete="configure(event)">
+	
+	<fx:Script>
+		<![CDATA[
+			import com.forwardfour.events.NetworkEvent;
+			import com.greensock.TweenMax;
+			
+			import mx.controls.Alert;
+			import mx.core.FlexGlobals;
+			import mx.events.FlexEvent;
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
+			
+		//Globalize a reference to the main application, so that the instantiated Config class can be accessed
+			private var main:Main;
+			
+		//Globalize a reference to the loaded data
+			[Bindable]
+			protected var data:Object;
+			
+		//Set whether this component should transition into view when the requested data has been loaded
+			private var transitionOnComplete:Boolean;
+			
+		//Use the configuration class to set whether or not the Flex busy cursor should show during network activity
+			private function configure(event:FlexEvent):void {
+				this.main = Main(FlexGlobals.topLevelApplication);
+				
+				this.dataService.showBusyCursor = this.main.config.showFlexBusyCursor;
+			}
+			
+		//Load the requested data from the server
+			public function load(URL:String, transitionOnComplete:Boolean = false):void {
+				this.dataService.url = URL;
+				this.dataService.send();
+				
+				this.transitionOnComplete = transitionOnComplete;
+			}
+			
+		//Share the loaded data with the component, dispatch a data fetched event, and see if the component should be transitioned
+			private function dataResultHandler(e:ResultEvent):void {
+			//Share the data with the component
+				this.data = e.result.data;
+				
+			//Dispatch the event
+				var eventData:NetworkEvent = new NetworkEvent("loadComplete");
+				eventData.data = e.result.data;
+				eventData.headers = e.headers;
+				eventData.statusCode = e.statusCode;
+				eventData.triggeredObject = this;
+				eventData.URL = this.dataService.url;
+				
+				super.dispatchEvent(eventData);
+				
+			//Should the component be transitioned into place?
+				if (this.transitionOnComplete) {
+					this.transitionIn();
+				}
+			}
+			
+		//Transition this component into place
+			public function transitionIn():void {
+				TweenMax.to(this, (this.main.config.transitionDuration / 1000) / 2, {
+					y : "-=" + this.main.config.transitionLength
+				});
+			}
+			
+		//Handle file loading errors
+			private function dataFaultHandler(e:FaultEvent):void {
+				Alert.show("Data from the ModuleBase could not be fetched.\nFault code: " +
+							e.fault.faultCode + "\nFault details: " + e.fault.faultDetail, e.fault.faultString);
+			}			
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<s:CallResponder fault="dataFaultHandler(event)" id="dataServiceResponder" result="dataResultHandler(event)"/>
+		<s:HTTPService id="dataService"/>
+	</fx:Declarations>
+	
+	<fx:Metadata>
+		[Event(name="loadComplete", type="com.forwardfour.events.NetworkEvent")]
+	</fx:Metadata>
+</s:Group>

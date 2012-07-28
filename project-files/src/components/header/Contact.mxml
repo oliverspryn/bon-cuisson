@@ -1,22 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		 xmlns:s="library://ns.adobe.com/flex/spark" 
-		 xmlns:mx="library://ns.adobe.com/flex/mx">
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 creationComplete="configure(event)">
 	<fx:Script>
 		<![CDATA[
 			import flash.net.navigateToURL;
 			
-			[Bindable]
-			private var address:String = "118 Edgewood Road";
+			import mx.core.FlexGlobals;
+			import mx.events.FlexEvent;
 			
-			[Bindable]
-			private var phone:String = "Tele: 724-841-0747";
+		//Use the configuration class to set the values for each of the elements
+			private function configure(e:FlexEvent):void {
+				var main:Main = Main(FlexGlobals.topLevelApplication);
+				
+				address.text = main.config.address;
+				phone.text = "Tele: " + main.config.phone;
+				email.text = main.config.email;
+			}
 			
-			[Bindable]
-			private var email:String = "dawn@boncuisson.com";
-			
-			private function sendEmail(event:MouseEvent):void {
-				var loader:URLRequest = new URLRequest("mailto:" + this.email);
+		//Open the user's email
+			private function sendEmail(e:MouseEvent):void {
+				var loader:URLRequest = new URLRequest("mailto:" + e.currentTarget.text);
 				navigateToURL(loader, "_blank");
 			}
 		]]>
@@ -26,7 +31,7 @@
 	<fx:Style source="../../assets/styles/header/Contact.css"/>
 	
 <!-- Write out the contact information -->
-	<s:RichText x="10" y="12" styleName="info" text="{this.address}"/>
-	<s:RichText x="10" y="43" styleName="info" text="{this.phone}"/>
-	<s:RichText x="10" y="72" buttonMode="true" click="sendEmail(event)" styleName="info" text="{this.email}"/>
+	<s:Label id="address" styleName="info" x="10" y="12"/>
+	<s:Label id="phone" styleName="info" x="10" y="43"/>
+	<s:Label buttonMode="true" click="sendEmail(event)" id="email" styleName="info" x="10" y="72"/>
 </s:Group>

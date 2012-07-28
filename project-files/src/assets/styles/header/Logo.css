@@ -20,6 +20,13 @@
 	fontSize: 69;
 }
 
+.byTagline {
+	color: #FFFFFF;
+	fontFamily: FrenchScript;
+	fontLookup: embeddedCFF;
+	fontSize: 28;
+}
+
 .tagline {
 	color: #FFFFFF;
 	fontFamily: FrenchScript;
