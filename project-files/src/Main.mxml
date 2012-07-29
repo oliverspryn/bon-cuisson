@@ -52,9 +52,6 @@
 			
 		//Add an event listener for when "links" on the menu are clicked and initialize SWFAddress
 			private function init(event:FlexEvent):void {
-			//Set the configuration for the main application
-				//bac
-				
 			//Listen for menu clicks
 				this.menu.addEventListener(Menu.MENU_ITEM_CLICKED, menuNavigateToPageHandler);
 				

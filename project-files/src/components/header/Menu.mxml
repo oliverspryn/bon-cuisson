@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		 xmlns:s="library://ns.adobe.com/flex/spark" 
-		 xmlns:mx="library://ns.adobe.com/flex/mx" xmlns:pagesservice="services.pagesservice.*"
-		 creationComplete="init(event)"
-		 width="100%">
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 xmlns:pagesservice="services.pagesservice.*"
+		 width="100%"
+		 creationComplete="init(event)">
 	<fx:Script>
 		<![CDATA[
+			import com.asual.swfaddress.SWFAddress;
 			import com.forwardfour.boncuisson.events.MenuEvent;
 			import com.greensock.TweenMax;
 			
@@ -20,183 +22,179 @@
 			
 			import spark.events.IndexChangeEvent;
 			
+			import valueObjects.MenuVO;
+			
 		//The event that is dispatched during a menu item click
 			public static const MENU_ITEM_CLICKED:String = "menuItemClicked";
 			
-		//The event that is dispatched when the menu has finished rendering
-			public static const MENU_RENDER_COMPLETE:String = "menuRenderComplete";
-			
-		//For some reason, the PagesService request is fired each time the user clicks on the menu
-		//so prevent the cascade of events that are triggered on success of the service call by
-		//keeping track of the first one
-			private var hasMenuItems:Boolean = false;
+		//A reference to the data that was fetched from the server
+			[Bindable]
+			private var data:Object;
 			
 		//A reference to the current page pointer arrow
 			private var pointer:UIComponent = null;
 			
-		//For some reason, once the pointer is created and placed, the center of its coordinate
-		//system becomes the spot where it was originally placed. For example, if the pointer
-		//was placed at 123, 45; then the "x", relative to it, is 0, but relative to the stage
-		//is still 123. We need to keep track of this original x location (we don't care about
-		//the y location) in order to do calculations and slide it around on the menu when
-		//different menu items are selected. GRRRR *releases steam*
-			private var xOriginal:Number;
-			
-		//Slide the arrow to a new menu item
-			public function set selected(item:Number):void {
-			//Don't do anything if the pointer has not be created, it will be placed in the correct spot ;)
-				if (this.pointer != null) {
-					item --; //Subtract one to convert to the array zero-based notatation
-					list.selectedIndex = item;
-					
-					var width:int = 10; //Width of the pointer
-					var selectedItem:IVisualElement = list.dataGroup.getElementAt(list.selectedIndex);
-					var selectedItemX:Number = selectedItem.x;
-					var selectedItemWidth:Number = selectedItem.width;
-					var xPos:Number = (stage.stageWidth / 10) + selectedItemX + (selectedItemWidth / 2) - (width / 2);
-					
-				//Why are we doing this? Its really stupid. See the comment above the xOriginal declaration
-					xPos = xPos - this.xOriginal; //Yes, we'll need negatives
-					
-				//Tween the pointer to the proper place
-					TweenMax.to(this.pointer, 1, {
-									x : xPos
-								});
-				}
-			}
-			
 		//Request the menu data from the server and hide the menu scrollbars
 			private function init(e:Event):void {
-			//Request server data
-				menuResponder.token = menu.getAllPages();
+			//Request the menu data
+				dataServiceResponder.token = dataService.send();
 				
 			//Hide menu scrollbars
+				list.scroller.setStyle("horizontalScrollPolicy", "off");
 				list.scroller.setStyle("verticalScrollPolicy", "off");
 			}
 			
-		//Begin building the visual interface, after the data has been recieved from the server and the stage is accessable
-			private function initDisplayObjects(e:ResultEvent):void {
-				if (!this.hasMenuItems) {
-					this.hasMenuItems = true;
-					
-					if (stage) {
-						this.positionMenu(new Event(Event.ADDED_TO_STAGE));
-					} else {
-						this.addEventListener(Event.ADDED_TO_STAGE, positionMenu);
-					}
-				}
+		//Share the loaded data with the component, and transition the menu into view
+			private function dataResultHandler(e:ResultEvent):void {
+				this.data = e.result.menu;
+				this.slideOut();
 			}
 			
-		//Add 10% padding to the left and right of the menu links, animate the menu background,
-		//and wait until the menu has transitioned into view before displaying the pointer arrow
-			private function positionMenu(e:Event):void {				
-			//Animate the menu background
-				TweenMax.to(background, 0.50, {
-								onComplete : rollDown,
-								width : stage.stageWidth
-							});
+		//Handle data loading errors
+			private function dataFaultHandler(e:FaultEvent):void {
+				Alert.show("Data for the Menu could not be fetched.\n\nFault code: " +
+							e.fault.faultCode + "\nFault details: " + e.fault.faultDetail, e.fault.faultString);
+			}
+			
+		/**
+		 * Perform the following actions to transitioning the menu into view
+		 *  - [1] slide the out horizontally to full width
+		 *  - [2] roll the menu down to full height
+		 *  - [3] build the menu items (performed by each item renderer)
+		 *  - [4] build the current page pointer arrow
+		*/
+			
+			private function slideOut():void {
+				TweenMax.to(this.background, 0.50, {
+					onComplete : slideDown,
+					width : stage.stageWidth
+				});
+			}
+			
+			private function slideDown():void {
+				TweenMax.to(this.background, 0.50, {
+					height : 40,
+					onComplete : buildPointerDelay
+				});
 				
-			//Adjust the width of the menu
-				list.left = stage.stageWidth / 10;
-				list.right = stage.stageWidth / 10;
-				
-			//Wait until the menu is in view before displaying the pointer arrow
-				var delay:Number = 1250;                        //1.25 sec delay for the menu background to transition into place
-				delay += menuResponder.lastResult.length * 250; //0.25 sec delay for each item appearing in the menu
+			//Anchor the backgroud of the menu to the left and right of the stage
+				this.background.left = 0;
+				this.background.right = 0;
+			}
+			
+			private function buildPointerDelay():void {
+				var delay:Number = 1250;                    //1.25 sec delay for the menu background to transition into place
+				delay += this.data.item.length * 250;       //0.25 sec delay for each item appearing in the menu
 				
 				var timer:Timer = new Timer(delay, 1);
 				timer.addEventListener(TimerEvent.TIMER_COMPLETE, buildPointer);
 				timer.start();
 			}
 			
-		//Roll the menu background down
-			private function rollDown():void {
-				TweenMax.to(background, 0.50, {
-								height : 40
-							});
+			private function buildPointer(e:TimerEvent):void {
+			//Pointer configuration
+				var color:uint = 0xFFFFFF;
+				var width:int = 10;
+				
+			//Building the pointer
+				this.pointer = new UIComponent();
+				this.pointer.alpha = 0;
+				this.pointer.graphics.beginFill(color);
+				this.pointer.graphics.moveTo(width / 2, 0);
+				this.pointer.graphics.lineTo(width, width);
+				this.pointer.graphics.lineTo(0, width);
+				this.pointer.graphics.lineTo(width / 2, 0);
+				this.pointer.graphics.endFill();
+				this.pointer.x = (width * 0.1); //Placing it on the left of the menu
+				this.pointer.y = 40 - width;
+				this.addElement(this.pointer);
+				
+			//Place the arrow under the active menu item
+				if (this.URL == "") {
+					this.selected = 1;
+				} else {
+					var menuItems:Number = this.data.item.length - 1;
+					
+					for (var i:int = 0; i <= menuItems; i ++) {
+						if (this.data.item[i].URL == this.URL) {
+							this.selected = i + 1;
+							break;
+						}
+					}
+				}
 			}
 			
-		//Build the current-menu pointer and position it according to the selected page
-			private function buildPointer(e:TimerEvent):void {
-			//Remove the event listener
-				EventDispatcher(e.target).removeEventListener(e.type, buildPointer);
-				
-			//Build the pointer
-				var pointer:Shape = new Shape();
-				var color:uint = 0xFFFFFF;
+		//Get the x-axis position of the pointer if were placed at a given menu item
+			private function getArrowPositionAtIndex(index:Number):Number {
 				var width:int = 10; //Width of the pointer
 				var selectedItem:IVisualElement = list.dataGroup.getElementAt(list.selectedIndex);
 				var selectedItemX:Number = selectedItem.x;
 				var selectedItemWidth:Number = selectedItem.width;
+				var xPos:Number = (stage.stageWidth / 10) + selectedItemX + (selectedItemWidth / 2) - (width / 2);
 				
-				this.pointer = new UIComponent();
-				pointer.alpha = 0;
-				pointer.x = (stage.stageWidth / 10) + selectedItemX + (selectedItemWidth / 2) - (width / 2);
-				pointer.y = 40 - width;
-				pointer.graphics.beginFill(color);
-				pointer.graphics.moveTo(width / 2, 0);
-				pointer.graphics.lineTo(width, width);
-				pointer.graphics.lineTo(0, width);
-				pointer.graphics.lineTo(width / 2, 0);
-				pointer.graphics.endFill();
-				this.pointer.addChild(pointer);
-				this.addElement(this.pointer);
-				
-			//Why are we doing this? Its really stupid. See the comment above the xOriginal declaration
-				this.xOriginal = pointer.x;
-				
-			//Transition it into view
-				TweenMax.to(pointer, 0.25, {
-								alpha : 1,
-								onComplete : menuRendered
-							});
+				return xPos;
 			}
 			
-		//Dispatch an event showing that the menu has rendered
-			private function menuRendered():void {
-				super.dispatchEvent(new Event(Menu.MENU_RENDER_COMPLETE));
+		//Slide the arrow to a new menu item
+			public function set selected(item:Number):void {
+			//Don't do anything if the pointer has not be created
+				if (this.pointer != null) {
+					list.selectedIndex = item - 1;
+					
+					var xPos:Number = this.getArrowPositionAtIndex(list.selectedIndex);
+					
+					TweenMax.to(this.pointer, 1, {
+						alpha : 1,
+						x : xPos
+					});
+				}
 			}
-			
-		//Show an error dialog in the case of an error when communicating with the server
-			private function menu_faultHandler(e:FaultEvent):void {
-				Alert.show("Fault string: " + e.fault.faultString + "\nFault detail: " + e.fault.faultDetail, e.fault.faultCode);
-			}		
 			
 		//Let the application know that the user has selected a menu item
 			private function navigateToPageHandler(e:IndexChangeEvent):void {
 			//Collect the event data
 				var event:MenuEvent = new MenuEvent(Menu.MENU_ITEM_CLICKED);
 				event.menuIndex = list.selectedIndex;
-				event.pageID = menuResponder.lastResult[list.selectedIndex].id;
-				event.pageURL = menuResponder.lastResult[list.selectedIndex].URL;
-				event.pageType = menuResponder.lastResult[list.selectedIndex].type;
+				event.pageID = this.data.item[list.selectedIndex].id;
+				event.pageURL = this.data.item[list.selectedIndex].URL;
+				event.pageType = this.data.item[list.selectedIndex].type;
 				
 			//Dispatch the event
 				super.dispatchEvent(event);
+			}
+			
+		//Get the hijaxed URL of the current page
+			private function get URL():String {
+				var URL:String = SWFAddress.getValue();
+				
+				if (URL == "" || URL == "/") {
+					return "";
+				} else {
+					return URL.substring(1);
+				}
 			}
 		]]>
 	</fx:Script>
 	
 <!-- Make a request to the server for each of the menu items -->
 	<fx:Declarations>
-		<s:CallResponder id="menuResponder"/>
-		<pagesservice:PagesService id="menu" showBusyCursor="true" fault="menu_faultHandler(event)" result="initDisplayObjects(event)"/>
+		<s:CallResponder fault="dataFaultHandler(event)" id="dataServiceResponder" result="dataResultHandler(event)"/>
+		<s:HTTPService id="dataService" url="services/menu.php"/>
 	</fx:Declarations>
 	
 <!-- The background of the menu -->
-	<s:Rect id="background" horizontalCenter="0" width="0" height="1">
+	<s:Rect height="1" horizontalCenter="0" id="background" width="0">
 		<s:fill>
 			<s:SolidColor color="0x333333"/>
 		</s:fill>
 	</s:Rect>
 	
 <!-- The styled list which will act as the menu -->
-	<s:List borderVisible="false" contentBackgroundAlpha="0" id="list" requireSelection="true"
-			itemRenderer="renderers.Navigation" change="navigateToPageHandler(event)">
+	<s:List borderVisible="false" change="navigateToPageHandler(event)" contentBackgroundAlpha="0"
+			dataProvider="{this.data.item}" id="list" itemRenderer="renderers.Navigation"
+			left="{width * 0.1}" requireSelection="true" right="{width * 0.1}">
 		<s:layout>
 			<s:HorizontalLayout gap="30"/>
 		</s:layout>
-		
-		<s:AsyncListView list="{menuResponder.lastResult}"/>
 	</s:List>
 </s:Group>

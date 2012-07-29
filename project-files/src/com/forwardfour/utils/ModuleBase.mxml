@@ -6,7 +6,9 @@
 	
 	<fx:Script>
 		<![CDATA[
+			import com.forwardfour.events.ComponentStateEvent;
 			import com.forwardfour.events.NetworkEvent;
+			import com.forwardfour.events.TransitionEvent;
 			import com.greensock.TweenMax;
 			
 			import mx.controls.Alert;
@@ -26,7 +28,7 @@
 			private var transitionOnComplete:Boolean;
 			
 		//Use the configuration class to set whether or not the Flex busy cursor should show during network activity
-			private function configure(event:FlexEvent):void {
+			private function configure(e:FlexEvent):void {
 				this.main = Main(FlexGlobals.topLevelApplication);
 				
 				this.dataService.showBusyCursor = this.main.config.showFlexBusyCursor;
@@ -47,7 +49,7 @@
 				
 			//Dispatch the event
 				var eventData:NetworkEvent = new NetworkEvent("loadComplete");
-				eventData.data = e.result.data;
+				eventData.data = e.result;
 				eventData.headers = e.headers;
 				eventData.statusCode = e.statusCode;
 				eventData.triggeredObject = this;
@@ -61,18 +63,84 @@
 				}
 			}
 			
-		//Transition this component into place
+		//Handle data loading errors
+			private function dataFaultHandler(e:FaultEvent):void {
+				Alert.show("Data for the ModuleBase could not be fetched.\n\nFault code: " +
+							e.fault.faultCode + "\nFault details: " + e.fault.faultDetail, e.fault.faultString);
+			}	
+			
+		//Restore the visual appearance of the component, and transition it into place
 			public function transitionIn():void {
+			//Restore the component
+				this.restore();
+				
+			//Transition it into place
 				TweenMax.to(this, (this.main.config.transitionDuration / 1000) / 2, {
+					alpha : 1,
+					onComplete : transitionInCompleteHandler,
 					y : "-=" + this.main.config.transitionLength
 				});
 			}
 			
-		//Handle file loading errors
-			private function dataFaultHandler(e:FaultEvent):void {
-				Alert.show("Data from the ModuleBase could not be fetched.\nFault code: " +
-							e.fault.faultCode + "\nFault details: " + e.fault.faultDetail, e.fault.faultString);
-			}			
+		//Dispatch an event when transitioning in is complete
+			private function transitionInCompleteHandler():void {
+				var eventData:TransitionEvent = new TransitionEvent("transitionInComplete");
+				eventData.transitionDuration = (this.main.config.transitionDuration / 1000) / 2;
+				eventData.transitionType = TransitionEvent.TRANSITION_IN;
+				eventData.triggeredObject = this;
+				
+				super.dispatchEvent(eventData);
+			}
+			
+		//Transition this component out of place
+			public function transitionOut(destroyOnComplete:Boolean = true):void {
+				TweenMax.to(this, (this.main.config.transitionDuration / 1000) / 2, {
+					alpha : 0,
+					onComplete : transitionOutCompleteHandler,
+					onCompleteParams : new Array(destroyOnComplete),
+					y : "+=" + this.main.config.transitionLength
+				});
+			}
+			
+		//Dispatch an event when transitioning out is complete and destroy this component's data, if set to do so
+			private function transitionOutCompleteHandler(destroyOnComplete:Boolean):void {
+			//Dispatch the event
+				var eventData:TransitionEvent = new TransitionEvent("transitionOutComplete");
+				eventData.transitionDuration = (this.main.config.transitionDuration / 1000) / 2;
+				eventData.transitionType = TransitionEvent.TRANSITION_OUT;
+				eventData.triggeredObject = this;
+				
+				super.dispatchEvent(eventData);
+				
+			//Should this components data and visual appearance be destroyed?
+				if (destroyOnComplete) {
+					this.destroy();
+				}
+			}
+			
+		//Destroy this component's data and visual appearence, and dispatch a destroyed event
+			public function destroy():void {
+			//Destroy the data the sub-class's components are bound to
+				this.data = null;
+				
+			//Destroy the visual appearance
+				this.height = 0;
+				this.visible = false;
+				
+			//Dispatch the destroyed event
+				super.dispatchEvent(new ComponentStateEvent("componentDestroyed"));
+			}
+			
+		//Restore this component's visual appearance, and dispatch the restored event. The data is gone :(
+			public function restore():void {
+			//Restore the component
+				this.height = NaN;
+				this.invalidateSize();
+				this.height = super.measuredHeight;
+				
+			//Dispatch the restored event
+				super.dispatchEvent(new ComponentStateEvent("componentRestored"));
+			}
 		]]>
 	</fx:Script>
 	
@@ -82,6 +150,10 @@
 	</fx:Declarations>
 	
 	<fx:Metadata>
+		[Event(name="componentDestroyed", type="com.forwardfour.events.ComponentStateEvent")]
+		[Event(name="componentRestored", type="com.forwardfour.events.ComponentStateEvent")]
 		[Event(name="loadComplete", type="com.forwardfour.events.NetworkEvent")]
+		[Event(name="transitionInComplete", type="com.forwardfour.events.TransitionEvent")]
+		[Event(name="transitionOutComplete", type="com.forwardfour.events.TransitionEvent")]
 	</fx:Metadata>
 </s:Group>
