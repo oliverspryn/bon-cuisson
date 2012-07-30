@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+				xmlns:s="library://ns.adobe.com/flex/spark" 
+				xmlns:mx="library://ns.adobe.com/flex/mx" 
+				autoDrawBackground="false"
+				creationComplete="init(event)" mouseOut="hideLightHandler(event)" mouseOver="displayLightHandler(event)">
+	
+	<fx:Script>
+		<![CDATA[
+			import com.asual.swfaddress.SWFAddress;
+			import com.greensock.TweenMax;
+			
+			import mx.core.FlexGlobals;
+			
+		//Globalize a reference to the main application, so that the instantiated Config class can be accessed
+			private var main:Main;
+			
+		//Configure the application, and transition each menu item into view, one right after another
+			private function init(e:Event):void {
+				this.configure();
+				
+			//The delay will be calculated depending on this item's position in the menu
+				var delay:Number = this.main.config.menuInitDuration;                //Delay for the menu background
+				delay += this.itemIndex * this.main.config.menuItemDuration;         //Delay for each menu item
+				
+				var timer:Timer = new Timer(delay, 1);
+				timer.addEventListener(TimerEvent.TIMER_COMPLETE, transitionToView);
+				timer.start();
+			}
+			
+		//Use the configuration class to set the color of the scrollbar
+			private function configure():void {
+				this.main = Main(FlexGlobals.topLevelApplication);
+			}
+			
+		//Transition this menu item into view
+			private function transitionToView(e:TimerEvent):void {
+				e.target.removeEventListener(TimerEvent.TIMER_COMPLETE, transitionToView);
+				
+				TweenMax.to(menuItem, this.main.config.menuItemDuration / 1000, {
+					alpha : 1,
+					y : 13
+				});
+			}
+			
+		//Display the hover light
+			private function displayLightHandler(e:MouseEvent):void {
+				TweenMax.to(hoverLight, this.main.config.menuHoverTransitionDuration / 1000, {
+					alpha : 1
+				});
+			}
+			
+		//Hide the hover light
+			private function hideLightHandler(e:MouseEvent):void {
+				TweenMax.to(hoverLight, this.main.config.menuHoverTransitionDuration / 1000, {
+					alpha : 0
+				});
+			}
+		]]>
+	</fx:Script>
+	
+<!-- Include the required stylesheet -->
+	<fx:Style source="../assets/styles/header/Menu.css"/>
+	
+<!-- Display the light above each menu item, only visible when it is hovered over -->
+	<s:Ellipse alpha="0" height="50" id="hoverLight" width="50"
+			   x="{(width / 2) - (hoverLight.width / 2)}" y="-25">
+		<s:fill>
+			<s:RadialGradient>
+				<s:entries>
+					<s:GradientEntry color="0xFFFFFF"/>
+					<s:GradientEntry alpha="0" color="0x333333"/>
+				</s:entries>
+			</s:RadialGradient>
+		</s:fill>
+	</s:Ellipse>
+	
+<!-- Display the menu item -->
+	<s:Label alpha="0" buttonMode="true" horizontalCenter="0" id="menuItem" styleName="link" text="{data.title}"/>
+</s:ItemRenderer>

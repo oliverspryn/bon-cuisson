@@ -1,15 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+<utils:ModuleBase xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		 xmlns:s="library://ns.adobe.com/flex/spark" 
 		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 xmlns:utils="com.forwardfour.utils.*"
 		 width="100%">
-	
-	<fx:Script>
-		<![CDATA[
-			[Bindable]
-			public var data:*; //Yeah, the lastResult property of the CallResponder isn't strongly typed
-		]]>
-	</fx:Script>
 	
 <!-- Include the required stylesheets -->
 	<fx:Style source="../../assets/styles/pages/HomeStyles.css"/>
@@ -17,21 +11,21 @@
 <!-- Display the three phrases and associated pictures -->
 	<s:VGroup horizontalCenter="0">
 		<s:HGroup>
-			<s:Label y="37" left="47" styleName="lines" text="{data.line1}" maxWidth="300" height="200"/>
+			<s:Label height="200" left="47" maxWidth="300" styleName="lines" text="{data.home.line1}" y="37"/>
 			<s:Spacer width="100"/>
-			<s:Image y="37" right="0" source="{data.image1}"/>
+			<s:Image right="0" source="{data.home.image1}" y="37"/>
 		</s:HGroup>
 		
 		<s:HGroup>
-			<s:Image y="37" right="0" source="{data.image2}"/>
+			<s:Image right="0" source="{data.home.image2}" y="37"/>
 			<s:Spacer width="100"/>
-			<s:Label y="37" left="47" styleName="lines" text="{data.line2}" maxWidth="300" height="200"/>
+			<s:Label height="200" left="47" maxWidth="300" styleName="lines" text="{data.home.line2}" y="37"/>
 		</s:HGroup>
 		
 		<s:HGroup>
-			<s:Label y="37" left="47" styleName="lines" text="{data.line3}" maxWidth="300" height="200"/>
+			<s:Label height="200" left="47" maxWidth="300" styleName="lines" text="{data.home.line3}" y="37"/>
 			<s:Spacer width="100"/>
-			<s:Image y="37" right="0" source="{data.image3}"/>
+			<s:Image right="0" source="{data.home.image3}" y="37"/>
 		</s:HGroup>
 	</s:VGroup>
-</s:Group>
+</utils:ModuleBase>

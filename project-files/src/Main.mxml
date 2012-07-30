@@ -2,47 +2,25 @@
 <s:Application xmlns:fx="http://ns.adobe.com/mxml/2009"
 			   xmlns:s="library://ns.adobe.com/flex/spark"
 			   xmlns:mx="library://ns.adobe.com/flex/mx"
-			   xmlns:components="components.*"
-			   xmlns:pagesservice="services.pagesservice.*"
-			   xmlns:menuservice="services.menuservice.*"
-			   xmlns:pages="components.pages.*"
-			   xmlns:reviewsservice="services.reviewsservice.*"
-			   xmlns:homeservice="services.homeservice.*"
-			   xmlns:lunchesservice="services.lunchesservice.*"
 			   xmlns:header="components.header.*"
-			   minWidth="955" minHeight="600"
-			   creationComplete="init(event)" backgroundColor="0x141414"
-			   skinClass="skins.Theme" preloader="com.forwardfour.boncuisson.Preloader">
+			   xmlns:pages="components.pages.*"
+			   backgroundColor="0x141414" minHeight="600" minWidth="955" skinClass="skins.Theme"
+			   creationComplete="init(event)">
 	<fx:Script>
 		<![CDATA[
-			import com.asual.swfaddress.*;
+			import com.asual.swfaddress.SWFAddress;
+			import com.asual.swfaddress.SWFAddressEvent;
 			import com.forwardfour.Config;
-			import com.forwardfour.boncuisson.events.MenuEvent;
-			import com.greensock.TweenMax;
-			import com.greensock.plugins.VisiblePlugin;
+			import com.forwardfour.events.MenuEvent;
+			import com.forwardfour.events.NetworkEvent;
+			import com.forwardfour.utils.ModuleBase;
 			
-			import components.header.Menu;
-			import components.pages.FoodMenu;
-			
-			import flash.utils.setTimeout;
-			
-			import mx.controls.Alert;
-			import mx.core.IVisualElement;
 			import mx.events.FlexEvent;
-			import mx.rpc.events.FaultEvent;
-			import mx.rpc.events.ResultEvent;
-			
-			import skins.Theme;
-			
-			import spark.components.Group;
 			
 		//Globalize a reference to the page content
-			private var pageObject:* = null; //This reference will be various types, so just make a general object
+			private var pageObject:ModuleBase = null;
 			
-		//Globalize a reference to the page which will be transitioning into place
-		//which is only used while the old page is transitioning out
-			private var newPageObject:* = null; //This reference will be various types, so just make a general object
-			
+		//Instantiate the configuration class
 			public var config:Config = new Config();
 			
 		/**
@@ -50,27 +28,28 @@
 		 * -------------------------------
 		*/
 			
-		//Add an event listener for when "links" on the menu are clicked and initialize SWFAddress
-			private function init(event:FlexEvent):void {
-			//Listen for menu clicks
-				this.menu.addEventListener(Menu.MENU_ITEM_CLICKED, menuNavigateToPageHandler);
-				
-			//Initialize SWFAddress
+		//Initialize SWFAddress and grab the page listed from the URL
+			private function init(event:FlexEvent):void {				
 				SWFAddress.addEventListener(SWFAddressEvent.INIT, initSWFAddress);
 			}
 			
-		//Initialize SWFAddress and grab the page listed from the URL
 			private function initSWFAddress(e:SWFAddressEvent):void {
 			//Listen for change events
 				SWFAddress.addEventListener(SWFAddressEvent.CHANGE, URLNavigateToPageHandler);
 				
-			//Fetch the page from the URL
+			//Get information about the selected menu item and navigate to that page
+				var info:Object = menu.getInfoForItemByIndex();
+				this.navigateToPage(info.pageType, info.pageID);
+			}
+			
+		//Get the hijaxed URL of the current page
+			private function get URL():String {
 				var URL:String = SWFAddress.getValue();
 				
 				if (URL == "" || URL == "/") {
-					pagesResponder.token = page.getPagesByPosition(1);
+					return "";
 				} else {
-					pagesResponder.token = page.getPagesByURL(URL.substring(1));
+					return URL.substring(1);
 				}
 			}
 			
@@ -81,160 +60,43 @@
 			
 		//Go to a specific page when a menu item has been clicked
 			private function menuNavigateToPageHandler(e:MenuEvent):void {
-				SWFAddress.setValue(e.pageURL);
-				pagesResponder.token = page.getPagesByID(e.pageID);
+				var info:Object = menu.getInfoForItemByIndex();
+				this.navigateToPage(info.pageType, info.pageID);
 			}
 			
 		//Request a page when the URL has changed
 			private function URLNavigateToPageHandler(e:SWFAddressEvent):void {
-				var URL:String = SWFAddress.getValue();
-				
-				if (URL == "" || URL == "/") {
-					pagesResponder.token = page.getPagesByPosition(1);
-				} else {
-					pagesResponder.token = page.getPagesByURL(URL.substring(1));
-				}
-			}	
+				var info:Object = menu.getInfoForItemByURL(this.URL);
+				this.navigateToPage(info.pageType, info.pageID);
+			}
 			
-		/**
-		 * Loading content
-		 * -------------------------------
-		*/	
-		
-		//Show an error dialog in the case of an error when communicating with the server
-			private function requestErrorHandler(e:FaultEvent):void {
-				Alert.show("Fault string: " + e.fault.faultString + "\nFault detail: " + e.fault.faultDetail, e.fault.faultCode);
-			}	
-		
-		//Determine what kind of page will be constructed
-			private function determinePage(e:ResultEvent):void {
-				var pageType:String = pagesResponder.lastResult.type;
-				
-			//We will need to know the type of page to build
+		//Process the page navigation request
+			private function navigateToPage(pageType:String, pageID:int):void {
 				switch(pageType) {
-					case "menu" : 
-						menuResponder.token = menuFetch.getMenuByType(pagesResponder.lastResult.category);
-						this.newPageObject = menuPage;
-						break;
-					
-					case "lunch" : 
-						lunchesResponder.token = lunchesFetch.getAllLunches();
-						this.newPageObject = lunchesPage;
-						break;
-					
-					case "reviews" : 
-						reviewsResponder.token = reviews.getAllReviews();
-						this.newPageObject = reviewsPage;
-						break;
-					
 					case "home" : 
-						homeResponder.token = homeFetch.getHomeByID(1);
-						this.newPageObject = homePage;
+						homePage.load("services/home.php");
+						homePage.addEventListener("loadComplete", transitionPages);
+						this.pageObject = homePage;
+						break;
+					
 					default : 
 						break;
 				}
-				
 			}
 			
-		//Using the data that was fetched from the "menuFetch" service, construct the page of type menu
-			private function constructMenu(e:ResultEvent):void {
-			//Transition the existing page out of view
-				if (this.pageObject != null) {
-					TweenMax.to(this.pageObject, 0.75, {
-						alpha : 0,
-						onComplete : hideAll,
-						y : 20
-					});
-				}
-				
-				var timer:Timer = new Timer(1000, 1);
-				timer.addEventListener(TimerEvent.TIMER_COMPLETE, transitionIn);
-				timer.start();
-			}
-			
-		//For some reason, setting the alpha to 0 on components with lots of child objects
-		//doesn't always work as excpected when the tweening process has finished, so set
-		//the visibility to 0 to ensure all components are hidden
-		//Also explicity set the height to 0
-			private function hideAll():void {
-				if (this.pageObject != null) {
-					this.pageObject.visible = false;
-					//this.pageObject.height = 0;
-				}
-			}
-			
-		//Slide the new page into place, pass it the data it needs, and select the relavent
-		//menu item
-			private function transitionIn(e:TimerEvent):void {				
-			//Hand over the new page reference to the current page referernce
-				this.pageObject = this.newPageObject;
-				
-			//Which data service is holding the server data?
-				var pageType:String = pagesResponder.lastResult.type;
-				
-				switch(pageType) {
-					case "menu" : 
-						this.pageObject.data = menuResponder.lastResult;
-						break;
-					
-					case "lunch" : 
-						this.pageObject.data = lunchesResponder.lastResult;
-						break;
-					
-					case "reviews" : 
-						this.pageObject.data = reviewsResponder.lastResult;
-						break;
-					
-					case "home" : 
-					default : 
-						this.pageObject.data = homeResponder.lastResult;
-						break;
-				}
-				
-			//Make sure the new component is not hidden
-				this.pageObject.visible = true;
-				
-			//Reset the height of the current component
-				//this.pageObject.height = NaN;
-				//this.pageObject.invalidateSize();
-				//this.pageObject.height = this.pageObject.measuredHeight;
-				
-			//Tween the new menu into place
-				TweenMax.to(this.pageObject, 0.75, {
-					alpha : 1,
-					y : 0
-				});
-				
-			//Select the relavent menu item
-				menu.selected = pagesResponder.lastResult.position;
+		//Transition the old page away and the new one into view
+			private function transitionPages(e:NetworkEvent):void {
+				this.pageObject.transitionIn();
 			}
 		]]>
 	</fx:Script>
 	
-<!-- Make a request to the server for the page data -->
-	<fx:Declarations>
-		<pagesservice:PagesService id="page"/>
-		<s:CallResponder id="pagesResponder" fault="requestErrorHandler(event)" result="determinePage(event)"/>
-		
-		<homeservice:HomeService id="homeFetch"/>
-		<s:CallResponder id="homeResponder" fault="requestErrorHandler(event)" result="constructMenu(event)"/>
-		
-		<menuservice:MenuService id="menuFetch"/>
-		<s:CallResponder id="menuResponder" fault="requestErrorHandler(event)" result="constructMenu(event)"/>
-		
-		<lunchesservice:LunchesService id="lunchesFetch"/>
-		<s:CallResponder id="lunchesResponder" fault="requestErrorHandler(event)" result="constructMenu(event)"/>
-		
-		<reviewsservice:ReviewsService id="reviews"/>
-		<s:CallResponder id="reviewsResponder" fault="requestErrorHandler(event)" result="constructMenu(event)"/>
-	</fx:Declarations>
-	
 <!-- Include the navigation menu -->
-	<header:Menu id="menu" top="0" left="-10" right="0"/>
+	<header:Menu id="menu" top="0" menuItemClicked="menuNavigateToPageHandler(event)"/>
 	
 <!-- We'll use these components as we need them -->
 	<s:Group width="100%" top="60">
-		<pages:Home id="homePage" alpha="0" y="20" visible="false"/>
+		<pages:Home alpha="0" id="homePage" y="20"/>
 		<pages:FoodMenu id="menuPage" alpha="0" y="20" visible="false"/>
 		<pages:Lunches id="lunchesPage" alpha="0" y="20" visible="false"/>
 		<pages:Reviews id="reviewsPage" alpha="0" y="20" visible="false"/>

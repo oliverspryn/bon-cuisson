@@ -31,13 +31,13 @@
 				
 			//Tween into these items into clarity
 				TweenMax.allTo(items, 0.5, {
-							   		alpha : 1,
-									
-									blurFilter : {
-										blurX : 0,
-										blurY : 0
-									}
-							   });
+			   		alpha : 1,
+					
+					blurFilter : {
+						blurX : 0,
+						blurY : 0
+					}
+			   });
 			}
 			
 		//Use the configuration class to set the values for each of the logo elements

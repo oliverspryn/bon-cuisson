@@ -37,7 +37,7 @@
 		//Load the requested data from the server
 			public function load(URL:String, transitionOnComplete:Boolean = false):void {
 				this.dataService.url = URL;
-				this.dataService.send();
+				this.dataServiceResponder.token = this.dataService.send();
 				
 				this.transitionOnComplete = transitionOnComplete;
 			}
@@ -45,7 +45,7 @@
 		//Share the loaded data with the component, dispatch a data fetched event, and see if the component should be transitioned
 			private function dataResultHandler(e:ResultEvent):void {
 			//Share the data with the component
-				this.data = e.result.data;
+				this.data = e.result;
 				
 			//Dispatch the event
 				var eventData:NetworkEvent = new NetworkEvent("loadComplete");
@@ -67,7 +67,7 @@
 			private function dataFaultHandler(e:FaultEvent):void {
 				Alert.show("Data for the ModuleBase could not be fetched.\n\nFault code: " +
 							e.fault.faultCode + "\nFault details: " + e.fault.faultDetail, e.fault.faultString);
-			}	
+			}
 			
 		//Restore the visual appearance of the component, and transition it into place
 			public function transitionIn():void {

@@ -1,12 +1,13 @@
-package com.forwardfour.boncuisson.events {
+package com.forwardfour.events {
 	import flash.events.Event;
 	
 	public class MenuEvent extends Event {
 	//These attributes are the destinctive features of this class which will store custom information about the dispatched event
+		public var menuIndex:uint;
 		public var pageID:int;
+		public var pageTitle:String;
 		public var pageType:String;
 		public var pageURL:String;
-		public var menuIndex:uint;
 		
 	//The constructor must call the super constructor
 		public function MenuEvent(type:String, bubbles:Boolean = false, cancelable:Boolean = false) {
