@@ -4,7 +4,7 @@
 		 xmlns:mx="library://ns.adobe.com/flex/mx"
 		 xmlns:utils="com.forwardfour.utils.*"
 		 height="100%" width="100%">	
-	<s:List borderVisible="false" contentBackgroundAlpha="0" dataProvider="{this.data}" horizontalScrollPolicy="off"
+	<s:List borderVisible="false" contentBackgroundAlpha="0" dataProvider="{this.data.item}" horizontalScrollPolicy="off"
 			id="list" itemRenderer="renderers.FoodMenuRenderer" top="10" width="90%">
 		<s:layout>
 			<s:VerticalLayout gap="45"/>

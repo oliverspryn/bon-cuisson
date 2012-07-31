@@ -137,6 +137,7 @@
 				this.height = NaN;
 				this.invalidateSize();
 				this.height = super.measuredHeight;
+				this.visible = true;
 				
 			//Dispatch the restored event
 				super.dispatchEvent(new ComponentStateEvent("componentRestored"));

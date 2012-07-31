@@ -7,6 +7,7 @@
 	<fx:Script>
 		<![CDATA[			
 			import com.asual.swfaddress.SWFAddress;
+			import com.asual.swfaddress.SWFAddressEvent;
 			import com.forwardfour.events.MenuEvent;
 			import com.forwardfour.exceptions.ServerDataGenerationError;
 			import com.greensock.TweenMax;
@@ -15,6 +16,7 @@
 			import mx.core.FlexGlobals;
 			import mx.core.IVisualElement;
 			import mx.core.UIComponent;
+			import mx.events.FlexEvent;
 			import mx.rpc.events.FaultEvent;
 			import mx.rpc.events.ResultEvent;
 			
@@ -30,28 +32,30 @@
 		//A reference to the current page pointer arrow
 			private var pointer:UIComponent = null;
 			
-		//Request the menu data from the server, hide the menu scrollbars, and configure this component
-			private function init(e:Event):void {
-			//Request the menu data
-				dataServiceResponder.token = dataService.send();
-				
-			//Hide menu scrollbars
+		//Hide the menu scrollbars, configure this component, and initialize SWFAddress
+			private function init(e:Event):void {	
 				list.scroller.setStyle("horizontalScrollPolicy", "off");
 				list.scroller.setStyle("verticalScrollPolicy", "off");
 				
-			//Configure the component
 				this.configure();
+				
+				SWFAddress.addEventListener(SWFAddressEvent.INIT, request);
 			}
 			
 		//Use the configuration class to set the menu's construction properties and behaviors
 			private function configure():void {
 				this.main = Main(FlexGlobals.topLevelApplication);
-				
 				this.dataService.showBusyCursor = this.main.config.showFlexBusyCursor;
 			}
 			
-		//Share the loaded data with the component, and transition the menu into view
+		//Request data from the server, now that we can access the URL
+			private function request(e:SWFAddressEvent):void {
+				dataServiceResponder.token = dataService.send();
+			}
+			
+		//Share the loaded data with the component and transition the menu into view
 			private function dataResultHandler(e:ResultEvent):void {
+			//Share the data with the application
 				try {
 					if (e.result.menu && e.result.menu != null) {
 						this.data = e.result.menu;
@@ -62,7 +66,25 @@
 					Alert.show(error.message);
 				}
 				
+			//Transition the menu into view
 				this.slideOut();
+				
+			//Dispatch a data fetched event
+				super.dispatchEvent(new Event("dataFetched"));
+				
+				if (list.selectedIndex == -1) {
+					list.addEventListener(FlexEvent.VALUE_COMMIT, menuConstructedHandler);
+				} else {
+					this.menuConstructedHandler(new FlexEvent("menuConstructed"));
+				}
+			}
+			
+		//Select the appropriate menu item just before construction complete, then dispatch a construction completed event
+			private function menuConstructedHandler(e:FlexEvent):void {
+				var menuData:Object = getInfoForItemByURL(this.URL);
+				this.list.selectedIndex = menuData.menuIndex;
+				
+				super.dispatchEvent(new Event("menuConstructed"));
 			}
 			
 		//Handle data loading errors
@@ -124,27 +146,31 @@
 				this.addElement(this.pointer);
 				
 			//Place the arrow under the active menu item
-				if (this.URL == "") {
-					this.list.selectedIndex = 0;
-					this.pointer.x = this.getArrowPositionAtIndex(0);
-					this.selected = 0;
+				this.pointer.x = this.getArrowPositionAtIndex(this.selected);
+				
+			//Dispatch a render complete event
+				super.dispatchEvent(new Event("renderComplete"));
+			}
+			
+		/**
+		 * Getters and setters
+		 * -------------------------------
+		 */
+			
+		//Get the hijaxed URL of the current page
+			private function get URL():String {
+				var URL:String = SWFAddress.getValue();
+				
+				if (URL == "" || URL == "/") {
+					return "";
 				} else {
-					var menuData:Object = getInfoForItemByURL(this.URL);
-					this.list.selectedIndex = menuData.menuIndex;
-					this.pointer.x = this.getArrowPositionAtIndex(menuData.menuIndex);
-					this.selected = menuData.menuIndex;
+					return URL.substring(1);
 				}
 			}
 			
-		//Get the x-axis position of the pointer if were placed at a given menu item
-			private function getArrowPositionAtIndex(index:Number):Number {
-				var width:int = this.main.config.menuPointerSize;
-				var selectedItem:IVisualElement = list.dataGroup.getElementAt(list.selectedIndex);
-				var selectedItemX:Number = selectedItem.x;
-				var selectedItemWidth:Number = selectedItem.width;
-				var xPos:Number = (stage.stageWidth / 10) + selectedItemX + (selectedItemWidth / 2) - (width / 2);
-				
-				return xPos;
+		//Get the selected menu item
+			public function get selected():Number {
+				return list.selectedIndex;
 			}
 			
 		//Set the selected menu item and slide the arrow to a new menu item
@@ -162,9 +188,15 @@
 				}
 			}
 			
-		//Get the selected menu item
-			public function get selected():Number {
-				return list.selectedIndex;
+		//Get the x-axis position of the pointer if were placed at a given menu item
+			private function getArrowPositionAtIndex(index:Number):Number {
+				var width:int = this.main.config.menuPointerSize;
+				var selectedItem:IVisualElement = list.dataGroup.getElementAt(list.selectedIndex);
+				var selectedItemX:Number = selectedItem.x;
+				var selectedItemWidth:Number = selectedItem.width;
+				var xPos:Number = (stage.stageWidth / 10) + selectedItemX + (selectedItemWidth / 2) - (width / 2);
+				
+				return xPos;
 			}
 			
 		//Get information about the currently selected menu item by index
@@ -178,45 +210,55 @@
 						item = index;
 					}
 					
-					var info:Object = new Object();
-					info.menuIndex = list.selectedIndex;
-					info.pageID = this.data.item[item].id;
-					info.pageTitle = this.data.item[item].title;
-					info.pageType = this.data.item[item].type;
-					info.pageURL = this.data.item[item].URL;
-					
-					return info;
+					if (item >= 0) {
+						var info:Object = new Object();
+						info.category = this.data.item[item].category;
+						info.menuIndex = list.selectedIndex;
+						info.pageID = this.data.item[item].id;
+						info.pageTitle = this.data.item[item].title;
+						info.pageType = this.data.item[item].type;
+						info.pageURL = this.data.item[item].URL;
+						
+						return info;
+					} else {
+						return false;
+					}
 				}
 				
 				return false;
 			}
 			
 		//Get information about the currently selected menu item by URL
-			public function getInfoForItemByURL(URL:String):Object {
+			public function getInfoForItemByURL(URL:String = ""):Object {
 				if (this.data && this.data != null) {
-					var item:int = -1;
+					var item:int;
 					
-				//Find the index of the item by its URL
-					for (var i:int = 0; i <= this.data.item.length - 1; i ++) {
-						if (this.data.item[i].URL == this.URL) {
-							item = i;
-							break;
+				//Find the index of the item by its URL or just use the currently selected item
+					if (URL != "") {
+						for (var i:int = 0; i <= this.data.item.length - 1; i ++) {
+							if (this.data.item[i].URL == this.URL) {
+								item = i;
+								break;
+							}
 						}
+					} else {
+						item = list.selectedIndex;
 					}
 					
 				//Return data about the menu item
-					if (item == -1) {
-						return new Object();
+					if (item >= 0) {
+						var info:Object = new Object();
+						info.category = this.data.item[item].category;
+						info.menuIndex = list.selectedIndex;
+						info.pageID = this.data.item[item].id;
+						info.pageTitle = this.data.item[item].title;
+						info.pageType = this.data.item[item].type;
+						info.pageURL = this.data.item[item].URL;
+						
+						return info;
+					} else {
+						return false;
 					}
-					
-					var info:Object = new Object();
-					info.menuIndex = list.selectedIndex;
-					info.pageID = this.data.item[item].id;
-					info.pageTitle = this.data.item[item].title;
-					info.pageType = this.data.item[item].type;
-					info.pageURL = this.data.item[item].URL;
-					
-					return info;
 				}
 				
 				return false;
@@ -226,6 +268,7 @@
 			private function menuItemSelectedHandler(e:IndexChangeEvent):void {
 			//Collect the event data
 				var event:MenuEvent = new MenuEvent("menuItemClicked");
+				event.category = this.data.item[list.selectedIndex].category;
 				event.menuIndex = list.selectedIndex;
 				event.pageID = this.data.item[list.selectedIndex].id;
 				event.pageTitle = this.data.item[list.selectedIndex].title;
@@ -235,22 +278,14 @@
 			//Dispatch the event
 				super.dispatchEvent(event);
 			}
-			
-		//Get the hijaxed URL of the current page
-			private function get URL():String {
-				var URL:String = SWFAddress.getValue();
-				
-				if (URL == "" || URL == "/") {
-					return "";
-				} else {
-					return URL.substring(1);
-				}
-			}
 		]]>
 	</fx:Script>
 	
 	<fx:Metadata>
+		[Event(name="dataFetched", type="flash.events.Event")]
+		[Event(name="menuConstructed", type="flash.events.Event")]
 		[Event(name="menuItemClicked", type="com.forwardfour.events.MenuEvent")]
+		[Event(name="renderComplete", type="flash.events.Event")]
 	</fx:Metadata>
 	
 <!-- Make a request to the server for each of the menu items -->

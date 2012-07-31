@@ -3,6 +3,7 @@ package com.forwardfour.events {
 	
 	public class MenuEvent extends Event {
 	//These attributes are the destinctive features of this class which will store custom information about the dispatched event
+		public var category:String;
 		public var menuIndex:uint;
 		public var pageID:int;
 		public var pageTitle:String;

@@ -4,8 +4,7 @@
 			   xmlns:mx="library://ns.adobe.com/flex/mx"
 			   xmlns:header="components.header.*"
 			   xmlns:pages="components.pages.*"
-			   backgroundColor="0x141414" minHeight="600" minWidth="955" skinClass="skins.Theme"
-			   creationComplete="init(event)">
+			   backgroundColor="0x141414" minHeight="600" minWidth="955" skinClass="skins.Theme">
 	<fx:Script>
 		<![CDATA[
 			import com.asual.swfaddress.SWFAddress;
@@ -15,10 +14,13 @@
 			import com.forwardfour.events.NetworkEvent;
 			import com.forwardfour.utils.ModuleBase;
 			
-			import mx.events.FlexEvent;
+			import mx.controls.Alert;
 			
 		//Globalize a reference to the page content
 			private var pageObject:ModuleBase = null;
+			
+		//Globalize a reference to the old page content
+			private var oldPageObject:ModuleBase = null;
 			
 		//Instantiate the configuration class
 			public var config:Config = new Config();
@@ -29,17 +31,9 @@
 		*/
 			
 		//Initialize SWFAddress and grab the page listed from the URL
-			private function init(event:FlexEvent):void {				
-				SWFAddress.addEventListener(SWFAddressEvent.INIT, initSWFAddress);
-			}
-			
-			private function initSWFAddress(e:SWFAddressEvent):void {
-			//Listen for change events
+			private function init(e:Event):void {
+				//SWFAddress.addEventListener(SWFAddressEvent.INIT, URLNavigateToPageHandler);
 				SWFAddress.addEventListener(SWFAddressEvent.CHANGE, URLNavigateToPageHandler);
-				
-			//Get information about the selected menu item and navigate to that page
-				var info:Object = menu.getInfoForItemByIndex();
-				this.navigateToPage(info.pageType, info.pageID);
 			}
 			
 		//Get the hijaxed URL of the current page
@@ -60,44 +54,71 @@
 			
 		//Go to a specific page when a menu item has been clicked
 			private function menuNavigateToPageHandler(e:MenuEvent):void {
-				var info:Object = menu.getInfoForItemByIndex();
-				this.navigateToPage(info.pageType, info.pageID);
+				this.navigateToPage(menu.getInfoForItemByIndex());
 			}
 			
 		//Request a page when the URL has changed
 			private function URLNavigateToPageHandler(e:SWFAddressEvent):void {
-				var info:Object = menu.getInfoForItemByURL(this.URL);
-				this.navigateToPage(info.pageType, info.pageID);
+				this.navigateToPage(menu.getInfoForItemByURL(this.URL));
 			}
 			
 		//Process the page navigation request
-			private function navigateToPage(pageType:String, pageID:int):void {
+			private function navigateToPage(pageData:Object):void {
+				var pageType:String = pageData.pageType;
+				
 				switch(pageType) {
 					case "home" : 
 						homePage.load("services/home.php");
 						homePage.addEventListener("loadComplete", transitionPages);
+						this.oldPageObject = this.pageObject;
 						this.pageObject = homePage;
 						break;
+					
+					case "menu" : 
+						menuPage.load("services/food-menu.php?type=" + pageData.category);
+						menuPage.addEventListener("loadComplete", transitionPages);
+						this.oldPageObject = this.pageObject;
+						this.pageObject = menuPage;
 					
 					default : 
 						break;
 				}
 			}
 			
-		//Transition the old page away and the new one into view
+		//Transition the old page away
 			private function transitionPages(e:NetworkEvent):void {
+				this.pageObject.removeEventListener("loadComplete", transitionPages);
+				
+				if (this.oldPageObject != null) {
+					this.oldPageObject.transitionOut();
+					this.oldPageObject.addEventListener("transitionOutComplete", finishTransition);
+				} else {
+					this.finishTransition(new Event("transitionOutComplete"))
+				}
+			}
+			
+		//...and the new one into view
+			private function finishTransition(e:Event):void {
+				if (this.oldPageObject != null) {
+					this.oldPageObject.removeEventListener("transitionOutComplete", finishTransition);
+					this.oldPageObject = null;
+				}
+				
+				var info:Object = menu.getInfoForItemByIndex();
+				SWFAddress.setTitle(info.pageTitle);
+				//SWFAddress.setValue(info.pageURL);
 				this.pageObject.transitionIn();
 			}
 		]]>
 	</fx:Script>
 	
 <!-- Include the navigation menu -->
-	<header:Menu id="menu" top="0" menuItemClicked="menuNavigateToPageHandler(event)"/>
+	<header:Menu id="menu" top="0" menuConstructed="init(event)" menuItemClicked="menuNavigateToPageHandler(event)"/>
 	
 <!-- We'll use these components as we need them -->
 	<s:Group width="100%" top="60">
 		<pages:Home alpha="0" id="homePage" y="20"/>
-		<pages:FoodMenu id="menuPage" alpha="0" y="20" visible="false"/>
+		<pages:FoodMenu alpha="0" id="menuPage" y="20"/>
 		<pages:Lunches id="lunchesPage" alpha="0" y="20" visible="false"/>
 		<pages:Reviews id="reviewsPage" alpha="0" y="20" visible="false"/>
 	</s:Group>
