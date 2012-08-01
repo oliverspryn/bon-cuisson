@@ -3,9 +3,8 @@
 				xmlns:s="library://ns.adobe.com/flex/spark" 
 				xmlns:mx="library://ns.adobe.com/flex/mx" 
 				xmlns:images="assets.images.*"
-				autoDrawBackground="false"
-				dataChange="init(event)"
-				minWidth="800" width="100%">
+				autoDrawBackground="false" minWidth="800" width="100%"
+				dataChange="init(event)">
 	<fx:Script>
 		<![CDATA[
 			import flashx.textLayout.conversion.TextConverter;
@@ -13,55 +12,54 @@
 			import mx.controls.Alert;
 			import mx.events.FlexEvent;
 			
-			import spark.core.MaskType;
-			import spark.filters.DropShadowFilter;
-			
-		//Format the name to includ a " : " after it if there is a tagline, construct either the price or the pricing variations,
-		//and assign the <s:Image> a source, if there is one 
+		/**
+		 * Initialization performs the following actions:
+		 *  - adds a ":" after the name, if a tagline exists
+		 *  - assign the <s:Image> a source, if there is one, so that a broken image icon isn't shown for
+		 *    a blank image source
+		 *  - either format the price using the CurrencyFormatter class, or construct a list of variations
+		 *    to show various prices for differ sizes of menu items
+		*/
 			private function init(e:Event):void {
 			//Add a ":" after the name if a tagline exists
-				if (data.tagline != "") {
+				if (data.tagline != null && data.tagline != "") {
 					title.text += " : ";
 				}
 				
 			//Assign the <s:Image> a source
-				if (data.imageURL != "") {
+				if (data.imageURL != null && data.imageURL != "") {
 					image.source = data.imageURL;
 				}
 				
-			//We only have a price to deal with
-				if (data.variations == "") {
+			//Format the price or price variations
+				if (data.variations == null || (data.variations != null && data.variations == "")) {
 					price.text = priceFormatter.format(data.price);
 					price.text += data.perUnit;
-			//We have variations to format...
 				} else {
 					var variations:Object = JSON.parse(data.variations);
 					var returnString:String = "";
 					
-				//We can navigate the above object like a multi-dimensional array
-				//First object within the array is the price
-				//Second object within the array is the size
-				//Third object within the array is the suggested serving audience
+					/**
+					 * We can navigate the above object like a multi-dimensional array:
+					 *  - first object within the array is the price
+					 *  - second object within the array is the size
+					 *  - third object within the array is the suggested serving audience
+				    */
+					
 					for (var i:int = 0; i <= variations.length - 1; i++) {
-						returnString += priceFormatter.format(variations[i][0]) + " " + variations[i][1] + "<br><font size=\"10\">" + "" + variations[i][2] + "</font><br>";
+						returnString += priceFormatter.format(variations[i][0]) + " " + variations[i][1] +
+										"<br><font size=\"10\">" + "" + variations[i][2] + "</font><br>";
 					}
 					
 					this.price.textFlow = TextConverter.importToFlow(returnString, TextConverter.TEXT_FIELD_HTML_FORMAT);
 				}
-				
-			//Add a drop shadow to the <s:Image>
-				var shadow:spark.filters.DropShadowFilter = new spark.filters.DropShadowFilter();
-				shadow.alpha = 45;
-				shadow.blurX = 10;
-				shadow.blurY = 10;
-				image.filters = new Array(shadow);
 			}
 			
 		]]>
 	</fx:Script>
 	
 	<fx:Declarations>
-		<s:CurrencyFormatter id="priceFormatter" currencySymbol="$ " fractionalDigits="0" trailingZeros="false" useCurrencySymbol="true" useGrouping="true"/>
+		<s:CurrencyFormatter currencySymbol="$ " fractionalDigits="0" id="priceFormatter" trailingZeros="false" useCurrencySymbol="true" useGrouping="true"/>
 	</fx:Declarations>
 	
 <!-- Include the required stylesheet -->

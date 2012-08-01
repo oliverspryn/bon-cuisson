@@ -1,0 +1,14 @@
+var swfVersionStr = "${version_major}.${version_minor}.${version_revision}";
+var xiSwfUrlStr = "${expressInstallSwf}";
+var flashvars = {};
+var params = {};
+params.quality = "high";
+params.bgcolor = "${bgcolor}";
+params.allowscriptaccess = "sameDomain";
+params.allowfullscreen = "true";
+var attributes = {};
+attributes.id = "${application}";
+attributes.name = "${application}";
+attributes.align = "middle";
+swfobject.embedSWF("${swf}.swf", "content", "${width}", "${height}", swfVersionStr, xiSwfUrlStr, flashvars, params, attributes);
+swfobject.createCSS("#content", "display:block;text-align:left;");

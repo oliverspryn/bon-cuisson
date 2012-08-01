@@ -13,11 +13,13 @@
 			import com.forwardfour.events.MenuEvent;
 			import com.forwardfour.events.NetworkEvent;
 			import com.forwardfour.utils.ModuleBase;
-			
-			import mx.controls.Alert;
+			import com.forwardfour.valueObjects.NavigationItemData;
 			
 		//Globalize a reference to the page content
 			private var pageObject:ModuleBase = null;
+			
+		//Globalize a reference to the page menu index
+			private var pageIndex:int;
 			
 		//Globalize a reference to the old page content
 			private var oldPageObject:ModuleBase = null;
@@ -32,11 +34,10 @@
 			
 		//Initialize SWFAddress and grab the page listed from the URL
 			private function init(e:Event):void {
-				//SWFAddress.addEventListener(SWFAddressEvent.INIT, URLNavigateToPageHandler);
 				SWFAddress.addEventListener(SWFAddressEvent.CHANGE, URLNavigateToPageHandler);
 			}
 			
-		//Get the hijaxed URL of the current page
+		//Get the hijacked URL of the current page
 			private function get URL():String {
 				var URL:String = SWFAddress.getValue();
 				
@@ -63,21 +64,21 @@
 			}
 			
 		//Process the page navigation request
-			private function navigateToPage(pageData:Object):void {
+			private function navigateToPage(pageData:NavigationItemData):void {
 				var pageType:String = pageData.pageType;
+				this.oldPageObject = this.pageObject;
+				this.pageIndex = pageData.menuIndex;
 				
 				switch(pageType) {
 					case "home" : 
 						homePage.load("services/home.php");
 						homePage.addEventListener("loadComplete", transitionPages);
-						this.oldPageObject = this.pageObject;
 						this.pageObject = homePage;
 						break;
 					
 					case "menu" : 
 						menuPage.load("services/food-menu.php?type=" + pageData.category);
 						menuPage.addEventListener("loadComplete", transitionPages);
-						this.oldPageObject = this.pageObject;
 						this.pageObject = menuPage;
 					
 					default : 
@@ -97,17 +98,22 @@
 				}
 			}
 			
-		//...and the new one into view
+		//...and the new one into view. Also update the hijacked URL, title, and selected menu item
 			private function finishTransition(e:Event):void {
 				if (this.oldPageObject != null) {
 					this.oldPageObject.removeEventListener("transitionOutComplete", finishTransition);
 					this.oldPageObject = null;
 				}
 				
-				var info:Object = menu.getInfoForItemByIndex();
+				SWFAddress.removeEventListener(SWFAddressEvent.CHANGE, URLNavigateToPageHandler);
+				
+				var info:NavigationItemData = menu.getInfoForItemByIndex(false, this.pageIndex);
 				SWFAddress.setTitle(info.pageTitle);
-				//SWFAddress.setValue(info.pageURL);
+				SWFAddress.setValue(info.pageURL);
+				menu.selected = info.menuIndex;
 				this.pageObject.transitionIn();
+				
+				SWFAddress.addEventListener(SWFAddressEvent.CHANGE, URLNavigateToPageHandler);
 			}
 		]]>
 	</fx:Script>
