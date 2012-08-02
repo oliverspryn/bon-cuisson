@@ -1,6 +1,6 @@
 <?php
 //Include the system core
-	require_once("root.php");
+	require_once("../root.php");
 	
 //Check to see if we are given the required parameters
 	if (isset($_GET['type']) && $_GET['type'] != "") {

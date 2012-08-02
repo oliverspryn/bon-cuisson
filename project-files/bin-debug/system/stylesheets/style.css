@@ -101,3 +101,53 @@ header nav.navigation ul li a, header nav.navigation ul li a:hover, header nav.n
 header nav.navigation ul li a.selected {
 	background: url(../images/pointer.png) no-repeat bottom center;
 }
+
+/**
+ * General main content
+ * styles
+ * -------------------------
+*/
+
+section.content {
+	margin: 0px 10% 0px 10%;
+}
+
+section.content h2 {
+	display: none;
+}
+
+/**
+ * Home module
+ * -------------------------
+*/
+
+section.content div.homeBanner {
+	background-repeat: no-repeat;
+	color: #FFFFFF;
+	display: table;
+	font-family: LucidaCalligraphy;
+	font-size: 20px;
+	height: 200px;
+	margin: 20px auto 20px auto;
+	width: 700px;
+}
+
+section.content div.homeBanner p {
+	display: table-cell;
+	max-width: 300px;
+	text-align: center;
+	vertical-align: middle;
+	width: 300px;
+}
+
+section.content div.homeBanner.left p {
+	padding-left: 400px;
+}
+
+section.content div.homeBanner.right {
+	background-position: right;
+}
+
+section.content div.homeBanner.right p {
+	padding-right: 400px;
+}

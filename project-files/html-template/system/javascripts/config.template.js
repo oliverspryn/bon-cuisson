@@ -10,5 +10,5 @@ var attributes = {};
 attributes.id = "${application}";
 attributes.name = "${application}";
 attributes.align = "middle";
-swfobject.embedSWF("${swf}.swf", "content", "${width}", "${height}", swfVersionStr, xiSwfUrlStr, flashvars, params, attributes);
-swfobject.createCSS("#content", "display:block;text-align:left;");
+swfobject.embedSWF("${swf}.swf", "container", "${width}", "${height}", swfVersionStr, xiSwfUrlStr, flashvars, params, attributes);
+swfobject.createCSS("#container", "display:block;text-align:left;");

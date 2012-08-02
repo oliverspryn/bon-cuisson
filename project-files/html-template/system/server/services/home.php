@@ -1,6 +1,6 @@
 <?php
 //Include the system core
-	require_once("root.php");
+	require_once("../root.php");
 	
 //Output this file as XML
 	header("Content-type: text/xml");

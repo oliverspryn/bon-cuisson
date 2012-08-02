@@ -1,6 +1,6 @@
 <?php
 //Include the system core and classes
-	require_once("services/root.php");
+	require_once("system/server/root.php");
 	
 //Output as an XML file
 	header("Content-type: text/xml");
@@ -15,9 +15,28 @@
 	
 	while($page = mysql_fetch_array($pageGraber)) {
 		echo "<url>
-<loc>" . ROOT . $page['URL'] . "</loc>
-<priority>1.000</priority>
-</url>\n";
+<loc>" . ROOT . escape($page['URL']) . "</loc>\n";
+
+	//Different modules should recieve differing levels of priority and changefreq
+		switch ($page['type']) {
+			case "home" : 
+				echo "<priority>0.5</priority>
+<changefreq>monthly</changefreq>\n";
+				break;
+				
+			case "menu" : 
+			case "lunch" : 
+				echo "<priority>0.8</priority>
+<changefreq>weekly</changefreq>\n";
+				break;
+				
+			case "reviews" : 
+				echo "<priority>0.7</priority>
+<changefreq>weekly</changefreq>\n";
+				break;
+		}
+
+		echo "</url>\n";
 	}
 ?>
 </urlset>
