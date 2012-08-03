@@ -15,6 +15,8 @@
 			import com.forwardfour.utils.ModuleBase;
 			import com.forwardfour.valueObjects.NavigationItemData;
 			
+			import mx.controls.Alert;
+			
 		//Globalize a reference to the page content
 			private var pageObject:ModuleBase = null;
 			
@@ -71,13 +73,13 @@
 				
 				switch(pageType) {
 					case "home" : 
-						homePage.load("services/home.php");
+						homePage.load("system/server/services/home.php");
 						homePage.addEventListener("loadComplete", transitionPages);
 						this.pageObject = homePage;
 						break;
 					
 					case "menu" : 
-						menuPage.load("services/food-menu.php?type=" + pageData.category);
+						menuPage.load("system/server/services/food-menu.php?type=" + pageData.category, false, true);
 						menuPage.addEventListener("loadComplete", transitionPages);
 						this.pageObject = menuPage;
 					
@@ -125,7 +127,7 @@
 	<s:Group width="100%" top="60">
 		<pages:Home alpha="0" id="homePage" y="20"/>
 		<pages:FoodMenu alpha="0" id="menuPage" y="20"/>
-		<pages:Lunches id="lunchesPage" alpha="0" y="20" visible="false"/>
-		<pages:Reviews id="reviewsPage" alpha="0" y="20" visible="false"/>
+		<!--<pages:Lunches id="lunchesPage" alpha="0" y="20" visible="false"/>
+		<pages:Reviews id="reviewsPage" alpha="0" y="20" visible="false"/>-->
 	</s:Group>
 </s:Application>

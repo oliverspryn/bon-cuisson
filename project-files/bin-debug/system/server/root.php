@@ -10,7 +10,7 @@
 	mysql_select_db($databaseName, $db);
 	
 //Define the root information for the site
-	define('ROOT', 'http://localhost/Bon%20Cuisson/project-files/bin-debug/');
+	define('ROOT', 'http://boncuisson.no-ip.org:256/Bon%20Cuisson/project-files/bin-debug/');
 	
 //Grab the data from the configuration table and for use sitewide
 	$configGrabber = mysql_query("SELECT * FROM `config` WHERE `id` = '1'", $db);

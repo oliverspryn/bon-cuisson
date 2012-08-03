@@ -41,7 +41,7 @@
 <head>
 <title><?php echo escape($page['title']); ?></title>
 <meta charset="UTF-8" />
-<link href="<?php echo ROOT; ?>system/stylesheets/style.css" rel="stylesheet" />
+<link href="<?php echo ROOT; ?>system/stylesheets/desktop.css" rel="stylesheet" />
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
 <script src="<?php echo ROOT; ?>system/javascripts/swfobject.js"></script>
 <script src="<?php echo ROOT; ?>system/javascripts/swfaddress.js"></script>

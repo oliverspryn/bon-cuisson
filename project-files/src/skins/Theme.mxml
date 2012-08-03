@@ -21,17 +21,17 @@
 				applicationScroller.addEventListener(MouseEvent.MOUSE_WHEEL, speedScroll, true);
 			}
 			
+		//Speed up the scrolling of the application window scroller
+			private function speedScroll(e:MouseEvent):void {
+				e.delta = e.delta > 0 ? 30 : -30;
+			}	
+			
 		//Use the configuration class to set the color of the scrollbar
 			private function configure(e:FlexEvent):void {
 				var main:Main = Main(FlexGlobals.topLevelApplication);
 				
 				applicationScroller.setStyle("chromeColor", main.config.scrollBarColor);
 			}
-			
-		//Speed up the scrolling of the application window scroller
-			private function speedScroll(e:MouseEvent):void {
-				e.delta = e.delta > 0 ? 30 : -30;
-			}			
 		]]>
     </fx:Script>
     
@@ -42,8 +42,8 @@
         <s:State name="disabledWithControlBar" />
     </s:states>
 
-	<s:Scroller height="100%" horizontalScrollPolicy="off" id="applicationScroller" width="100%">
-		<s:Group>
+	<s:Scroller bottom="0" horizontalScrollPolicy="off" id="applicationScroller" left="0" right="0" top="0">
+		<s:Group id="superContainer">
 			<header:Logo id="logo" left="{width / 6}" top="0"/>
 			<header:Contact id="contact" right="{width / 6}" top="10"/>
 			<s:Group bottom="10" id="contentGroup" left="10" right="10" top="160"/>

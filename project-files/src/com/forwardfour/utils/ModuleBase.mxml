@@ -2,7 +2,8 @@
 <s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		 xmlns:s="library://ns.adobe.com/flex/spark" 
 		 xmlns:mx="library://ns.adobe.com/flex/mx"
-		 creationComplete="configure(event)">
+		 creationComplete="configure(event)"
+		 height="0" visible="false">
 	
 	<fx:Script>
 		<![CDATA[
@@ -24,8 +25,14 @@
 			[Bindable]
 			protected var data:Object;
 			
+		//Hold the data from the server but do not share it with the child component... yet
+			private var delayedData:Object;
+			
 		//Set whether this component should transition into view when the requested data has been loaded
 			private var transitionOnComplete:Boolean;
+			
+		//Set whether the data from the server should be shared immediately with the child component
+			private var delaySharingDataUntilTransitionIn:Boolean;
 			
 		//Use the configuration class to set whether or not the Flex busy cursor should show during network activity
 			private function configure(e:FlexEvent):void {
@@ -35,17 +42,23 @@
 			}
 			
 		//Load the requested data from the server
-			public function load(URL:String, transitionOnComplete:Boolean = false):void {
+			public function load(URL:String, transitionOnComplete:Boolean = false,
+								 delaySharingDataUntilTransitionIn:Boolean = false):void {
 				this.dataService.url = URL;
 				this.dataServiceResponder.token = this.dataService.send();
 				
 				this.transitionOnComplete = transitionOnComplete;
+				this.delaySharingDataUntilTransitionIn = delaySharingDataUntilTransitionIn;
 			}
 			
 		//Share the loaded data with the component, dispatch a data fetched event, and see if the component should be transitioned
 			private function dataResultHandler(e:ResultEvent):void {
 			//Share the data with the component
-				this.data = e.result;
+				if (!this.delaySharingDataUntilTransitionIn) {
+					this.data = e.result;
+				} else {
+					this.delayedData = e.result;
+				}
 				
 			//Dispatch the event
 				var eventData:NetworkEvent = new NetworkEvent("loadComplete");
@@ -73,6 +86,12 @@
 			public function transitionIn():void {
 			//Restore the component
 				this.restore();
+				
+			//Share the data with the child component
+				if (this.delaySharingDataUntilTransitionIn) {
+					this.data = this.delayedData;
+					this.delayedData = null;
+				}
 				
 			//Transition it into place
 				TweenMax.to(this, (this.main.config.transitionDuration / 1000) / 2, {
@@ -102,8 +121,13 @@
 				});
 			}
 			
-		//Dispatch an event when transitioning out is complete and destroy this component's data, if set to do so
+		//Destroy this component's data, and dispatch an event when transitioning out is complete
 			private function transitionOutCompleteHandler(destroyOnComplete:Boolean):void {
+			//Should this components data and visual appearance be destroyed?
+				if (destroyOnComplete) {
+					this.destroy();
+				}
+				
 			//Dispatch the event
 				var eventData:TransitionEvent = new TransitionEvent("transitionOutComplete");
 				eventData.transitionDuration = (this.main.config.transitionDuration / 1000) / 2;
@@ -111,11 +135,6 @@
 				eventData.triggeredObject = this;
 				
 				super.dispatchEvent(eventData);
-				
-			//Should this components data and visual appearance be destroyed?
-				if (destroyOnComplete) {
-					this.destroy();
-				}
 			}
 			
 		//Destroy this component's data and visual appearence, and dispatch a destroyed event

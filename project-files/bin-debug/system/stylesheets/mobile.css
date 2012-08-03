@@ -1,0 +1,42 @@
+/**
+ * General styles
+ * -------------------------
+*/
+
+footer {
+	text-align: center;
+}
+
+footer ul {
+	list-style: none;
+	padding: 0px;
+}
+
+footer ul li {
+	display: inline;
+}
+
+footer ul li:last-child {
+	padding-left: 10px;
+}
+
+/**
+ * Home module
+ * -------------------------
+*/
+
+@font-face {
+	font-family: LucidaCalligraphy;
+	font-size: 15;
+	src: url('fonts/lcallig.ttf');
+}
+
+section.content div.homeBanner {
+	font-family: LucidaCalligraphy;
+	text-align: center;
+}
+
+section.content div.homeBanner img {
+	max-width: 100%;
+	width: 300px;
+}

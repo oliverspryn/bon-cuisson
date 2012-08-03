@@ -293,7 +293,7 @@
 <!-- Make a request to the server for each of the menu items -->
 	<fx:Declarations>
 		<s:CallResponder fault="dataFaultHandler(event)" id="dataServiceResponder" result="dataResultHandler(event)"/>
-		<s:HTTPService id="dataService" url="services/menu.php"/>
+		<s:HTTPService id="dataService" url="system/server/services/menu.php"/>
 	</fx:Declarations>
 	
 <!-- The background of the menu -->

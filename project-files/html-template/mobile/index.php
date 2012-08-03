@@ -4,6 +4,7 @@
 <title><?php echo escape($page['title']); ?></title>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="<?php echo ROOT; ?>system/stylesheets/mobile.css" rel="stylesheet" />
 <link rel="stylesheet" href="http://code.jquery.com/mobile/1.1.1/jquery.mobile-1.1.1.min.css" />
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
 <script src="http://code.jquery.com/mobile/1.1.1/jquery.mobile-1.1.1.min.js"></script>
@@ -27,7 +28,17 @@
 ?>
 </header>
 
-<section data-role="content">
+<section class="content" data-role="content">
+<?php
+//Fetch the appropriate module processor for the requested page type
+	if ($page) {
+		switch ($page['type']) {
+			case "home" : 
+				require_once("mobile/modules/home.php");
+				break;
+		}
+	}
+?>
 
 <nav class="mainMenu">
 <ul data-inset="true" data-role="listview">
@@ -48,7 +59,7 @@
 
 <footer>
 <ul>
-<li><?php echo escape($config['phone']); ?></li>
+<li><a href="tel:<?php echo preg_replace("/[^0-9]/", "", escape($config['phone'])); ?>"><?php echo escape($config['phone']); ?></a></li>
 <li><a href="mailto:<?php echo escape($config['email']); ?>" target="_blank"><?php echo escape($config['email']); ?></a></li>
 </ul>
 </footer>

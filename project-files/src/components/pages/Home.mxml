@@ -13,11 +13,11 @@
 		<s:HGroup>
 			<s:Label height="200" left="47" maxWidth="300" styleName="lines" text="{data.home.line1}" y="37"/>
 			<s:Spacer width="100"/>
-			<s:Image right="0" source="{data.home.image1}" y="37"/>
+			<s:Image right="0" source="data/home/{data.home.image1}" y="37"/>
 		</s:HGroup>
 		
 		<s:HGroup>
-			<s:Image right="0" source="{data.home.image2}" y="37"/>
+			<s:Image right="0" source="data/home/{data.home.image2}" y="37"/>
 			<s:Spacer width="100"/>
 			<s:Label height="200" left="47" maxWidth="300" styleName="lines" text="{data.home.line2}" y="37"/>
 		</s:HGroup>
@@ -25,7 +25,7 @@
 		<s:HGroup>
 			<s:Label height="200" left="47" maxWidth="300" styleName="lines" text="{data.home.line3}" y="37"/>
 			<s:Spacer width="100"/>
-			<s:Image right="0" source="{data.home.image3}" y="37"/>
+			<s:Image right="0" source="data/home/{data.home.image3}" y="37"/>
 		</s:HGroup>
 	</s:VGroup>
 </utils:ModuleBase>

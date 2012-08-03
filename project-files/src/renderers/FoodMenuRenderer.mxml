@@ -14,6 +14,7 @@
 			
 		/**
 		 * Initialization performs the following actions:
+		 *  - check to see if the Fleur de Lis should appear
 		 *  - adds a ":" after the name, if a tagline exists
 		 *  - assign the <s:Image> a source, if there is one, so that a broken image icon isn't shown for
 		 *    a blank image source
@@ -34,7 +35,10 @@
 			//Format the price or price variations
 				if (data.variations == null || (data.variations != null && data.variations == "")) {
 					price.text = priceFormatter.format(data.price);
-					price.text += data.perUnit;
+					
+					if (data.perUnit != null && data.perUnit != "") {
+						price.text += " " + data.perUnit;
+					}
 				} else {
 					var variations:Object = JSON.parse(data.variations);
 					var returnString:String = "";
@@ -67,9 +71,12 @@
 	
 <!-- Display the header of the menu item including the name, price, tagline, and Fleur de Lis as the "bullet" item -->
 	<s:RichText id="price" left="5" styleName="price" top="7"/>
-	<images:FleurDeLis left="{width * 0.1}" />
-	<s:Label id="title" left="{(width * 0.1) + 35}" styleName="name" text="{data.name}"/>
-	<s:Label id="tagline" left="{title.x + title.width + 10}" right="0" styleName="tag" text="{data.tagline}" top="6"/>
+	
+	<s:HGroup left="{width * 0.1}">
+		<images:FleurDeLis/>
+		<s:Label id="title" styleName="name" text="{data.name}"/>
+		<s:Label id="tagline" right="0" styleName="tag" text="{data.tagline}" top="6"/>
+	</s:HGroup>
 	
 <!-- Display the description and associated image (if any) of the menu item -->
 	<s:Image id="image" left="{(width * 0.1) + 35}" top="{tagline.height + 35}" maxWidth="300"/>
