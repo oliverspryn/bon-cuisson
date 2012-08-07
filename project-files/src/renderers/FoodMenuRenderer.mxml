@@ -22,6 +22,15 @@
 		 *    to show various prices for differ sizes of menu items
 		*/
 			private function init(e:Event):void {
+			//Should a Fleur de Lis appear?
+				if (data.showIcon == "0") {
+					bullet.visible = false;
+					bullet.width = 0
+				} else {
+					bullet.visible = true;
+					bullet.width = NaN;
+				}
+				
 			//Add a ":" after the name if a tagline exists
 				if (data.tagline != null && data.tagline != "") {
 					title.text += " : ";
@@ -52,7 +61,7 @@
 					
 					for (var i:int = 0; i <= variations.length - 1; i++) {
 						returnString += priceFormatter.format(variations[i][0]) + " " + variations[i][1] +
-										"<br><font size=\"10\">" + "" + variations[i][2] + "</font><br>";
+										"<br><font size=\"10\">" + variations[i][2] + "</font><br>";
 					}
 					
 					this.price.textFlow = TextConverter.importToFlow(returnString, TextConverter.TEXT_FIELD_HTML_FORMAT);
@@ -63,22 +72,24 @@
 	</fx:Script>
 	
 	<fx:Declarations>
-		<s:CurrencyFormatter currencySymbol="$ " fractionalDigits="0" id="priceFormatter" trailingZeros="false" useCurrencySymbol="true" useGrouping="true"/>
+		<s:CurrencyFormatter currencySymbol="$ " fractionalDigits="0" id="priceFormatter" trailingZeros="false"
+							 useCurrencySymbol="true" useGrouping="true"/>
 	</fx:Declarations>
 	
 <!-- Include the required stylesheet -->
-	<fx:Style source="../assets/styles/pages/Menu.css"/>
+	<fx:Style source="../assets/styles/pages/FoodMenuStyles.css"/>
 	
 <!-- Display the header of the menu item including the name, price, tagline, and Fleur de Lis as the "bullet" item -->
 	<s:RichText id="price" left="5" styleName="price" top="7"/>
 	
-	<s:HGroup left="{width * 0.1}">
-		<images:FleurDeLis/>
+	<s:HGroup left="{width * 0.1}" verticalAlign="top">
+		<images:FleurDeLis id="bullet"/>
 		<s:Label id="title" styleName="name" text="{data.name}"/>
-		<s:Label id="tagline" right="0" styleName="tag" text="{data.tagline}" top="6"/>
+		<s:Label height="24" id="tagline" styleName="tag" text="{data.tagline}" verticalAlign="bottom"/>
 	</s:HGroup>
 	
 <!-- Display the description and associated image (if any) of the menu item -->
-	<s:Image id="image" left="{(width * 0.1) + 35}" top="{tagline.height + 35}" maxWidth="300"/>
-	<s:Label left="{image.x + image.width + 15}" right="0" top="{tagline.height + 35}" styleName="description" text="{data.description}"/>
+	<s:Image id="image" left="{(width * 0.1) + 35}" top="{tagline.height + 15}" maxWidth="300"/>
+	<s:Label left="{image.x + image.width + 15}" right="0" top="{tagline.height + 15}" styleName="description"
+			 text="{data.description}"/>
 </s:ItemRenderer>

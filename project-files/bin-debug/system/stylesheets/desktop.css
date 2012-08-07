@@ -151,3 +151,56 @@ section.content div.homeBanner.right {
 section.content div.homeBanner.right p {
 	padding-right: 400px;
 }
+
+/**
+ * Food menu module
+ * -------------------------
+*/
+
+section.content ul.foodMenu {
+	color: #FFFFFF;
+	font-family: LucidaCalligraphy;
+	font-size: 20px;
+	list-style: none;
+	padding: 0px;
+}
+
+section.content ul.foodMenu li {
+	clear: both;
+	padding-bottom: 45px;
+	position: relative;
+}
+
+section.content ul.foodMenu li span.price {
+	font-size: 15px;
+	left: -12%;
+	position: absolute;
+	top: 10px;
+}
+
+section.content ul.foodMenu li span.name {
+	font-size: 25px;
+}
+
+section.content ul.foodMenu li.icon span.name {
+	background: url(../images/fleurDeLis.png) no-repeat top left;
+	font-size: 25px;
+	padding-left: 45px;
+}
+
+section.content ul.foodMenu li span.description {
+	display: block;
+	font-size: 20px;
+	margin-top: 15px;
+	padding-left: 60px;
+}
+
+section.content ul.foodMenu li ul {
+	list-style: none;
+	margin-top: 15px;
+	padding-left: 47px;
+}
+
+section.content ul.foodMenu li ul li {
+	display: inline-block;
+}

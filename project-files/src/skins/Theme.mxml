@@ -32,6 +32,12 @@
 				
 				applicationScroller.setStyle("chromeColor", main.config.scrollBarColor);
 			}
+			
+			public function scrollFix():void {
+			//Move the scroller children and destroy the scroller
+				superContainer.parent.removeChild(superContainer);
+				
+			}
 		]]>
     </fx:Script>
     

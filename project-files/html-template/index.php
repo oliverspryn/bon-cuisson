@@ -84,6 +84,10 @@
 			case "home" : 
 				require_once("modules/home.php");
 				break;
+				
+			case "menu" : 
+				require_once("modules/food-menu.php");
+				break;
 		}
 	}
 ?>

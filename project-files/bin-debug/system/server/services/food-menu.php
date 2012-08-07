@@ -20,6 +20,7 @@
 			$XML .= "<type>" . $menu['type'] . "</type>";
 			$XML .= "<price>" . $menu['price'] . "</price>";
 			$XML .= "<perUnit>" . $menu['perUnit'] . "</perUnit>";
+			$XML .= "<showIcon>" . $menu['showIcon'] . "</showIcon>";
 			$XML .= "<name>" . $menu['name'] . "</name>";
 			$XML .= "<tagline>" . $menu['tagline'] . "</tagline>";
 			$XML .= "<description>" . $menu['description'] . "</description>";
