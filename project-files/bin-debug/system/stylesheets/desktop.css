@@ -178,8 +178,32 @@ section.content ul.foodMenu li span.price {
 	top: 10px;
 }
 
+section.content ul.foodMenu li ul.variations {
+	left: -12%;
+	list-style: none;
+	padding: 0px;
+	position: absolute;
+	top: 10px;
+}
+
+section.content ul.foodMenu li ul.variations li {
+	padding: 0px;
+}
+
+section.content ul.foodMenu li ul.variations li.price {
+	font-size: 15px;
+}
+
+section.content ul.foodMenu li ul.variations li.serves {
+	font-size: 12px;
+}
+
 section.content ul.foodMenu li span.name {
 	font-size: 25px;
+}
+
+section.content ul.foodMenu li span.tagline {
+	font-size: 15px;
 }
 
 section.content ul.foodMenu li.icon span.name {
@@ -190,17 +214,30 @@ section.content ul.foodMenu li.icon span.name {
 
 section.content ul.foodMenu li span.description {
 	display: block;
-	font-size: 20px;
+	font-size: 15px;
 	margin-top: 15px;
 	padding-left: 60px;
 }
 
-section.content ul.foodMenu li ul {
+section.content ul.foodMenu li ul.details {
+	clear: both;
+	display: block;
 	list-style: none;
 	margin-top: 15px;
+	overflow: auto;
 	padding-left: 47px;
+	width: 100%;
 }
 
-section.content ul.foodMenu li ul li {
-	display: inline-block;
+section.content ul.foodMenu li ul.details li {
+	display: inline;
+}
+
+section.content ul.foodMenu li ul.details li img {
+	float: left;
+	padding-right: 15px;
+}
+
+section.content ul.foodMenu li ul.details li span.description {
+	margin-top: 0px;
 }

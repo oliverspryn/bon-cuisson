@@ -1,7 +1,7 @@
 <?php
 //Fetch the food menu data
 	$type = escape($page['category']);
-	$menuGrabber = mysql_query("SELECT * FROM `menu` WHERE `type` = '{$type}'", $db);
+	$menuGrabber = mysql_query("SELECT * FROM `menu` WHERE `visible` = '1' AND `type` = '{$type}' ORDER BY `position` ASC", $db);
 	
 //Display a title for SEO
 	echo "<h2>" . escape($page['title']) . "</h2>
@@ -42,16 +42,16 @@
 		 *  - third object within the array is the suggested serving audience
 		*/
 			
-			echo "<div class=\"variations\">
+			echo "<ul class=\"variations\">
 ";
 			
 			for ($i = 0; $i <= sizeof($variations) - 1; $i++) {
-				echo "<span class=\"price\">$ " . intval(escape($variations[$i]['0'])) . " " . escape($variations[$i]['1']) . "</span>
-<span class=\"serves\">" . escape($variations[$i]['2']) . "</span>
+				echo "<li class=\"price\">$ " . intval(escape($variations[$i]['0'])) . " " . escape($variations[$i]['1']) . "</li>
+<li class=\"serves\">" . escape($variations[$i]['2']) . "</li>
 ";
 			}
 			
-			echo "</div>
+			echo "</ul>
 ";
 		}
 		
@@ -70,7 +70,7 @@
 	//Display the image and description
 		if ($menu['imageURL'] != "") {
 			echo "
-<ul>
+<ul class=\"details\">
 <li><img alt=\"" . escape($menu['name']) . " image\" src=\"" . escape($menu['imageURL']) . "\" /></li>
 <li><span class=\"description image\">" . escape($menu['description']) . "</span></li>
 </ul>

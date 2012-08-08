@@ -31,10 +31,10 @@
 	require_once("system/server/third-party/Mobile_Detect.php");
 	$detect = new Mobile_Detect();
 	
-	if ($detect->isMobile()) {
+	//if ($detect->isMobile()) {
 		require_once("mobile/index.php");
 		exit;
-	}
+	//}
 ?>
 <!DOCTYPE html>
 <html lang="en-US"> 

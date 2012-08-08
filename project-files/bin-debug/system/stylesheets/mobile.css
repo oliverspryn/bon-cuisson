@@ -40,3 +40,30 @@ section.content div.homeBanner img {
 	max-width: 100%;
 	width: 300px;
 }
+
+/**
+ * Food menu module
+ * -------------------------
+*/
+
+section.content ul.foodMenu li a h3 {
+	margin: 0px;
+}
+
+section.content ul.foodMenu li a p.description {
+	overflow: hidden;
+	padding-top: 5px;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	width: 100%;
+}
+
+section.content ul.foodMenu li a p.price {
+	font-weight: bold;
+	margin: 0px;
+	padding-top: 13px;
+}
+
+section.content ul.foodMenu li a img {
+	padding: 5px 0px 0px 5px;
+}
