@@ -18,6 +18,10 @@
 	
 //Simplify the name of some commonly used functions
 	function escape($dbValue) {
+		return mysql_real_escape_string($dbValue);
+	}
+	
+	function strip($dbValue) {
 		return stripslashes($dbValue);
 	}
 ?>

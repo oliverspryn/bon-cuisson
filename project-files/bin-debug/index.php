@@ -46,7 +46,7 @@
 <script src="<?php echo ROOT; ?>system/javascripts/swfobject.js"></script>
 <script src="<?php echo ROOT; ?>system/javascripts/swfaddress.js"></script>
 <script src="<?php echo ROOT; ?>system/javascripts/hijax-redirect.js"></script>
-<script src="<?php echo ROOT; ?>system/javascripts/config.js"></script>
+<!--<script src="<?php echo ROOT; ?>system/javascripts/config.js"></script>-->
 </head>
 
 <body id="container">
