@@ -2,11 +2,12 @@
 <s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		 xmlns:s="library://ns.adobe.com/flex/spark" 
 		 xmlns:mx="library://ns.adobe.com/flex/mx"
-		 creationComplete="configure(event)"
+		 preinitialize="configure(event)"
 		 height="0" visible="false">
 	
 	<fx:Script>
 		<![CDATA[
+			import com.forwardfour.Config;
 			import com.forwardfour.events.ComponentStateEvent;
 			import com.forwardfour.events.NetworkEvent;
 			import com.forwardfour.events.TransitionEvent;
@@ -93,7 +94,7 @@
 					this.delayedData = null;
 				}
 				
-			//Transition it into place
+			//Transition it into place, if the component has been added to the stage
 				TweenMax.to(this, (this.main.config.transitionDuration / 1000) / 2, {
 					alpha : 1,
 					onComplete : transitionInCompleteHandler,
@@ -101,14 +102,18 @@
 				});
 			}
 			
-		//Dispatch an event when transitioning in is complete
+		//Dispatch an event when transitioning in is complete, and set an explict height
 			private function transitionInCompleteHandler():void {
+			//Dispatch the event
 				var eventData:TransitionEvent = new TransitionEvent("transitionInComplete");
 				eventData.transitionDuration = (this.main.config.transitionDuration / 1000) / 2;
 				eventData.transitionType = TransitionEvent.TRANSITION_IN;
 				eventData.triggeredObject = this;
 				
 				super.dispatchEvent(eventData);
+				
+			//Set the explicit height
+				this.restore();
 			}
 			
 		//Transition this component out of place

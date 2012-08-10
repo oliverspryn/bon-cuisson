@@ -11,14 +11,14 @@
 	
 	while ($menu = mysql_fetch_array($menuGrabber)) {
 		$XML .= "<item>";
-		$XML .= "<id>" . $menu['id'] . "</id>";
-		$XML .= "<visible>" . $menu['visible'] . "</visible>";
-		$XML .= "<position>" . $menu['position'] . "</position>";
-		$XML .= "<URL>" . $menu['URL'] . "</URL>";
-		$XML .= "<type>" . $menu['type'] . "</type>";
-		$XML .= "<title>" . $menu['title'] . "</title>";
-		$XML .= "<content>" . $menu['content'] . "</content>";
-		$XML .= "<category>" . $menu['category'] . "</category>";
+		$XML .= "<id>" . strip($menu['id']) . "</id>";
+		$XML .= "<visible>" . strip($menu['visible']) . "</visible>";
+		$XML .= "<position>" . strip($menu['position']) . "</position>";
+		$XML .= "<URL>" . strip($menu['URL']) . "</URL>";
+		$XML .= "<type>" . strip($menu['type']) . "</type>";
+		$XML .= "<title>" . strip($menu['title']) . "</title>";
+		$XML .= "<content>" . strip($menu['content']) . "</content>";
+		$XML .= "<category>" . strip($menu['category']) . "</category>";
 		$XML .= "</item>";
 	}
 	

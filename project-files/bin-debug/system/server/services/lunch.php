@@ -9,7 +9,7 @@
 		
 	//Fetch the menu
 		$type = strtolower(mysql_real_escape_string($_GET['type']));
-		$menuGrabber = mysql_query("SELECT * FROM `menu` WHERE `visible` = '1' AND `type` = '{$type}' ORDER BY `position` ASC", $db);
+		$menuGrabber = mysql_query("SELECT * FROM `lunch` WHERE `visible` = '1' AND `type` = '{$type}' ORDER BY `position` ASC", $db);
 		$XML = "<menu>";
 		
 		while ($menu = mysql_fetch_array($menuGrabber)) {

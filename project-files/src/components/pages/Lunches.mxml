@@ -1,49 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+<utils:ModuleBase xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		 xmlns:s="library://ns.adobe.com/flex/spark" 
 		 xmlns:mx="library://ns.adobe.com/flex/mx"
-		 width="100%" height="100%">
-<!-- Create an outward facing public variable which will pass data to the menu -->
-	<fx:Script>
-		<![CDATA[
-			[Bindable]
-			public var data:*; //Yeah, the lastResult property of the CallResponder isn't strongly typed
-		]]>
-	</fx:Script>
+		 xmlns:utils="com.forwardfour.utils.*"
+		 width="100%">
 	
 <!-- Include the required style sheet -->
 	<fx:Style source="../../assets/styles/pages/LunchesStyles.css"/>
 	
-<!-- Display the header items -->
-	<s:Label styleName="h1" id="header" left="{width * 0.1}" width="90%" top="20" textAlign="center"
-			 text="Each lunch comes with an enjoyable slice of fresh, buttered Challah bread and a delicious cookie"/>
-	
-	<s:Group id="headerGroup" width="90%" top="200">
-		<s:VGroup>
-			<s:Label styleName="price" text="$9"/>
-			<s:Label styleName="serving" text="Serving on:"/>
-		</s:VGroup>
-		
-		<s:Label styleName="h1" textAlign="center" width="100%" text="The Salads"/>
-	</s:Group>
-	
-<!-- Display the list of menu items -->
-	<s:List id="list" width="90%" top="{headerGroup.y + headerGroup.height + 35}" borderVisible="false" contentBackgroundAlpha="0"
-			itemRenderer="renderers.LunchesRenderer" horizontalScrollPolicy="off">
-		<s:layout>
-			<s:VerticalLayout gap="45"/>
-		</s:layout>
-		
-		<s:AsyncListView list="{data}"/>
-	</s:List>
-	
-<!-- Display the footer items -->
-	<s:Label styleName="h1" id="footer1" left="{width * 0.1}" width="90%" top="{list.y + list.height + 200}" textAlign="center"
-			 text="Orders for lunch need to be placed 24 hours in advance... Thank you"/>
-	<s:Label styleName="h1" id="footer2" left="{width * 0.1}" width="90%" top="{footer1.y + footer1.height + 30}" textAlign="center"
-			 text="There is a minimum of four lunches required for a delivery"/>
-	<s:Label styleName="h1" id="footer3" left="{width * 0.1}" width="90%" top="{footer2.y + footer2.height + 30}" textAlign="center"
-			 text="And..."/>
-	<s:Label styleName="h1" left="{width * 0.1}" width="90%" top="{footer3.y + footer3.height + 30}" textAlign="center"
-			 text="I will continue to update the lunch menu. With the cooler months coming, look forward to home made soups, stews, pirogues, cabbage rolls and much more."/>
-</s:Group>
+	<s:VGroup gap="45" height="100%" width="100%">		
+	<!-- Display the header items -->
+		<s:Label id="header" left="{width * 0.1}" styleName="h1" textAlign="center"
+				 text="Each lunch comes with an enjoyable slice of fresh, buttered Challah bread and a delicious cookie"
+				 top="20" width="90%"/>
+				 
+	<!-- Display the list of menu items -->
+		<s:List borderVisible="false" contentBackgroundAlpha="0" dataProvider="{this.data.menu.item}"
+				horizontalScrollPolicy="off" id="list" itemRenderer="renderers.LunchesRenderer" width="90%">
+			<s:layout>
+				<s:VerticalLayout gap="45"/>
+			</s:layout>
+		</s:List>
+			
+	<!-- Display the footer items -->
+		<s:Label styleName="h1" id="footer1" left="{width * 0.1}" width="90%" top="{list.y + list.height + 200}" textAlign="center"
+				 text="Orders for lunch need to be placed 24 hours in advance... Thank you"/>
+		<s:Label styleName="h1" id="footer2" left="{width * 0.1}" width="90%" top="{footer1.y + footer1.height + 30}" textAlign="center"
+				 text="There is a minimum of four lunches required for a delivery"/>
+		<s:Label styleName="h1" id="footer3" left="{width * 0.1}" width="90%" top="{footer2.y + footer2.height + 30}" textAlign="center"
+				 text="And..."/>
+		<s:Label styleName="h1" left="{width * 0.1}" width="90%" top="{footer3.y + footer3.height + 30}" textAlign="center"
+				 text="I will continue to update the lunch menu. With the cooler months coming, look forward to home made soups, stews, pirogues, cabbage rolls and much more."/>		
+	</s:VGroup>
+</utils:ModuleBase>

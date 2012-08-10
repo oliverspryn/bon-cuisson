@@ -14,13 +14,6 @@
 	fontSize: 30;
 }
 
-.price, .serving {
-	color: #FFFFFF;
-	fontFamily: "LucidaCalligraphy";
-	fontLookup: embeddedCFF;
-	fontSize: 15;
-}
-
 .name {
 	color: #FFFFFF;
 	fontFamily: LucidaCalligraphy;

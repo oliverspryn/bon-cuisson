@@ -7,13 +7,6 @@
 	src: url("../../fonts/lcallig.ttf");
 }
 
-.h1 {
-	color: #FFFFFF;
-	fontFamily: "LucidaCalligraphy";
-	fontLookup: embeddedCFF;
-	fontSize: 30;
-}
-
 .name {
 	color: #FFFFFF;
 	fontFamily: LucidaCalligraphy;
@@ -21,14 +14,14 @@
 	fontSize: 25;
 }
 
-.serving {
+.price, .variations {
 	color: #FFFFFF;
 	fontFamily: LucidaCalligraphy;
 	fontLookup: embeddedCFF;
 	fontSize: 15;
 }
 
-.description {
+.tag, .description {
 	color: #FFFFFF;
 	fontFamily: "Times New Roman";
 	fontLookup: embeddedCFF;

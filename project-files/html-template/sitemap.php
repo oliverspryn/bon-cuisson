@@ -15,7 +15,7 @@
 	
 	while($page = mysql_fetch_array($pageGraber)) {
 		echo "<url>
-<loc>" . ROOT . escape($page['URL']) . "</loc>\n";
+<loc>" . ROOT . strip($page['URL']) . "</loc>\n";
 
 	//Different modules should recieve differing levels of priority and changefreq
 		switch ($page['type']) {

@@ -18,7 +18,7 @@ body {
 	background-color: #141414;
 	margin: 0;
 	padding: 0;
-	overflow: auto;
+	overflow-y: scroll;
 }
 
 object:focus {
@@ -166,7 +166,7 @@ section.content ul.foodMenu {
 
 section.content ul.foodMenu li {
 	clear: both;
-	padding-bottom: 45px;
+	padding-bottom: 20px;
 	position: relative;
 }
 
@@ -215,7 +215,7 @@ section.content ul.foodMenu li span.description {
 	display: block;
 	font-size: 15px;
 	margin-top: 15px;
-	padding-left: 60px;
+	padding: 0px 0px 25px 60px;
 }
 
 section.content ul.foodMenu li ul.details {

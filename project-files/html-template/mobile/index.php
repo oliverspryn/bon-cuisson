@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en-US"> 
 <head>
-<title><?php echo escape($page['title']); ?></title>
+<title><?php echo strip($page['title']); ?></title>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="HandheldFriendly" content="true">
@@ -30,10 +30,10 @@
 <?php
 //Display a back button, if this isn't the start page
 	if ($page['position'] != "1") {
-		echo "<a data-icon=\"arrow-l\" data-iconpos=\"left\" data-rel=\"back\" href=\"#\">Back</a>\n";
+		echo "<a data-direction=\"back\" data-icon=\"arrow-l\" data-iconpos=\"left\" data-rel=\"back\" href=\"#\">Back</a>\n";
 	}
 ?>
-<h1><?php echo escape($page['title']); ?></h1>
+<h1><?php echo strip($page['title']); ?></h1>
 <?php
 //Display a home button, if this isn't the start page
 	if ($page['position'] != "1") {
@@ -66,9 +66,9 @@
 //Generate the menu
 	while ($menu = mysql_fetch_array($menuGrabber)) {
 		if ($menu['count'] > 0) {
-			echo "<li><a class=\"multi-page-link\" href=\"" . ROOT . escape($menu['URL']) . "\">" . escape($menu['title']) .  "<span class=\"ui-li-count\">" . $menu['count'] . "</span></a></li>\n";
+			echo "<li><a class=\"multi-page-link\" href=\"" . ROOT . strip($menu['URL']) . "\">" . strip($menu['title']) .  "<span class=\"ui-li-count\">" . $menu['count'] . "</span></a></li>\n";
 		} else {
-			echo "<li><a href=\"" . ROOT . escape($menu['URL']) . "\">" . escape($menu['title']) .  "</a></li>\n";
+			echo "<li><a href=\"" . ROOT . strip($menu['URL']) . "\">" . strip($menu['title']) .  "</a></li>\n";
 		}
 	}
 ?>
@@ -78,8 +78,8 @@
 
 <footer>
 <ul>
-<li><a href="tel:<?php echo preg_replace("/[^0-9]/", "", escape($config['phone'])); ?>"><?php echo escape($config['phone']); ?></a></li>
-<li><a href="mailto:<?php echo escape($config['email']); ?>" target="_blank"><?php echo escape($config['email']); ?></a></li>
+<li><a href="tel:<?php echo preg_replace("/[^0-9]/", "", strip($config['phone'])); ?>"><?php echo strip($config['phone']); ?></a></li>
+<li><a href="mailto:<?php echo strip($config['email']); ?>" target="_blank"><?php echo strip($config['email']); ?></a></li>
 </ul>
 </footer>
 </section>

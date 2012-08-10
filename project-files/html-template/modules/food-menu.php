@@ -4,7 +4,7 @@
 	$menuGrabber = mysql_query("SELECT * FROM `menu` WHERE `visible` = '1' AND `type` = '{$type}' ORDER BY `position` ASC", $db);
 	
 //Display a title for SEO
-	echo "<h2>" . escape($page['title']) . "</h2>
+	echo "<h2>" . strip($page['title']) . "</h2>
 
 ";
 	
@@ -25,15 +25,15 @@
 		
 	//Can we just show the price or do we need to show menu item variants?
 		if ($menu['variations'] == "") {
-			echo "<span class=\"price\">$ " . intval(escape($menu['price']));
+			echo "<span class=\"price\">$ " . intval(strip($menu['price']));
 			
 			if ($menu['perUnit'] != "") {
-				echo " " . escape($menu['perUnit']);
+				echo " " . strip($menu['perUnit']);
 			}
 			
 			echo "</span>";
 		} else {
-			$variations = json_decode(escape($menu['variations']));
+			$variations = json_decode(strip($menu['variations']));
 			
 		/**
 		 * We can navigate the above object like a multi-dimensional array:
@@ -46,8 +46,8 @@
 ";
 			
 			for ($i = 0; $i <= sizeof($variations) - 1; $i++) {
-				echo "<li class=\"price\">$ " . intval(escape($variations[$i]['0'])) . " " . escape($variations[$i]['1']) . "</li>
-<li class=\"serves\">" . escape($variations[$i]['2']) . "</li>
+				echo "<li class=\"price\">$ " . intval(strip($variations[$i]['0'])) . " " . strip($variations[$i]['1']) . "</li>
+<li class=\"serves\">" . strip($variations[$i]['2']) . "</li>
 ";
 			}
 			
@@ -58,12 +58,12 @@
 	//Display the menu item name and tagline
 		if ($menu['tagline'] == "") {
 			echo "
-<span class=\"name\">" . escape($menu['name']) . "</span>
+<span class=\"name\">" . strip($menu['name']) . "</span>
 ";
 		} else {
 			echo "
-<span class=\"name\">" . escape($menu['name']) . " : </span>
-<span class=\"tagline\">" . escape($menu['tagline']) . "</span>
+<span class=\"name\">" . strip($menu['name']) . " : </span>
+<span class=\"tagline\">" . strip($menu['tagline']) . "</span>
 ";
 		}
 		
@@ -71,14 +71,26 @@
 		if ($menu['imageURL'] != "") {
 			echo "
 <ul class=\"details\">
-<li><img alt=\"" . escape($menu['name']) . " image\" src=\"" . escape($menu['imageURL']) . "\" /></li>
-<li><span class=\"description image\">" . escape($menu['description']) . "</span></li>
+<li><img alt=\"" . strip($menu['name']) . " image\" src=\"" . strip($menu['imageURL']) . "\" /></li>
+<li>";
+
+		//Don't show a description if no description is avaliable
+			if ($menu['description'] != "") {
+				echo "<span class=\"description image\">" . strip($menu['description']) . "</span>";
+			}
+		
+			echo "</li>
 </ul>
 </li>
 ";
 		} else {
-			echo "<span class=\"description\">" . escape($menu['description']) . "</span>
-</li>
+		//Don't show a description if no description is avaliable
+			if ($menu['description'] != "") {
+				echo "<span class=\"description image\">" . strip($menu['description']) . "</span>
+";
+			}
+			
+			echo "</li>
 ";
 		}
 	}

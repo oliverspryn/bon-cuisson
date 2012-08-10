@@ -4,15 +4,15 @@
 		xmlns:components="components.*"
 		xmlns:header="components.header.*"
 		addedToStage="init(event)" creationComplete="configure(event)">
-
-    <fx:Metadata>
-    	<![CDATA[ 
-        	[HostComponent("spark.components.Application")]
-   	 	]]>
-    </fx:Metadata> 
-    
-    <fx:Script>
-        <![CDATA[
+	
+	<fx:Metadata>
+		<![CDATA[ 
+			[HostComponent("spark.components.Application")]
+		]]>
+	</fx:Metadata> 
+	
+	<fx:Script>
+		<![CDATA[
 			import mx.core.FlexGlobals;
 			import mx.events.FlexEvent;
 			
@@ -26,28 +26,22 @@
 				e.delta = e.delta > 0 ? 30 : -30;
 			}	
 			
-		//Use the configuration class to set the color of the scrollbar
+			//Use the configuration class to set the color of the scrollbar
 			private function configure(e:FlexEvent):void {
 				var main:Main = Main(FlexGlobals.topLevelApplication);
 				
 				applicationScroller.setStyle("chromeColor", main.config.scrollBarColor);
 			}
-			
-			public function scrollFix():void {
-			//Move the scroller children and destroy the scroller
-				superContainer.parent.removeChild(superContainer);
-				
-			}
 		]]>
-    </fx:Script>
-    
-    <s:states>
-        <s:State name="normal" />
-        <s:State name="disabled" />
-        <s:State name="normalWithControlBar" />
-        <s:State name="disabledWithControlBar" />
-    </s:states>
-
+	</fx:Script>
+	
+	<s:states>
+		<s:State name="normal" />
+		<s:State name="disabled" />
+		<s:State name="normalWithControlBar" />
+		<s:State name="disabledWithControlBar" />
+	</s:states>
+	
 	<s:Scroller bottom="0" horizontalScrollPolicy="off" id="applicationScroller" left="0" right="0" top="0">
 		<s:Group id="superContainer">
 			<header:Logo id="logo" left="{width / 6}" top="0"/>

@@ -72,6 +72,32 @@ section.content ul.foodMenu li a img {
 	padding: 5px 0px 0px 5px;
 }
 
+section.menuData h3 {
+	margin: 0px;
+}
+
+section.menuData p.price {
+	font-size: 12px;
+	font-weight: bold;
+	margin: 0px 0px 7px 0px;
+}
+
+
+section.menuData p.variation {
+	font-size: 12px;
+	font-weight: bold;
+	margin: 0px 0px 3px 0px;
+}
+
+section.menuData p.tagline {
+	font-style: italic;
+	margin: 0px;
+}
+
+section.menuData p.description {
+	margin: 15px 0px 0px 0px;
+}
+
 section.menuData ul {
 	clear: both;
 	display: block;
@@ -95,23 +121,4 @@ section.menuData ul li img {
 	max-height: 80px;
 	max-width: 80px;
 	padding: 0px 10px 10px 0px;
-}
-
-section.menuData ul li h3 {
-	margin: 0px;
-}
-
-section.menuData ul li p.price {
-	font-size: 12px;
-	font-weight: bold;
-	margin: 0px 0px 7px 0px;
-}
-
-section.menuData ul li p.tagline {
-	font-style: italic;
-	margin: 0px;
-}
-
-section.menuData ul li p.description {
-	margin: 15px 0px 0px 0px;
 }

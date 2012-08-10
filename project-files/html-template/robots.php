@@ -10,7 +10,7 @@
 	$pageGraber = mysql_query("SELECT * FROM `pages` WHERE `visible` = '0' ORDER BY `position` ASC", $db);
 	
 	while($page = mysql_fetch_array($pageGraber)) {
-		$visible .= "Disallow: /" . escape($page['URL']) . "/\n";
+		$visible .= "Disallow: /" . strip($page['URL']) . "/\n";
 	}
 ?>
 User-agent: *

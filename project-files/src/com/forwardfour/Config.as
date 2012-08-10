@@ -1,15 +1,15 @@
 package com.forwardfour {
-/**
- * Configure the application from a single configuration class, set all of its
- * instance variable as bindable expressesions, and do not allow this class to 
- * be extended
-*/
+	/**
+	 * Configure the application from a single configuration class, set all of its
+	 * instance variable as bindable expressesions, and do not allow this class to 
+	 * be extended
+	 */
 	
 	[Bindable]
 	final public class Config {
-		public var menuHoverTransitionDuration:int = 500;    //The amount of time for the hover light to show/hide, in milliseconds
+		public var menuHoverTransitionDuration:int = 500;     //The amount of time for the hover light to show/hide, in milliseconds
 		public var menuInitDuration:int = 1000;              //The amount of time for the menu background to show, in milliseconds
-		public var menuItemDuration:int = 150;               //The amount of time for each menu item to show, in milliseconds
+		public var menuItemDuration:int = 150;                //The amount of time for each menu item to show, in milliseconds
 		public var menuPointerTransitionDuration:int = 500;  //The duration of the menu arrow transitions, in milliseconds
 		public var menuPointerSize:int = 10;                 //The size of the arrow on the menu
 		public var scrollBarColor:uint = 0x666666;           //The chrome color of scrollbars

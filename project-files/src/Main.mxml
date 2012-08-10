@@ -3,7 +3,6 @@
 			   xmlns:s="library://ns.adobe.com/flex/spark"
 			   xmlns:mx="library://ns.adobe.com/flex/mx"
 			   xmlns:header="components.header.*"
-			   xmlns:pages="components.pages.*"
 			   backgroundColor="0x141414" minHeight="600" minWidth="955" skinClass="skins.Theme">
 	<fx:Script>
 		<![CDATA[
@@ -15,7 +14,9 @@
 			import com.forwardfour.utils.ModuleBase;
 			import com.forwardfour.valueObjects.NavigationItemData;
 			
-			import mx.controls.Alert;
+			import components.pages.FoodMenu;
+			import components.pages.Home;
+			import components.pages.Lunches;
 			
 		//Globalize a reference to the page content
 			private var pageObject:ModuleBase = null;
@@ -73,15 +74,31 @@
 				
 				switch(pageType) {
 					case "home" : 
-						homePage.load("system/server/services/home.php");
-						homePage.addEventListener("loadComplete", transitionPages);
-						this.pageObject = homePage;
+						this.pageObject = new Home();
+						this.pageObject.alpha = 0;
+						this.pageObject.y = 80;
+						this.pageObject.load("system/server/services/home.php");
+						this.pageObject.addEventListener("loadComplete", transitionPages);
+						this.addElement(this.pageObject);
 						break;
 					
 					case "menu" : 
-						menuPage.load("system/server/services/food-menu.php?type=" + pageData.category, false, true);
-						menuPage.addEventListener("loadComplete", transitionPages);
-						this.pageObject = menuPage;
+						this.pageObject = new FoodMenu();
+						this.pageObject.alpha = 0;
+						this.pageObject.y = 80;
+						this.pageObject.load("system/server/services/food-menu.php?type=" + pageData.category);
+						this.pageObject.addEventListener("loadComplete", transitionPages);
+						this.addElement(this.pageObject);
+						break;
+						
+					case "lunch" : 
+						this.pageObject = new Lunches();
+						this.pageObject.alpha = 0;
+						this.pageObject.y = 80;
+						this.pageObject.load("system/server/services/lunch.php");
+						this.pageObject.addEventListener("loadComplete", transitionPages);
+						this.addElement(this.pageObject);
+						break;
 					
 					default : 
 						break;
@@ -103,6 +120,8 @@
 		//...and the new one into view. Also update the hijacked URL, title, and selected menu item
 			private function finishTransition(e:Event):void {
 				if (this.oldPageObject != null) {
+					removeElement(this.oldPageObject);
+					
 					this.oldPageObject.removeEventListener("transitionOutComplete", finishTransition);
 					this.oldPageObject = null;
 				}
@@ -121,13 +140,7 @@
 	</fx:Script>
 	
 <!-- Include the navigation menu -->
-	<header:Menu id="menu" top="0" menuConstructed="init(event)" menuItemClicked="menuNavigateToPageHandler(event)"/>
+	<header:Menu id="menu" menuConstructed="init(event)" menuItemClicked="menuNavigateToPageHandler(event)" top="0"/>
 	
-<!-- We'll use these components as we need them -->
-	<s:Group width="100%" top="60">
-		<pages:Home alpha="0" id="homePage" y="20"/>
-		<pages:FoodMenu alpha="0" id="menuPage" y="20"/>
-		<!--<pages:Lunches id="lunchesPage" alpha="0" y="20" visible="false"/>
-		<pages:Reviews id="reviewsPage" alpha="0" y="20" visible="false"/>-->
-	</s:Group>
+<!-- We'll build the components in AS as we need them -->
 </s:Application>

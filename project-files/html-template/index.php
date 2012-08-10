@@ -31,33 +31,47 @@
 	require_once("system/server/third-party/Mobile_Detect.php");
 	$detect = new Mobile_Detect();
 	
-	//if ($detect->isMobile()) {
+	if ($detect->isMobile()) {
 		require_once("mobile/index.php");
 		exit;
-	//}
+	}
 ?>
 <!DOCTYPE html>
 <html lang="en-US"> 
 <head>
-<title><?php echo escape($page['title']); ?></title>
+<title><?php echo strip($page['title']); ?></title>
 <meta charset="UTF-8" />
+<meta name="HandheldFriendly" content="true">
+<meta name="apple-touch-fullscreen" content="yes" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+<link rel="shortcut icon" href="<?php echo ROOT; ?>system/images/favicon.ico" />
+<link rel="apple-touch-icon" href="<?php echo ROOT; ?>system/images/mobile-app/favicon-57.jpg" />
+<link rel="apple-touch-icon" sizes="72×72" href="<?php echo ROOT; ?>system/images/mobile-app/favicon-72.jpg" />
+<link rel="apple-touch-icon" sizes="114×114" href="<?php echo ROOT; ?>system/images/mobile-app/favicon-114.jpg" )" />
+<link rel="apple-touch-startup-image" href="<?php echo ROOT; ?>system/images/mobile-app/startup-large-landscape.jpg" media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:landscape)" />
+<link rel="apple-touch-startup-image" href="<?php echo ROOT; ?>system/images/mobile-app/startup-large-portrait.jpg" media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:portrait)" />
+<link rel="apple-touch-startup-image" href="<?php echo ROOT; ?>system/images/mobile-app/startup-small-landscape.jpg"  media="screen and (max-device-width: 320px) and (orientation:landscape)" />
+<link rel="apple-touch-startup-image" href="<?php echo ROOT; ?>system/images/mobile-app/startup-small-portrait.jpg"  media="screen and (max-device-width: 320px) and (orientation:portrait)" />
+
 <link href="<?php echo ROOT; ?>system/stylesheets/desktop.css" rel="stylesheet" />
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
 <script src="<?php echo ROOT; ?>system/javascripts/swfobject.js"></script>
 <script src="<?php echo ROOT; ?>system/javascripts/swfaddress.js"></script>
+<script src="<?php echo ROOT; ?>system/javascripts/desktop-superpackage.js"></script>
 <script src="<?php echo ROOT; ?>system/javascripts/hijax-redirect.js"></script>
-<!--<script src="<?php echo ROOT; ?>system/javascripts/config.js"></script>-->
+<script src="<?php echo ROOT; ?>system/javascripts/config.js"></script>
 </head>
 
 <body id="container">
 <header>
-<h1><?php echo escape($config['companyName']); ?></h1>
-<a href="<?php echo ROOT; ?>"><img alt="<?php echo escape($config['companyName']); ?>" src="<?php echo ROOT; ?>system/images/logo.png" /></a>
+<h1><?php echo strip($config['companyName']); ?></h1>
+<a href="<?php echo ROOT; ?>"><img alt="<?php echo strip($config['companyName']); ?>" src="<?php echo ROOT; ?>system/images/logo.png" /></a>
 
 <ul class="contact">
-<li><?php echo escape($config['address']); ?></li>
-<li>Tele: <?php echo escape($config['phone']); ?></li>
-<li><a href="mailto:<?php echo htmlentities(escape($config['email'])); ?>" target="_blank"><?php echo escape($config['email']); ?></a></li>
+<li><?php echo strip($config['address']); ?></li>
+<li>Tele: <?php echo strip($config['phone']); ?></li>
+<li><a href="mailto:<?php echo htmlentities(strip($config['email'])); ?>" target="_blank"><?php echo strip($config['email']); ?></a></li>
 </ul>
 
 <nav class="navigation">
@@ -65,10 +79,10 @@
 <?php
 //Generate the menu
 	while ($menu = mysql_fetch_array($menuGrabber)) {
-		if ($URL == escape($menu['URL']) || ($URL == "" && $menu['position'] == "1")) {
-			echo "<li><a class=\"selected\" href=\"" . ROOT . escape($menu['URL']) . "\">" . escape($menu['title']) . "</a></li>\n";
+		if ($URL == strip($menu['URL']) || ($URL == "" && $menu['position'] == "1")) {
+			echo "<li><a class=\"selected\" href=\"" . ROOT . strip($menu['URL']) . "\">" . strip($menu['title']) . "</a></li>\n";
 		} else {
-			echo "<li><a href=\"" . ROOT . escape($menu['URL']) . "\">" . escape($menu['title']) . "</a></li>\n";
+			echo "<li><a href=\"" . ROOT . strip($menu['URL']) . "\">" . strip($menu['title']) . "</a></li>\n";
 		}
 	}
 ?>

@@ -33,11 +33,11 @@
 		//A reference to the current page pointer arrow
 			private var pointer:UIComponent = null;
 			
+		//During initialization, track whether the user clicked on a menu item
+			private var userSelected:Boolean = false;
+			
 		//Hide the menu scrollbars, configure this component, and initialize SWFAddress
 			private function init(e:Event):void {	
-				list.scroller.setStyle("horizontalScrollPolicy", "off");
-				list.scroller.setStyle("verticalScrollPolicy", "off");
-				
 				this.configure();
 				
 				SWFAddress.addEventListener(SWFAddressEvent.INIT, request);
@@ -82,8 +82,10 @@
 			
 		//Select the appropriate menu item just before construction complete, then dispatch a construction completed event
 			private function menuConstructedHandler(e:FlexEvent):void {
-				var menuData:Object = getInfoForItemByURL(this.URL);
-				this.list.selectedIndex = menuData.menuIndex;
+				if (!this.userSelected) {
+					var menuData:Object = getInfoForItemByURL(this.URL);
+					this.list.selectedIndex = menuData.menuIndex;
+				}
 				
 				super.dispatchEvent(new Event("menuConstructed"));
 			}
@@ -148,7 +150,7 @@
 				
 			//Place the arrow under the active menu item
 				this.pointer.x = this.getArrowPositionAtIndex(this.selected);
-				this.selected = this.selected;
+				this.selected = this.selected; //Doesn't move the pointer, just fades it into view
 				
 			//Dispatch a render complete event
 				super.dispatchEvent(new Event("renderComplete"));
@@ -171,12 +173,12 @@
 			}
 			
 		//Get the selected menu item
-			public function get selected():Number {
+			public function get selected():int {
 				return list.selectedIndex;
 			}
 			
 		//Set the selected menu item and slide the arrow to a new menu item
-			public function set selected(index:Number):void {
+			public function set selected(index:int):void {
 			//Don't do anything if the pointer has not be created
 				if (this.pointer != null) {
 					list.selectedIndex = index;
@@ -193,7 +195,7 @@
 		//Get the x-axis position of the pointer if were placed at a given menu item
 			private function getArrowPositionAtIndex(index:Number):Number {
 				var width:int = this.main.config.menuPointerSize;
-				var selectedItem:IVisualElement = list.dataGroup.getElementAt(list.selectedIndex);
+				var selectedItem:IVisualElement = list.dataGroup.getElementAt(index);
 				var selectedItemX:Number = selectedItem.x;
 				var selectedItemWidth:Number = selectedItem.width;
 				var xPos:Number = (stage.stageWidth / 10) + selectedItemX + (selectedItemWidth / 2) - (width / 2);
@@ -268,6 +270,11 @@
 			
 		//Let the application know that the user has selected a menu item
 			private function menuItemSelectedHandler(e:IndexChangeEvent):void {
+			//If the menu has not yet completed construction, but the user selected an menu item, don't
+			//use the URL to the select the active menu item, since the user has selected the one they
+			//wanted
+				this.userSelected = true;
+				
 			//Collect the event data
 				var event:MenuEvent = new MenuEvent("menuItemClicked");
 				event.category = this.data.item[list.selectedIndex].category;

@@ -14,18 +14,18 @@
 		
 		while ($menu = mysql_fetch_array($menuGrabber)) {
 			$XML .= "<item>";
-			$XML .= "<id>" . $menu['id'] . "</id>";
-			$XML .= "<visible>" . $menu['visible'] . "</visible>";
-			$XML .= "<position>" . $menu['position'] . "</position>";
-			$XML .= "<type>" . $menu['type'] . "</type>";
-			$XML .= "<price>" . $menu['price'] . "</price>";
-			$XML .= "<perUnit>" . $menu['perUnit'] . "</perUnit>";
-			$XML .= "<showIcon>" . $menu['showIcon'] . "</showIcon>";
-			$XML .= "<name>" . $menu['name'] . "</name>";
-			$XML .= "<tagline>" . $menu['tagline'] . "</tagline>";
-			$XML .= "<description>" . $menu['description'] . "</description>";
-			$XML .= "<variations>" . $menu['variations'] . "</variations>";
-			$XML .= "<imageURL>" . $menu['imageURL'] . "</imageURL>";
+			$XML .= "<id>" . strip($menu['id']) . "</id>";
+			$XML .= "<visible>" . strip($menu['visible']) . "</visible>";
+			$XML .= "<position>" . strip($menu['position']) . "</position>";
+			$XML .= "<type>" . strip($menu['type']) . "</type>";
+			$XML .= "<price>" . strip($menu['price']) . "</price>";
+			$XML .= "<perUnit>" . strip($menu['perUnit']) . "</perUnit>";
+			$XML .= "<showIcon>" . strip($menu['showIcon']) . "</showIcon>";
+			$XML .= "<name>" . strip($menu['name']) . "</name>";
+			$XML .= "<tagline>" . strip($menu['tagline']) . "</tagline>";
+			$XML .= "<description>" . strip($menu['description']) . "</description>";
+			$XML .= "<variations>" . strip($menu['variations']) . "</variations>";
+			$XML .= "<imageURL>" . strip($menu['imageURL']) . "</imageURL>";
 			$XML .= "</item>";
 		}
 		
