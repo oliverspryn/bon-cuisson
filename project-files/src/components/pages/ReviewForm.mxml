@@ -1,20 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:Form xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		xmlns:s="library://ns.adobe.com/flex/spark" 
-		xmlns:mx="library://ns.adobe.com/flex/mx" xmlns:pages="components.pages.*"
-		width="100%" height="100%" left="{width * 0.1}" xmlns:reviewsservice="services.reviewsservice.*">
+		xmlns:mx="library://ns.adobe.com/flex/mx"
+		xmlns:pages="components.pages.*"
+		width="100%">
 	
 	<fx:Script>
 		<![CDATA[
 			import mx.controls.Alert;
-			import mx.core.Application;
-			import mx.core.FlexGlobals;
 			import mx.rpc.events.FaultEvent;
 			import mx.validators.Validator;
-			
-			import services.reviewsservice.ReviewsService;
-			
-			import valueObjects.Reviews;
 			
 		//We need to globalize a reference to the rating, and update it just before we send it to the server
 			[Bindable]
@@ -23,8 +18,19 @@
 		//Allow components to be able to access this data
 			public var reviewData:Object;
 			
-		//Validate the form, and send the data to the server, if validation passed,
-		//share this event with the application, reset the form, and given a confirmation
+		/**
+		 * This method performs the following operations:
+		 *  - validate the form
+		 * 
+		 * If validation passed:
+		 *  - send the data to the server
+		 *  - share this event with the application
+		 *  - reset the form
+		 *  - give a confirmation
+		 * 
+		 * If validation failed:
+		 *  - prompt the user to fill in the required values
+		*/
 			private function validate(e:MouseEvent):void {
 			//Validate the data
 				var validationCheck:Array = Validator.validateAll(new Array(reviewerValidator, reviewValidator));
@@ -38,16 +44,17 @@
 					var date:Date = new Date();
 					this.reviewData = new Object();
 					this.reviewData.id = 999; // Just make up some ID, since the review list will expect to see it
-					this.reviewData.timestamp = int(Math.round(date.getTime() / 1000));
 					this.reviewData.name = reviewer.text;
 					this.reviewData.rating = this.ratingValue;
 					this.reviewData.review = review.text;
+					this.reviewData.timestamp = int(Math.round(date.getTime() / 1000));
+					
 					super.dispatchEvent(new Event("reviewProcessed"));
 					
 				//Reset the form
-					reviewer.text = "";
 					rating.current = 0;
 					review.text = "";
+					reviewer.text = "";
 				} else {
 					Alert.show("We need a bit more information in the review form.", "Not quite");
 				}
@@ -55,7 +62,8 @@
 			
 		//Show an error dialog in the case of an error when communicating with the server
 			private function sendReviewErrorHandler(e:FaultEvent):void {
-				Alert.show("Fault string: " + e.fault.faultString + "\nFault detail: " + e.fault.faultDetail, e.fault.faultCode);
+				Alert.show("The review could not be submitted to the server.\n\nFault code: " +
+					e.fault.faultCode + "\nFault details: " + e.fault.faultDetail, e.fault.faultString);
 			}
 		]]>
 	</fx:Script>
@@ -66,23 +74,21 @@
 	
 	<fx:Declarations>
 	<!-- Validator components -->
-		<mx:StringValidator id="reviewerValidator"
-							source="{reviewer}" property="text"
-							triggerEvent=""
-							requiredFieldError="We'll need your name"/>
+		<mx:StringValidator id="reviewerValidator" property="text"
+							requiredFieldError="We'll need your name"
+							source="{reviewer}" triggerEvent=""/>
 		
-		<mx:StringValidator id="reviewValidator"
-							source="{review}" property="text"
-							triggerEvent=""
-							requiredFieldError="Can you leave review?"/>
+		<mx:StringValidator id="reviewValidator" property="text"
+							requiredFieldError="Could you please leave review?"
+							source="{review}" triggerEvent=""/>
 		
 	<!-- Use the reviews service from the main application to send data -->
-		<s:CallResponder id="sendReviewResponder" fault="sendReviewErrorHandler(event)"/>
-		<s:HTTPService id="sendReview" url="services/ReviewProcessor.php" useProxy="false" method="POST">
-			<s:request xmlns="">
-				<reviewer>{reviewer.text}</reviewer>
+		<s:CallResponder fault="sendReviewErrorHandler(event)" id="sendReviewResponder"/>
+		<s:HTTPService id="sendReview" method="POST" useProxy="false" url="system/server/processors/reviews.php">
+			<s:request>
 				<rating>{this.ratingValue}</rating>
 				<review>{review.text}</review>
+				<reviewer>{reviewer.text}</reviewer>
 			</s:request>
 		</s:HTTPService>
 	</fx:Declarations>
@@ -99,7 +105,7 @@
 	</s:FormItem>
 	
 	<s:FormItem label="Review:" styleName="label">
-		<s:TextArea id="review" styleName="input" height="200" width="320"/>
+		<s:TextArea height="200" id="review" styleName="input" width="320"/>
 	</s:FormItem>
 	
 	<s:FormItem label="">

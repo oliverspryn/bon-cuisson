@@ -17,6 +17,7 @@
 			import components.pages.FoodMenu;
 			import components.pages.Home;
 			import components.pages.Lunches;
+			import components.pages.Reviews;
 			
 		//Globalize a reference to the page content
 			private var pageObject:ModuleBase = null;
@@ -96,6 +97,15 @@
 						this.pageObject.alpha = 0;
 						this.pageObject.y = 80;
 						this.pageObject.load("system/server/services/lunch.php");
+						this.pageObject.addEventListener("loadComplete", transitionPages);
+						this.addElement(this.pageObject);
+						break;
+					
+					case "reviews" : 
+						this.pageObject = new Reviews();
+						this.pageObject.alpha = 0;
+						this.pageObject.y = 80;
+						this.pageObject.load("system/server/services/reviews.php");
 						this.pageObject.addEventListener("loadComplete", transitionPages);
 						this.addElement(this.pageObject);
 						break;

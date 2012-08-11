@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+<utils:ModuleBase xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		 xmlns:s="library://ns.adobe.com/flex/spark" 
 		 xmlns:mx="library://ns.adobe.com/flex/mx"
-		 width="100%" height="100%" xmlns:pages="components.pages.*">
-<!-- Create an outward facing public variable which will pass data to the reviews component -->
+		 xmlns:pages="components.pages.*"
+		 xmlns:utils="com.forwardfour.utils.*"
+		 width="100%">
+	
 	<fx:Script>
-		<![CDATA[
-			[Bindable]
-			public var data:*; //Yeah, the lastResult property of the CallResponder isn't strongly typed
-			
+		<![CDATA[			
 		//When the data has been processed an submitted to the server, add it to the list
 			private function processedHandler(event:Event):void {
 				this.data.addItem(this.form.reviewData);
@@ -19,20 +18,20 @@
 <!-- Include the required style sheet -->
 	<fx:Style source="../../assets/styles/pages/ReviewStyles.css"/>
 	
-	<s:VGroup gap="55" width="90%" left="{width * 0.1}">
+	<s:VGroup gap="55" left="{width * 0.1}" width="90%">
 	<!-- Display the list of reviews -->
-		<s:List contentBackgroundAlpha="0" borderVisible="false" id="reviews"
-				itemRenderer="renderers.ReviewRenderer" dataProvider="{data}"
-				top="10" minHeight="1" width="100%">
+		<s:List borderVisible="false" contentBackgroundAlpha="0" dataProvider="{this.data.reviews.item}" id="reviews"
+				itemRenderer="renderers.ReviewRenderer" minHeight="1"
+				top="10" width="100%">
 			<s:layout>
-				<s:VerticalLayout useVirtualLayout="false" requestedMinRowCount="1" gap="35"/>
+				<s:VerticalLayout gap="35" requestedMinRowCount="1" useVirtualLayout="false"/>
 			</s:layout>
 		</s:List>
 		
 	<!-- Display the review entry form -->
 		<s:VGroup>
 			<s:Label styleName="h1" text="I would love to hear from you:"/>
-			<pages:ReviewForm id="form" width="90%" reviewProcessed="processedHandler(event)"/>
+			<pages:ReviewForm id="form" reviewProcessed="processedHandler(event)" width="90%"/>
 		</s:VGroup>
 	</s:VGroup>
-</s:Group>
+</utils:ModuleBase>

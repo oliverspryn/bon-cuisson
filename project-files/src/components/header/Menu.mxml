@@ -312,8 +312,9 @@
 	
 <!-- The styled list which will act as the menu -->
 	<s:List borderVisible="false" change="menuItemSelectedHandler(event)" contentBackgroundAlpha="0"
-			dataProvider="{this.data.item}" id="list" itemRenderer="renderers.MainMenuRenderer"
-			left="{width * 0.1}" requireSelection="true" right="{width * 0.1}">
+			dataProvider="{this.data.item}" horizontalScrollPolicy="off" id="list"
+			itemRenderer="renderers.MainMenuRenderer" left="{width * 0.1}" requireSelection="true"
+			right="{width * 0.1}" verticalScrollPolicy="off">
 		<s:layout>
 			<s:HorizontalLayout gap="30"/>
 		</s:layout>

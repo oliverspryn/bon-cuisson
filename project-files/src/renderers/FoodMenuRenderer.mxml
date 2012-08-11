@@ -89,7 +89,7 @@
 	</s:HGroup>
 	
 <!-- Display the description and associated image (if any) of the menu item -->
-	<s:Group id="detailsContainer"  width="100%">
+	<s:Group id="detailsContainer" width="100%">
 		<s:Image id="image" left="{(width * 0.1) + 35}" maxWidth="300" top="{tagline.height + 15}"/>
 		<s:Label left="{image.x + image.width + 15}" right="0" styleName="description" text="{data.description}"
 				 top="{tagline.height + 15}"/>

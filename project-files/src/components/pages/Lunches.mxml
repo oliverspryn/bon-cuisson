@@ -8,28 +8,24 @@
 <!-- Include the required style sheet -->
 	<fx:Style source="../../assets/styles/pages/LunchesStyles.css"/>
 	
-	<s:VGroup gap="45" height="100%" width="100%">		
-	<!-- Display the header items -->
-		<s:Label id="header" left="{width * 0.1}" styleName="h1" textAlign="center"
-				 text="Each lunch comes with an enjoyable slice of fresh, buttered Challah bread and a delicious cookie"
-				 top="20" width="90%"/>
-				 
-	<!-- Display the list of menu items -->
-		<s:List borderVisible="false" contentBackgroundAlpha="0" dataProvider="{this.data.menu.item}"
-				horizontalScrollPolicy="off" id="list" itemRenderer="renderers.LunchesRenderer" width="90%">
-			<s:layout>
-				<s:VerticalLayout gap="45"/>
-			</s:layout>
-		</s:List>
-			
-	<!-- Display the footer items -->
-		<s:Label styleName="h1" id="footer1" left="{width * 0.1}" width="90%" top="{list.y + list.height + 200}" textAlign="center"
-				 text="Orders for lunch need to be placed 24 hours in advance... Thank you"/>
-		<s:Label styleName="h1" id="footer2" left="{width * 0.1}" width="90%" top="{footer1.y + footer1.height + 30}" textAlign="center"
-				 text="There is a minimum of four lunches required for a delivery"/>
-		<s:Label styleName="h1" id="footer3" left="{width * 0.1}" width="90%" top="{footer2.y + footer2.height + 30}" textAlign="center"
-				 text="And..."/>
-		<s:Label styleName="h1" left="{width * 0.1}" width="90%" top="{footer3.y + footer3.height + 30}" textAlign="center"
-				 text="I will continue to update the lunch menu. With the cooler months coming, look forward to home made soups, stews, pirogues, cabbage rolls and much more."/>		
-	</s:VGroup>
+	<utils:layout>
+		<s:VerticalLayout gap="45" />
+	</utils:layout>
+			 
+<!-- Display the list of menu items -->
+	<s:List borderVisible="false" contentBackgroundAlpha="0" dataProvider="{this.data.menu.item}"
+			horizontalScrollPolicy="off" id="list" itemRenderer="renderers.LunchesRenderer" width="90%">
+		<s:layout>
+			<s:VerticalLayout gap="45"/>
+		</s:layout>
+	</s:List>
+		
+<!-- Display the footer items, &#13; are new line characters -->
+	<s:Label paddingLeft="{width * 0.1}" styleName="footer" 
+			 text="Orders for lunch need to be placed 24 hours in advance... Thank you&#13;
+There is a minimum of four lunches required for a delivery&#13;
+And...&#13;
+I will continue to update the lunch menu. With the cooler months coming, look forward to
+home made soups, stews, pirogues, cabbage rolls and much more."
+			 textAlign="center" width="90%"/>
 </utils:ModuleBase>
