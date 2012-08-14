@@ -28,7 +28,7 @@
 	</fx:Script>
 	
 <!-- Include the required stylesheet -->
-	<fx:Style source="../../assets/styles/header/Contact.css"/>
+	<fx:Style source="../../assets/styles/header/ContactStyles.css"/>
 	
 <!-- Write out the contact information -->
 	<s:Label id="address" styleName="info" x="10" y="12"/>

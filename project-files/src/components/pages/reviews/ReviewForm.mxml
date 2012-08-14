@@ -2,12 +2,15 @@
 <s:Form xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		xmlns:s="library://ns.adobe.com/flex/spark" 
 		xmlns:mx="library://ns.adobe.com/flex/mx"
-		xmlns:pages="components.pages.*"
+		xmlns:reviews="components.pages.reviews.*"
+		creationComplete="configure(event)"
 		width="100%">
 	
 	<fx:Script>
 		<![CDATA[
 			import mx.controls.Alert;
+			import mx.core.FlexGlobals;
+			import mx.events.FlexEvent;
 			import mx.rpc.events.FaultEvent;
 			import mx.validators.Validator;
 			
@@ -17,6 +20,13 @@
 			
 		//Allow components to be able to access this data
 			public var reviewData:Object;
+			
+		//Use the configuration class to set whether or not the <s:HTTPService> class should show a busy sursor
+			private function configure(e:FlexEvent):void {
+				var main:Main = Main(FlexGlobals.topLevelApplication);
+				
+				sendReview.showBusyCursor = main.config.showFlexBusyCursor;
+			}
 			
 		/**
 		 * This method performs the following operations:
@@ -64,7 +74,7 @@
 			private function sendReviewErrorHandler(e:FaultEvent):void {
 				Alert.show("The review could not be submitted to the server.\n\nFault code: " +
 					e.fault.faultCode + "\nFault details: " + e.fault.faultDetail, e.fault.faultString);
-			}
+			}			
 		]]>
 	</fx:Script>
 	
@@ -84,7 +94,7 @@
 		
 	<!-- Use the reviews service from the main application to send data -->
 		<s:CallResponder fault="sendReviewErrorHandler(event)" id="sendReviewResponder"/>
-		<s:HTTPService id="sendReview" method="POST" useProxy="false" url="system/server/processors/reviews.php">
+		<s:HTTPService id="sendReview" method="POST" url="system/server/processors/reviews.php" useProxy="false">
 			<s:request>
 				<rating>{this.ratingValue}</rating>
 				<review>{review.text}</review>
@@ -94,14 +104,14 @@
 	</fx:Declarations>
 	
 <!-- Include the required style sheet -->
-	<fx:Style source="../../assets/styles/pages/ReviewStyles.css"/>
+	<fx:Style source="../../../assets/styles/pages/ReviewStyles.css"/>
 	
 	<s:FormItem label="Name:" styleName="label">
 		<s:TextInput id="reviewer" styleName="input"/>
 	</s:FormItem>
 	
 	<s:FormItem label="Rating:" styleName="label">
-		<pages:Rating id="rating"/>
+		<reviews:Rating id="rating"/>
 	</s:FormItem>
 	
 	<s:FormItem label="Review:" styleName="label">

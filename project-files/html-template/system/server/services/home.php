@@ -9,7 +9,7 @@
 	$homeGrabber = mysql_query("SELECT * FROM `home` WHERE `id` = '1'", $db);
 	$home = mysql_fetch_array($homeGrabber);
 	
-	$XML = "<home>";
+	$XML = "<root>";
 	$XML .= "<id>" . strip($home['id']) . "</id>";
 	$XML .= "<line1>" . strip($home['line1']) . "</line1>";
 	$XML .= "<line2>" . strip($home['line2']) . "</line2>";
@@ -17,7 +17,7 @@
 	$XML .= "<image1>" . strip($home['image1']) . "</image1>";
 	$XML .= "<image2>" . strip($home['image2']) . "</image2>";
 	$XML .= "<image3>" . strip($home['image3']) . "</image3>";
-	$XML .= "</home>";
+	$XML .= "</root>";
 	
 	echo $XML;
 ?>

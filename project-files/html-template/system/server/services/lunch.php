@@ -9,7 +9,7 @@
 	$now = strtotime("now");
 	$oneMonth = strtotime("+1 month");
 	$menuGrabber = mysql_query("SELECT * FROM `entrees` WHERE `serving` > '{$now}' AND `serving` < '{$oneMonth}' ORDER BY `serving` ASC", $db);
-	$XML = "<menu>";
+	$XML = "<root>";
 	
 	while ($menu = mysql_fetch_array($menuGrabber)) {
 		$XML .= "<item>";
@@ -21,7 +21,7 @@
 		$XML .= "</item>";
 	}
 	
-	$XML .= "</menu>";
+	$XML .= "</root>";
 	
 	echo $XML;
 ?>

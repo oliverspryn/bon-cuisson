@@ -9,13 +9,13 @@
 
 @font-face {
 	embed-as-cff: true;
-	fontFamily: "TimesNewRomainItalic";
+	fontFamily: "TimesNewRomanItalic";
 	src: url("../../fonts/timesi.ttf");
 }
 
 .footer {
 	color: #FFFFFF;
-	fontFamily: TimesNewRomainItalic;
+	fontFamily: TimesNewRomanItalic;
 	fontLookup: embeddedCFF;
 	fontSize: 25;
 }
@@ -36,7 +36,7 @@
 
 .description {
 	color: #FFFFFF;
-	fontFamily: "Times New Roman";
+	fontFamily: TimesNewRomanItalic;
 	fontLookup: embeddedCFF;
 	fontSize: 20;
 	fontStyle: italic;

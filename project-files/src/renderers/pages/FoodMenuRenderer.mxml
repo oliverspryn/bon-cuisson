@@ -77,7 +77,7 @@
 	</fx:Declarations>
 	
 <!-- Include the required stylesheet -->
-	<fx:Style source="../assets/styles/pages/FoodMenuStyles.css"/>
+	<fx:Style source="../../assets/styles/pages/FoodMenuStyles.css"/>
 	
 <!-- Display the header of the menu item including the name, price, tagline, and Fleur de Lis as the "bullet" item -->
 	<s:RichText id="price" left="5" styleName="price" top="7"/>

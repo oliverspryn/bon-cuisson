@@ -13,8 +13,8 @@
 	</utils:layout>
 			 
 <!-- Display the list of menu items -->
-	<s:List borderVisible="false" contentBackgroundAlpha="0" dataProvider="{this.data.menu.item}"
-			horizontalScrollPolicy="off" id="list" itemRenderer="renderers.LunchesRenderer" width="90%">
+	<s:List borderVisible="false" contentBackgroundAlpha="0" dataProvider="{this.data.root.item}"
+			horizontalScrollPolicy="off" id="list" itemRenderer="renderers.pages.LunchesRenderer" width="90%">
 		<s:layout>
 			<s:VerticalLayout gap="45"/>
 		</s:layout>

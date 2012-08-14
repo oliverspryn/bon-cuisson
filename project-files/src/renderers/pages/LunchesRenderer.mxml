@@ -21,7 +21,7 @@
 	</fx:Declarations>
 	
 <!-- Include the required stylesheet -->
-	<fx:Style source="../assets/styles/pages/LunchesStyles.css"/>
+	<fx:Style source="../../assets/styles/pages/LunchesStyles.css"/>
 	
 <!-- Display the header of the menu item including the name and serving date -->
 	<s:RichText id="serving" left="5" styleName="serving" top="7"/>

@@ -13,11 +13,13 @@
 			import com.forwardfour.events.TransitionEvent;
 			import com.greensock.TweenMax;
 			
+			import mx.collections.ArrayCollection;
 			import mx.controls.Alert;
 			import mx.core.FlexGlobals;
 			import mx.events.FlexEvent;
 			import mx.rpc.events.FaultEvent;
 			import mx.rpc.events.ResultEvent;
+			import mx.utils.ArrayUtil;
 			
 		//Globalize a reference to the main application, so that the instantiated Config class can be accessed
 			private var main:Main;
@@ -54,11 +56,74 @@
 			
 		//Share the loaded data with the component, dispatch a data fetched event, and see if the component should be transitioned
 			private function dataResultHandler(e:ResultEvent):void {
+			/**
+			 * The point of the below conditional statements are two-fold:
+			 * 
+			 * POINT ONE -----------------------
+			 * 
+			 * If no data is recieved from the server, then the conditions fill in the data with 
+			 * empty objects so that runtime errors aren't encountered when Flash tries to parse
+			 * empty data.
+			 * 
+			 * POINT TWO -----------------------
+			 * 
+			 * Issue resolved: Type Coercion failed: cannot convert mx.utils::ObjectProxy to mx.collections.IList.
+			 * 
+			 * WHY: If XML returns mode than childnodes it was working fine but if xml returns just one node then
+			 *      ArrayCollection starts throwing error.
+			 * URL: http://wadhwakanu.wordpress.com/2010/06/21/type-coercion-failed-cannot-convert-mx-utilsobjectproxy-to-
+			 *      mx-collections-arraycollection/comment-page-1/
+			 * 
+			 * The second "if" condition checks to see if there is a <root><item /></root> structure
+			 * in the loaded XML file. All modules which have the potential for multiple sets of data
+			 * will have a heiarchy like this:
+			 * 
+			 *     <root>
+			 *       <item>
+			 *         ... XML items ...
+			 *       </item>
+			 * 
+			 *       <item>
+			 *         ... XML items ...
+			 *       </item>
+			 *     </root>
+			 * 
+			 * If there is only one set of data that is expected, the strcuture will display like this:
+			 * 
+			 *     <root>
+			 *       ... XML items ...
+			 *     </root>
+			 * 
+			 * If there is the possibility for multiple sets of data, then the "Only one result"
+			 * condition will ensure that the recieved data is properly casted.
+			*/
+				
+				var fetchedData:Object;
+				
+				if (e.result.root) {
+					if (e.result.root.item && e.result.root.item != null) {
+					//2 or more results
+						if (e.result.root.item is ArrayCollection) {
+							fetchedData = e.result;
+					//Only one result
+						} else {
+							fetchedData = new Object();
+							fetchedData.root = new Object();
+							fetchedData.root.item = new ArrayCollection(ArrayUtil.toArray(e.result.root.item));
+						}
+					} else {
+						fetchedData = e.result;
+					}
+				} else {
+					fetchedData = new Object();
+					fetchedData.root = new Object();
+				}
+				
 			//Share the data with the component
 				if (!this.delaySharingDataUntilTransitionIn) {
-					this.data = e.result;
+					this.data = fetchedData;
 				} else {
-					this.delayedData = e.result;
+					this.delayedData = fetchedData;
 				}
 				
 			//Dispatch the event

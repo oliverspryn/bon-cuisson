@@ -15,14 +15,14 @@
 
 .h1 {
 	color: #FFFFFF;
-	fontFamily: "MinionPro";
+	fontFamily: MinionPro;
 	fontLookup: embeddedCFF;
 	fontSize: 30;
 }
 
 .reviewer {
 	color: #FFFFFF;
-	fontFamily: "MinionProBold";
+	fontFamily: MinionProBold;
 	fontLookup: embeddedCFF;
 	fontSize: 20;
 	fontWeight: bold;
@@ -30,21 +30,21 @@
 
 .review {
 	color: #FFFFFF;
-	fontFamily: "MinionPro";
+	fontFamily: MinionPro;
 	fontLookup: embeddedCFF;
 	fontSize: 15;
 }
 
 .timestamp {
 	color: #CCCCCC;
-	fontFamily: "MinionProBold";
+	fontFamily: MinionProBold;
 	fontLookup: embeddedCFF;
 	fontSize: 10;
 }
 
 .label {
 	color: #FFFFFF;
-	fontFamily: "MinionPro";
+	fontFamily: MinionPro;
 	fontLookup: embeddedCFF;
 	fontSize: 15;
 	textAlign: right;
@@ -53,7 +53,7 @@
 .input {
 	color: #FFFFFF;
 	contentBackgroundColor: #333333;
-	fontFamily: "MinionPro";
+	fontFamily: MinionPro;
 	fontLookup: embeddedCFF;
 	fontSize: 15;
 	textAlign: left;
@@ -61,6 +61,6 @@
 
 .button {
 	color: #FFFFFF;
-	fontFamily: "MinionPro";
+	fontFamily: MinionPro;
 	fontLookup: embeddedCFF;
 }

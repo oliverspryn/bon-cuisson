@@ -7,6 +7,12 @@
 	src: url("../../fonts/lcallig.ttf");
 }
 
+@font-face {
+	embed-as-cff: true;
+	fontFamily: "TimesNewRomanItalic";
+	src: url("../../fonts/timesi.ttf");
+}
+
 .name {
 	color: #FFFFFF;
 	fontFamily: LucidaCalligraphy;
@@ -23,7 +29,7 @@
 
 .tag, .description {
 	color: #FFFFFF;
-	fontFamily: "Times New Roman";
+	fontFamily: TimesNewRomanItalic;
 	fontLookup: embeddedCFF;
 	fontSize: 20;
 	fontStyle: italic;

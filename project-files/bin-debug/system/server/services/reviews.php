@@ -6,18 +6,16 @@
 	header("Content-type: text/xml");
 	
 //Fetch the menu
-	$now = strtotime("now");
-	$oneMonth = strtotime("+1 month");
-	$menuGrabber = mysql_query("SELECT * FROM `entrees` WHERE `serving` > '{$now}' AND `serving` < '{$oneMonth}' ORDER BY `serving` ASC", $db);
+	$menuGrabber = mysql_query("SELECT * FROM `reviews` ORDER BY `id` ASC LIMIT 25", $db);
 	$XML = "<root>";
 	
 	while ($menu = mysql_fetch_array($menuGrabber)) {
 		$XML .= "<item>";
 		$XML .= "<id>" . strip($menu['id']) . "</id>";
-		$XML .= "<serving>" . strip($menu['serving']) . "</serving>";
-		$XML .= "<price>" . strip($menu['price']) . "</price>";
+		$XML .= "<timestamp>" . strip($menu['timestamp']) . "</timestamp>";
 		$XML .= "<name>" . strip($menu['name']) . "</name>";
-		$XML .= "<description>" . strip($menu['description']) . "</description>";
+		$XML .= "<rating>" . strip($menu['rating']) . "</rating>";
+		$XML .= "<review>" . strip($menu['review']) . "</review>";
 		$XML .= "</item>";
 	}
 	

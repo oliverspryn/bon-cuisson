@@ -60,7 +60,7 @@
 	</fx:Script>
 	
 <!-- Include the required stylesheet -->
-	<fx:Style source="../assets/styles/header/Menu.css"/>
+	<fx:Style source="../../assets/styles/header/MenuStyles.css"/>
 	
 <!-- Display the light above each menu item, only visible when it is hovered over -->
 	<s:Ellipse alpha="0" height="50" id="hoverLight" width="50"

@@ -52,7 +52,7 @@
 	</fx:Script>
 	
 <!-- Include the required stylesheet -->
-	<fx:Style source="../../assets/styles/header/Logo.css"/>
+	<fx:Style source="../../assets/styles/header/LogoStyles.css"/>
 	
 <!-- Create the logo and tagline -->
 	<s:Label alpha="0" id="logo" styleName="logo" x="5" y="11"/>

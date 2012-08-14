@@ -10,7 +10,7 @@
 	//Fetch the menu
 		$type = strtolower(mysql_real_escape_string($_GET['type']));
 		$menuGrabber = mysql_query("SELECT * FROM `menu` WHERE `visible` = '1' AND `type` = '{$type}' ORDER BY `position` ASC", $db);
-		$XML = "<menu>";
+		$XML = "<root>";
 		
 		while ($menu = mysql_fetch_array($menuGrabber)) {
 			$XML .= "<item>";
@@ -29,7 +29,7 @@
 			$XML .= "</item>";
 		}
 		
-		$XML .= "</menu>";
+		$XML .= "</root>";
 		
 		echo $XML;
 	}

@@ -2,8 +2,8 @@
 <s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		 xmlns:s="library://ns.adobe.com/flex/spark" 
 		 xmlns:mx="library://ns.adobe.com/flex/mx"
-		 width="100%"
-		 creationComplete="init(event)">
+		 creationComplete="init(event)"
+		 width="100%">
 	<fx:Script>
 		<![CDATA[			
 			import com.asual.swfaddress.SWFAddress;
@@ -58,8 +58,8 @@
 			private function dataResultHandler(e:ResultEvent):void {
 			//Share the data with the application
 				try {
-					if (e.result.menu && e.result.menu != null) {
-						this.data = e.result.menu;
+					if (e.result.root && e.result.root != null) {
+						this.data = e.result.root;
 					} else {
 						throw new ServerDataGenerationError("The server has returned invalid data while generating data for the Menu");
 					}
@@ -313,7 +313,7 @@
 <!-- The styled list which will act as the menu -->
 	<s:List borderVisible="false" change="menuItemSelectedHandler(event)" contentBackgroundAlpha="0"
 			dataProvider="{this.data.item}" horizontalScrollPolicy="off" id="list"
-			itemRenderer="renderers.MainMenuRenderer" left="{width * 0.1}" requireSelection="true"
+			itemRenderer="renderers.header.MenuRenderer" left="{width * 0.1}" requireSelection="true"
 			right="{width * 0.1}" verticalScrollPolicy="off">
 		<s:layout>
 			<s:HorizontalLayout gap="30"/>

@@ -2,7 +2,7 @@
 <utils:ModuleBase xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		 xmlns:s="library://ns.adobe.com/flex/spark" 
 		 xmlns:mx="library://ns.adobe.com/flex/mx"
-		 xmlns:pages="components.pages.*"
+		 xmlns:reviews="components.pages.reviews.*"
 		 xmlns:utils="com.forwardfour.utils.*"
 		 width="100%">
 	
@@ -10,7 +10,7 @@
 		<![CDATA[			
 		//When the data has been processed an submitted to the server, add it to the list
 			private function processedHandler(event:Event):void {
-				this.data.addItem(this.form.reviewData);
+				this.data.userreviews.addItem(this.form.reviewData);
 			}
 		]]>
 	</fx:Script>
@@ -19,10 +19,15 @@
 	<fx:Style source="../../assets/styles/pages/ReviewStyles.css"/>
 	
 	<s:VGroup gap="55" left="{width * 0.1}" width="90%">
+	<!-- Display a notification that no reviews are present, if none are present -->
+		<s:HGroup gap="40" verticalCenter="0" id="empty" verticalAlign="middle" width="600">
+			<s:Image source="@Embed('../../assets/images/reviews.png')"/>
+			<s:Label text="We don't currently have any reviews, but you can be the first to leave one!"/>
+		</s:HGroup>
+		
 	<!-- Display the list of reviews -->
-		<s:List borderVisible="false" contentBackgroundAlpha="0" dataProvider="{this.data.reviews.item}" id="reviews"
-				itemRenderer="renderers.ReviewRenderer" minHeight="1"
-				top="10" width="100%">
+		<s:List borderVisible="false" contentBackgroundAlpha="0" dataProvider="{this.data.root.item}" id="reviews"
+				itemRenderer="renderers.pages.ReviewRenderer" minHeight="1" top="10" width="100%">
 			<s:layout>
 				<s:VerticalLayout gap="35" requestedMinRowCount="1" useVirtualLayout="false"/>
 			</s:layout>
@@ -31,7 +36,7 @@
 	<!-- Display the review entry form -->
 		<s:VGroup>
 			<s:Label styleName="h1" text="I would love to hear from you:"/>
-			<pages:ReviewForm id="form" reviewProcessed="processedHandler(event)" width="90%"/>
+			<reviews:ReviewForm id="form" width="90%"/>
 		</s:VGroup>
 	</s:VGroup>
 </utils:ModuleBase>
