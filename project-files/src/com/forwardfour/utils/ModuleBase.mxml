@@ -177,7 +177,7 @@
 				
 				super.dispatchEvent(eventData);
 				
-			//Set the explicit height
+			//Set the explicit height after transitioning is complete
 				this.restore();
 			}
 			

@@ -6,16 +6,17 @@
 	header("Content-type: text/xml");
 	
 //Fetch the menu
-	$menuGrabber = mysql_query("SELECT * FROM `reviews` ORDER BY `id` ASC LIMIT 25", $db);
+	$history = strtotime("-1 month");
+	$reviewsGrabber = mysql_query("SELECT * FROM `reviews` WHERE `timestamp` > '{$history}' ORDER BY `timestamp` ASC LIMIT 25", $db);
 	$XML = "<root>";
 	
-	while ($menu = mysql_fetch_array($menuGrabber)) {
+	while ($review = mysql_fetch_array($reviewsGrabber)) {
 		$XML .= "<item>";
-		$XML .= "<id>" . strip($menu['id']) . "</id>";
-		$XML .= "<timestamp>" . strip($menu['timestamp']) . "</timestamp>";
-		$XML .= "<name>" . strip($menu['name']) . "</name>";
-		$XML .= "<rating>" . strip($menu['rating']) . "</rating>";
-		$XML .= "<review>" . strip($menu['review']) . "</review>";
+		$XML .= "<id>" . strip($review['id']) . "</id>";
+		$XML .= "<timestamp>" . strip($review['timestamp']) . "</timestamp>";
+		$XML .= "<name>" . strip($review['name']) . "</name>";
+		$XML .= "<rating>" . strip($review['rating']) . "</rating>";
+		$XML .= "<review>" . strip($review['review']) . "</review>";
 		$XML .= "</item>";
 	}
 	

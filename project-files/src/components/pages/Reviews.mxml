@@ -4,26 +4,91 @@
 		 xmlns:mx="library://ns.adobe.com/flex/mx"
 		 xmlns:reviews="components.pages.reviews.*"
 		 xmlns:utils="com.forwardfour.utils.*"
+		 loadComplete="init(event)"
 		 width="100%">
 	
 	<fx:Script>
-		<![CDATA[			
-		//When the data has been processed an submitted to the server, add it to the list
+		<![CDATA[
+			import com.forwardfour.events.NetworkEvent;
+			
+			import flash.utils.setTimeout;
+			
+			import mx.collections.ArrayCollection;
+			import mx.core.FlexGlobals;
+			
+			[Bindable]
+			private var liveData:Object;
+			
+		/**
+		 * When the data has been processed an submitted to the server, add it to the list
+		 * 
+		 * The "if" statement solves the case when no comments are loaded from the server.
+		 * If the PHP service service only returns a <root /> node, without any <item> nodes
+		 * (i.e.: no comments exist), ModuleBase will cast the empty <root /> node as an
+		 * object. Although this will take care of most errors that other modules may 
+		 * encounter due to empty data, this module requires additional assistance since
+		 * data from the user is injected into the object encapsulating the loaded data.
+		 * 
+		 * The code within the "if" statement is triggered when no comments exist. First,
+		 * the "item" ArrayCollection is created, then the data object is copied to a private
+		 * [Bindable] variable, so that the <s:List> dataProvider can be updated with any
+		 * data provided by the user. The data object and its encapsulating properties are not
+		 * [Bindable] since they were not casted to a class that supports event dispatching
+		 * when Flex loaded and parsed the empty XML structure.
+		 * 
+		 * The user's data is then injected to the private [Bindable] variable, and the <s:List>
+		 * dataProvider property is then assigned to this variable. All data provided by the 
+		 * user can now be injected into the <s:List> in realtime.
+		 * 
+		 * The "else" block is triggered if at least one <item> node was returned from the 
+		 * PHP service (i.e.: at least one comments exists). No special processing is needed
+		 * here, since Flex captured, parsed, and casted the data such that the "data" object
+		 * into a class the supports data binding.
+		*/
 			private function processedHandler(event:Event):void {
-				this.data.userreviews.addItem(this.form.reviewData);
+			//Handle the user's data if no comments were recieved...
+				if (!this.data.root.item) {
+				//Construct the data
+					this.data.root.item = new ArrayCollection();	
+					liveData = this.data;
+					liveData.root.item.addItem(this.form.reviewData);
+					
+				//Share it with the list
+					reviews.dataProvider = liveData.root.item;
+					
+				//Remove the invitation to leave a comment
+					container.removeElement(empty);
+			//... or simply inject into the list if at least one is returned
+				} else {
+					this.data.root.item.addItem(this.form.reviewData);
+				}
+				
+			//Wait a bit for the itemrenderer to process the data, then resize the component
+				setTimeout(function():void {
+					Main(FlexGlobals.topLevelApplication).evalContents();
+				}, 250);
+			}		
+			
+			private function init(e:NetworkEvent):void {
+				if (this.data.root.item) {
+					container.removeElement(empty);
+				}
 			}
+			
 		]]>
 	</fx:Script>
 	
 <!-- Include the required style sheet -->
 	<fx:Style source="../../assets/styles/pages/ReviewStyles.css"/>
 	
-	<s:VGroup gap="55" left="{width * 0.1}" width="90%">
+	<s:VGroup gap="55" id="container" left="{width * 0.1}" width="90%">
 	<!-- Display a notification that no reviews are present, if none are present -->
-		<s:HGroup gap="40" verticalCenter="0" id="empty" verticalAlign="middle" width="600">
-			<s:Image source="@Embed('../../assets/images/reviews.png')"/>
-			<s:Label text="We don't currently have any reviews, but you can be the first to leave one!"/>
-		</s:HGroup>
+		<s:Group id="empty" width="100%">
+			<s:HGroup gap="40" horizontalCenter="0" verticalAlign="middle" width="600">
+				<s:Image source="@Embed('../../assets/images/reviews.png')"/>
+				<s:Label styleName="empty" text="We don't currently have any reviews, but you can be the first to leave one!"/>
+			</s:HGroup>
+		</s:Group>
 		
 	<!-- Display the list of reviews -->
 		<s:List borderVisible="false" contentBackgroundAlpha="0" dataProvider="{this.data.root.item}" id="reviews"
@@ -36,7 +101,7 @@
 	<!-- Display the review entry form -->
 		<s:VGroup>
 			<s:Label styleName="h1" text="I would love to hear from you:"/>
-			<reviews:ReviewForm id="form" width="90%"/>
+			<reviews:ReviewForm id="form" reviewProcessed="processedHandler(event)" width="90%"/>
 		</s:VGroup>
 	</s:VGroup>
 </utils:ModuleBase>

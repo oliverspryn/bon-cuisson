@@ -13,9 +13,22 @@
 	src: url("../../fonts/minionpro-bold.otf");
 }
 
-.h1 {
+@font-face {
+	embed-as-cff: true;
+	fontFamily: "MinionProItalic";
+	src: url("../../fonts/minionpro-it.otf");
+}
+
+.empty {
 	color: #FFFFFF;
 	fontFamily: MinionPro;
+	fontLookup: embeddedCFF;
+	fontSize: 15;
+}
+
+.h1 {
+	color: #FFFFFF;
+	fontFamily: MinionProItalic;
 	fontLookup: embeddedCFF;
 	fontSize: 30;
 }
@@ -25,7 +38,6 @@
 	fontFamily: MinionProBold;
 	fontLookup: embeddedCFF;
 	fontSize: 20;
-	fontWeight: bold;
 }
 
 .review {

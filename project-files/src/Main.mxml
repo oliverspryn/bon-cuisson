@@ -146,6 +146,16 @@
 				
 				SWFAddress.addEventListener(SWFAddressEvent.CHANGE, URLNavigateToPageHandler);
 			}
+			
+		/**
+		 * Public methods
+		 * -------------------------------
+		*/
+			
+		//Re-evaluate the size of the stage to re-size the master <s:Scroller>
+			public function evalContents():void {
+				this.pageObject.restore();
+			}
 		]]>
 	</fx:Script>
 	

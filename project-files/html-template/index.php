@@ -3,7 +3,7 @@
 	require_once("system/server/root.php");
 		
 //Fetch all of the menu items
-	$menuGrabber = mysql_query("SELECT id, visible, position, URL, type, title, content, category, menuTotal+lunchesTotal as count FROM (SELECT pages.*, COUNT(menu.type) AS menuTotal, COUNT(lunches.id) AS lunchesTotal FROM `pages` LEFT JOIN (menu) ON pages.category = menu.type LEFT JOIN (lunches) ON pages.type = 'lunch' WHERE pages.visible = '1' GROUP BY pages.id ORDER BY position ASC) subquery", $db);
+	$menuGrabber = mysql_query("SELECT id, visible, position, URL, type, title, content, category, menuTotal+entreesTotal as count FROM (SELECT pages.*, COUNT(menu.type) AS menuTotal, COUNT(entrees.id) AS entreesTotal FROM `pages` LEFT JOIN (menu) ON pages.category = menu.type LEFT JOIN (entrees) ON pages.type = 'lunch' WHERE pages.visible = '1' GROUP BY pages.id ORDER BY position ASC) subquery", $db);
 	
 //Obtain a reference to the URL and page data
 	if (isset($_GET['url']) && $_GET['url'] != "") {
@@ -60,7 +60,7 @@
 <script src="<?php echo ROOT; ?>system/javascripts/swfaddress.js"></script>
 <script src="<?php echo ROOT; ?>system/javascripts/desktop-superpackage.js"></script>
 <script src="<?php echo ROOT; ?>system/javascripts/hijax-redirect.js"></script>
-<script src="<?php echo ROOT; ?>system/javascripts/config.js"></script>
+<!--<script src="<?php echo ROOT; ?>system/javascripts/config.js"></script>-->
 </head>
 
 <body id="container">
@@ -101,6 +101,10 @@
 				
 			case "menu" : 
 				require_once("modules/food-menu.php");
+				break;
+				
+			case "reviews" : 
+				require_once("modules/reviews.php");
 				break;
 		}
 	}

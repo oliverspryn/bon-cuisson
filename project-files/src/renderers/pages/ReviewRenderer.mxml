@@ -2,23 +2,24 @@
 <s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
 				xmlns:s="library://ns.adobe.com/flex/spark" 
 				xmlns:mx="library://ns.adobe.com/flex/mx" 
-				autoDrawBackground="false" xmlns:pages="components.pages.*"
-				width="100%" xmlns:reviews="components.pages.reviews.*">
+				xmlns:reviews="components.pages.reviews.*"
+				autoDrawBackground="false"
+				width="100%">
 	
 	<fx:Declarations>
-		<s:DateTimeFormatter id="dateFormatter" dateTimePattern="MMMM d, yyyy"/>
+		<s:DateTimeFormatter dateTimePattern="MMMM d, yyyy" id="dateFormatter"/>
 	</fx:Declarations>
 	
 <!-- Include the required style sheet -->
 	<fx:Style source="../../assets/styles/pages/ReviewStyles.css"/>
 	
-	<s:HGroup id="header" gap="10" verticalAlign="bottom">
+	<s:HGroup gap="10" id="header" verticalAlign="bottom">
 		<s:Label styleName="reviewer" text="{data.name}"/>
-		<reviews:Rating id="rating" current="{data.rating}" preview="true"/>
+		<reviews:Rating current="{data.rating}" id="rating" preview="true"/>
 	</s:HGroup>
 	
-	<s:Label id="review" styleName="review" left="25" right="0" width="100%" text="{data.review}"
-			 top="{header.y + header.height + 15}"/>
-	<s:Label styleName="timestamp" left="25" text="{'-- on ' + dateFormatter.format(data.timestamp * 1000)}"
+	<s:Label id="review" left="25" right="0" styleName="review" text="{data.review}"
+			 top="{header.y + header.height + 15}" width="100%"/>
+	<s:Label left="25" styleName="timestamp" text="{'-- on ' + dateFormatter.format(data.timestamp * 1000)}"
 			 top="{review.y + review.height + 7}"/>
 </s:ItemRenderer>

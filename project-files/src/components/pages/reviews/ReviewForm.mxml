@@ -89,7 +89,7 @@
 							source="{reviewer}" triggerEvent=""/>
 		
 		<mx:StringValidator id="reviewValidator" property="text"
-							requiredFieldError="Could you please leave review?"
+							requiredFieldError="Could you leave review?"
 							source="{review}" triggerEvent=""/>
 		
 	<!-- Use the reviews service from the main application to send data -->
@@ -118,7 +118,9 @@
 		<s:TextArea height="200" id="review" styleName="input" width="320"/>
 	</s:FormItem>
 	
-	<s:FormItem label="">
-		<s:Button click="validate(event)" id="submit" label="Share" styleName="button"/>
-	</s:FormItem>
+	<s:HGroup>
+		<s:FormItem label="">
+			<s:Button click="validate(event)" id="submit" label="Share" styleName="button"/>
+		</s:FormItem>
+	</s:HGroup>
 </s:Form>
