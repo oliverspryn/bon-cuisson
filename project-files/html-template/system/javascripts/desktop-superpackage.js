@@ -66,11 +66,18 @@
 			var reviewer = $('section.form input#reviewer').val();
 			var rating = parseInt($('section.form input#rating').val());
 			var review = $('section.form textarea#review').val();
-			alert(rating);
+			
 		//Validate the requried fields
-			if (reviewer == "" || review == "") {
-				alert("We will need both a name and a quick review!");
+			if (reviewer == '' || review == '') {
+				alert('We will need both a name and a quick review!');
 				return false;
+			}
+			
+		//Is this the first review? If so, hide the review empty container and provide an unordered list on which to append the review
+			if ($('section.empty').length) {
+				var empty = $('section.empty');
+				empty.after('<ul class="reviews"></ul>');
+				empty.remove();
 			}
 			
 		//Inject the review into the list
@@ -97,8 +104,8 @@
 			var month = date.getMonth();
 			var day = date.getDate();
 			var year = date.getFullYear();
-			var months = new Array("January", "February", "March", "April", "May", "June",
-								   "July", "August", "September", "October", "November", "December");
+			var months = new Array('January', 'February', 'March', 'April', 'May', 'June',
+								   'July', 'August', 'September', 'October', 'November', 'December');
 			
 			HTML += '<time datetime="' + year + '-' + month + '-' + day + '">' + months[month] + ' ' + day + ', ' + year + '</time>';
 			HTML += '</span>';

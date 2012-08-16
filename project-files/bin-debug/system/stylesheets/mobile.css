@@ -129,15 +129,17 @@ section.menuData ul li img {
 */
 
 section.content section.empty {
-	background: url(../images/reviews.png) no-repeat;
-	height: 76px;
-	margin: 15px 20% 70px 20%;
-	padding: 27px 0px 0px 100px;
-	vertical-align: middle;
+	padding-bottom: 60px;
 }
 
 section.content section.empty p {
+	background: url(../images/reviews-mobile.png) no-repeat top left;
+	display: inline-block;
+	height: 28px;
+	line-height: 150%;
 	margin: 0px;
+	padding: 3px;
+	text-indent: 40px;
 }
 
 section.content ul.reviews {

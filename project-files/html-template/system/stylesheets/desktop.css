@@ -414,6 +414,8 @@ section.content section.form input, section.content section.form textarea {
 	color: #FFFFFF;
 	font-family: MinionPro;
 	font-size: 15px;
+	outline: none;
+	resize: none;
 }
 
 section.content section.form ul.rating {

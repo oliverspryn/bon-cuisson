@@ -44,6 +44,13 @@
 				return false;
 			}
 			
+		//Is this the first review? If so, hide the review empty container and provide an unordered list on which to append the review
+			if ($('section.empty').length) {
+				var empty = $('section.empty');
+				empty.after('<ul class="reviews"></ul>');
+				empty.remove();
+			}
+			
 		//Inject the review into the list
 			var HTML = '<span class="reviewer">' + reviewer + '</span>\n';
 			
@@ -76,9 +83,17 @@
 			
 			$('ul.reviews').append('<li>' + HTML + '</li>');
 			
+		//Scroll to the new review
+   			var destination = $('ul.reviews li:last').offset().top;
+			
+   			$('html, body').animate({
+				'scrollTop' : destination - 20
+			});
+			
 		//Clear the form
 			$('section.form input#reviewer').val('');
 			$('section.form select#rating option:selected').prop('selected', false);
+			$('section.form select#rating option:first').attr('selected', 'selected');
 			$('section.form select#rating').selectmenu('refresh', true);
 			$('section.form textarea#review').val('');
 			
