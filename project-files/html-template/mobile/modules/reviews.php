@@ -3,11 +3,6 @@
 	$history = strtotime("-1 month");
 	$reviewsGrabber = mysql_query("SELECT * FROM `reviews` WHERE `timestamp` > '{$history}' ORDER BY `timestamp` ASC LIMIT 25", $db);
 	
-//Display a title for SEO
-	echo "<h2>" . strip($page['title']) . "</h2>
-
-";
-
 //Display the list of comments
 	if (mysql_num_rows($reviewsGrabber)) {
 		echo "<ul class=\"reviews\">";
@@ -61,19 +56,19 @@
 <br>
 
 <label for="rating">Rating:</label>
-<input id="rating" name="rating" type="hidden" value="0" />
-<ul class="live rating" id="rating">
-<li></li>
-<li></li>
-<li></li>
-<li></li>
-<li></li>
-</ul>
+<select id="rating" name="rating">
+<option value="0">Select rating...</option>
+<option value="1">One Star</option>
+<option value="2">Two Stars</option>
+<option value="3">Three Stars</option>
+<option value="4">Four Stars</option>
+<option value="5">Five Stars</option>
+</select>
 <br>
 
 <label for="review">Review:</label>
 <textarea id="review" name="review"></textarea>
 <br>
 
-<button class="submit">Share</button>
+<button class="submit" data-theme="b">Share</button>
 </section>

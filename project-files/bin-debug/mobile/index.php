@@ -54,6 +54,10 @@
 			case "menu" : 
 				require_once("mobile/modules/food-menu.php");
 				break;
+				
+			case "reviews" : 
+				require_once("mobile/modules/reviews.php");
+				break;
 		}
 	}
 ?>

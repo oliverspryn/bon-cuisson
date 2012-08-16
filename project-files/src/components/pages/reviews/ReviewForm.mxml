@@ -118,9 +118,7 @@
 		<s:TextArea height="200" id="review" styleName="input" width="320"/>
 	</s:FormItem>
 	
-	<s:HGroup>
-		<s:FormItem label="">
-			<s:Button click="validate(event)" id="submit" label="Share" styleName="button"/>
-		</s:FormItem>
-	</s:HGroup>
+	<s:FormItem label="">
+		<s:Button click="validate(event)" id="submit" label="Share" styleName="button"/>
+	</s:FormItem>
 </s:Form>

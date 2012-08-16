@@ -31,10 +31,10 @@
 	require_once("system/server/third-party/Mobile_Detect.php");
 	$detect = new Mobile_Detect();
 	
-	if ($detect->isMobile()) {
+	//if ($detect->isMobile()) {
 		require_once("mobile/index.php");
 		exit;
-	}
+	//}
 ?>
 <!DOCTYPE html>
 <html lang="en-US"> 
@@ -60,7 +60,7 @@
 <script src="<?php echo ROOT; ?>system/javascripts/swfaddress.js"></script>
 <script src="<?php echo ROOT; ?>system/javascripts/desktop-superpackage.js"></script>
 <script src="<?php echo ROOT; ?>system/javascripts/hijax-redirect.js"></script>
-<!--<script src="<?php echo ROOT; ?>system/javascripts/config.js"></script>-->
+<script src="<?php echo ROOT; ?>system/javascripts/config.js"></script>
 </head>
 
 <body id="container">

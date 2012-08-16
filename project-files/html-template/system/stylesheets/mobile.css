@@ -122,3 +122,70 @@ section.menuData ul li img {
 	max-width: 80px;
 	padding: 0px 10px 10px 0px;
 }
+
+/**
+ * Reviews module
+ * -------------------------
+*/
+
+section.content section.empty {
+	background: url(../images/reviews.png) no-repeat;
+	height: 76px;
+	margin: 15px 20% 70px 20%;
+	padding: 27px 0px 0px 100px;
+	vertical-align: middle;
+}
+
+section.content section.empty p {
+	margin: 0px;
+}
+
+section.content ul.reviews {
+	list-style: none;
+	padding-left: 0px;
+}
+
+section.content ul.reviews li {
+	padding-bottom: 30px;
+}
+
+section.content ul.reviews li span.reviewer {
+	font-size: 20px;
+}
+
+section.content ul.reviews li ul.rating {
+	display: inline;
+	font-size: 0px;
+	list-style: none;
+	padding-left: 0px;
+}
+
+section.content ul.reviews li ul.rating li {
+	background: url(../images/cupcake.png) no-repeat;
+	display: inline-block;
+	height: 16px;
+	margin: 0px;
+	padding: 0px;
+	width: 16px;
+}
+
+section.content ul.reviews li ul.rating li.selected {
+	background-position: 0px -16px;
+}
+
+section.content ul.reviews li span.review {
+	display: block;
+	font-size: 15px;
+	padding: 10px 0px 5px 25px;
+}
+
+section.content ul.reviews li span.date {
+	color: #333333;
+	display: block;
+	font-size: 10px;
+	padding-left: 25px;
+}
+
+section.content h3.reviewTitle {
+	font-style: italic;
+}
