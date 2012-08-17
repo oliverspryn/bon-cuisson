@@ -14,9 +14,9 @@
 			import com.forwardfour.utils.ModuleBase;
 			import com.forwardfour.valueObjects.NavigationItemData;
 			
+			import components.pages.Entrees;
 			import components.pages.FoodMenu;
 			import components.pages.Home;
-			import components.pages.Lunches;
 			import components.pages.Reviews;
 			
 		//Globalize a reference to the page content
@@ -92,11 +92,11 @@
 						this.addElement(this.pageObject);
 						break;
 						
-					case "lunch" : 
-						this.pageObject = new Lunches();
+					case "entrees" : 
+						this.pageObject = new Entrees();
 						this.pageObject.alpha = 0;
 						this.pageObject.y = 80;
-						this.pageObject.load("system/server/services/lunch.php");
+						this.pageObject.load("system/server/services/entrees.php");
 						this.pageObject.addEventListener("loadComplete", transitionPages);
 						this.addElement(this.pageObject);
 						break;

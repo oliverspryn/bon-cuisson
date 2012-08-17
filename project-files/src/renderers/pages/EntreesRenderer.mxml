@@ -9,19 +9,30 @@
 		<![CDATA[
 			import mx.events.FlexEvent;
 			
+		/**
+		 * Initialization performs the following actions:
+		 *  - format the serving date
+		 *  - adds a ":" after the name, if a tagline exists
+		 *  - assign the <s:Image> a source, if there is one, so that a broken image icon isn't shown for
+		 *    a blank image source
+		 *  - either format the price using the CurrencyFormatter class, or construct a list of variations
+		 *    to show various prices for differ sizes of menu items
+		 */
+			
 		//Format the name serving date to a user-readable value 
-			private function init(e:FlexEvent):void {				
+			private function init(e:FlexEvent):void {
+			//Format the serving date
 				serving.text = dateFormatter.format(data.serving * 1000);
 			}
 		]]>
 	</fx:Script>
 	
 	<fx:Declarations>
-		<s:DateTimeFormatter id="dateFormatter" dateTimePattern="M-d-yy"/>
+		<s:DateTimeFormatter id="dateFormatter" dateTimePattern="EEEE &#13;'{data.type}' &#13;M-d-yy"/>
 	</fx:Declarations>
 	
 <!-- Include the required stylesheet -->
-	<fx:Style source="../../assets/styles/pages/LunchesStyles.css"/>
+	<fx:Style source="../../assets/styles/pages/EntreesStyles.css"/>
 	
 <!-- Display the header of the menu item including the name and serving date -->
 	<s:RichText id="serving" left="5" styleName="serving" top="7"/>

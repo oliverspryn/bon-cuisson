@@ -6,15 +6,15 @@
 		 width="100%">
 	
 <!-- Include the required style sheet -->
-	<fx:Style source="../../assets/styles/pages/LunchesStyles.css"/>
+	<fx:Style source="../../assets/styles/pages/EntreesStyles.css"/>
 	
 	<utils:layout>
-		<s:VerticalLayout gap="45" />
+		<s:VerticalLayout gap="75" />
 	</utils:layout>
 			 
 <!-- Display the list of menu items -->
 	<s:List borderVisible="false" contentBackgroundAlpha="0" dataProvider="{this.data.root.item}"
-			horizontalScrollPolicy="off" id="list" itemRenderer="renderers.pages.LunchesRenderer" width="90%">
+			horizontalScrollPolicy="off" id="list" itemRenderer="renderers.pages.EntreesRenderer" width="90%">
 		<s:layout>
 			<s:VerticalLayout gap="45"/>
 		</s:layout>
@@ -22,7 +22,7 @@
 		
 <!-- Display the footer items, &#13; are new line characters -->
 	<s:Label paddingLeft="{width * 0.1}" styleName="footer" 
-			 text="Orders for lunch need to be placed 24 hours in advance... Thank you&#13;
+			 text="Orders need to be placed 24 hours in advance... Thank you&#13;
 There is a minimum of four lunches required for a delivery&#13;
 And...&#13;
 I will continue to update the lunch menu. With the cooler months coming, look forward to

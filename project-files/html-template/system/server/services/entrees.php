@@ -15,9 +15,11 @@
 		$XML .= "<item>";
 		$XML .= "<id>" . strip($menu['id']) . "</id>";
 		$XML .= "<serving>" . strip($menu['serving']) . "</serving>";
+		$XML .= "<type>" . strip($menu['type']) . "</type>";
 		$XML .= "<price>" . strip($menu['price']) . "</price>";
 		$XML .= "<name>" . strip($menu['name']) . "</name>";
 		$XML .= "<description>" . strip($menu['description']) . "</description>";
+		$XML .= "<imageURL>" . strip($menu['imageURL']) . "</imageURL>";
 		$XML .= "</item>";
 	}
 	
