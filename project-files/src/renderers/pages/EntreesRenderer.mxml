@@ -3,31 +3,74 @@
 				xmlns:s="library://ns.adobe.com/flex/spark" 
 				xmlns:mx="library://ns.adobe.com/flex/mx" 
 				xmlns:images="assets.images.*"
-				autoDrawBackground="false" creationComplete="init(event)"
-				minWidth="800" width="100%">
+				dataChange="init(event)"
+				autoDrawBackground="false" minWidth="800" width="100%">
 	<fx:Script>
 		<![CDATA[
 			import mx.events.FlexEvent;
 			
 		/**
 		 * Initialization performs the following actions:
+		 *  - check to see if the Fleur de Lis should appear
 		 *  - format the serving date
-		 *  - adds a ":" after the name, if a tagline exists
 		 *  - assign the <s:Image> a source, if there is one, so that a broken image icon isn't shown for
 		 *    a blank image source
-		 *  - either format the price using the CurrencyFormatter class, or construct a list of variations
-		 *    to show various prices for differ sizes of menu items
+		 *  - format the pricing and suggested serving sizes
 		 */
-			
-		//Format the name serving date to a user-readable value 
+			 
 			private function init(e:FlexEvent):void {
+			//Should a Fleur de Lis appear?
+				if (data.showIcon == "0") {
+					bullet.visible = false;
+					bullet.width = 0
+				} else {
+					bullet.visible = true;
+					bullet.width = NaN;
+				}
+				
 			//Format the serving date
 				serving.text = dateFormatter.format(data.serving * 1000);
+				
+			//Assign the <s:Image> a source
+				if (data.imageURL != null && data.imageURL != "") {
+					image.source = data.imageURL;
+				} else {
+					image.source = null; //Wipe out the old image
+				}
+				
+			//Format the pricing and suggested serving sizes
+				var prices:Object = JSON.parse(data.price);
+				var returnString:String = "";
+				
+				/**
+				 * We can navigate the above object like a multi-dimensional array:
+				 *  - first object within the array is the suggested serving size
+				 *  - second object within the array is the price
+				*/
+				
+				for (var i:int = 0; i <= prices.length - 1; i++) {
+					returnString += data.type;
+					
+					if (prices[i][0] != "0") {
+						returnString += " for " + prices[i][0] + " - " + priceFormatter.format(prices[i][1]);
+					} else {
+						returnString += " - " + priceFormatter.format(prices[i][1]);
+					}
+					
+					if (i != prices.length - 1) {
+						returnString += "    ";
+					}
+				}
+				
+				pricing.text = returnString;
 			}
 		]]>
 	</fx:Script>
 	
 	<fx:Declarations>
+	<!-- Within the DateTimeFormatter &#13; are new lines, and data.type is the type of meal from the database -->
+		<s:CurrencyFormatter currencySymbol="$" fractionalDigits="0" id="priceFormatter" trailingZeros="false"
+							 useCurrencySymbol="true" useGrouping="true"/>
 		<s:DateTimeFormatter id="dateFormatter" dateTimePattern="EEEE &#13;'{data.type}' &#13;M-d-yy"/>
 	</fx:Declarations>
 	
@@ -35,9 +78,20 @@
 	<fx:Style source="../../assets/styles/pages/EntreesStyles.css"/>
 	
 <!-- Display the header of the menu item including the name and serving date -->
-	<s:RichText id="serving" left="5" styleName="serving" top="7"/>
-	<s:Label id="title" left="{width * 0.1}" styleName="name" text="{data.name}"/>
+	<s:Label id="serving" left="5" styleName="serving" top="7"/>
 	
-<!-- Display the description and associated image (if any) of the menu item -->
-	<s:Label left="{(width * 0.1) + 35}" right="0" top="{title.height + 15}" styleName="description" text="{data.description}"/>
+	<s:HGroup left="{width * 0.1}" verticalAlign="top">
+		<images:FleurDeLis id="bullet"/>
+		<s:Label id="title" styleName="name" text="{data.name}"/>
+	</s:HGroup>
+	
+	<!-- Display the description and associated image (if any) of the entree item -->
+	<s:Group id="detailsContainer" width="100%">
+		<s:Image id="image" left="{(width * 0.1) + 35}" maxWidth="300" top="{title.height + 15}"/>
+		
+		<s:VGroup gap="15" left="{image.x + image.width + 15}" right="0" top="{title.height + 15}">
+			<s:Label styleName="description" text="{data.description}" width="100%"/>
+			<s:Label id="pricing" styleName="price" textAlign="center" width="100%"/>
+		</s:VGroup>
+	</s:Group>
 </s:ItemRenderer>

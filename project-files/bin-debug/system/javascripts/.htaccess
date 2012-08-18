@@ -1,0 +1,9 @@
+# Redirect all JS requests to js.php, if the JS file doesn't exist
+<IfModule mod_rewrite.c>
+	RewriteEngine On
+	
+	RewriteCond %{SCRIPT_FILENAME} !-d
+	RewriteCond %{SCRIPT_FILENAME} !-f
+	RewriteRule ^(.+)\.js$ $1.js.php [NC,L]
+	RewriteRule ^(.+)\.min\.js$ $1.min.js.php [NC,L]
+</IfModule>

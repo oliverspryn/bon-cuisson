@@ -13,6 +13,13 @@
 	src: url("../../fonts/timesi.ttf");
 }
 
+.servingHeader {
+	color: #FFFFFF;
+	fontFamily: LucidaCalligraphy;
+	fontLookup: embeddedCFF;
+	fontSize: 15;
+}
+
 .footer {
 	color: #FFFFFF;
 	fontFamily: TimesNewRomanItalic;
@@ -39,5 +46,11 @@
 	fontFamily: TimesNewRomanItalic;
 	fontLookup: embeddedCFF;
 	fontSize: 20;
-	fontStyle: italic;
+}
+
+.price {
+	color: #FFFFFF;
+	fontFamily: TimesNewRomanItalic;
+	fontLookup: embeddedCFF;
+	fontSize: 14;
 }

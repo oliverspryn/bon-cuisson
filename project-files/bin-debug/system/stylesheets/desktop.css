@@ -5,14 +5,15 @@
 
 html, body {
 	height: 100%;
+	margin: 0px;
+	padding: 0px;
 	width: 100%;
 }
 
 body {
 	background-color: #141414;
-	margin: 0;
-	padding: 0;
-	overflow-y: scroll;
+	overflow-x: hidden;
+	overflow-y: auto;
 }
 
 object:focus {
@@ -218,32 +219,42 @@ section.content div.homeBanner.right p {
 }
 
 /**
- * Food menu module
+ * Food menu and entrees
+ * modules
  * -------------------------
 */
 
-section.content ul.foodMenu {
+section.content ul.foodMenu,
+section.content ul.entrees {
 	color: #FFFFFF;
-	font-family: LucidaCalligraphy;
+	font-family: "Times New Roman", Times, serif;
 	font-size: 20px;
+	font-style: italic;
 	list-style: none;
 	padding: 0px;
 }
 
-section.content ul.foodMenu li {
+section.content ul.foodMenu li,
+section.content ul.entrees li {
 	clear: both;
 	padding-bottom: 20px;
 	position: relative;
 }
 
-section.content ul.foodMenu li span.price {
+section.content ul.foodMenu li span.price,
+section.content ul.entrees li span.serving {
+	font-family: LucidaCalligraphy;
 	font-size: 15px;
+	font-style: normal;
 	left: -12%;
 	position: absolute;
 	top: 10px;
 }
 
 section.content ul.foodMenu li ul.variations {
+	font-family: LucidaCalligraphy;
+	font-size: 15px;
+	font-style: normal;
 	left: -12%;
 	list-style: none;
 	padding: 0px;
@@ -263,28 +274,48 @@ section.content ul.foodMenu li ul.variations li.serves {
 	font-size: 12px;
 }
 
-section.content ul.foodMenu li span.name {
+section.content ul.foodMenu li span.name,
+section.content ul.entrees li span.name {
+	font-family: LucidaCalligraphy;
 	font-size: 25px;
+	font-style: normal;
 }
 
-section.content ul.foodMenu li span.tagline {
-	font-size: 15px;
-}
-
-section.content ul.foodMenu li.icon span.name {
+section.content ul.foodMenu li.icon span.name,
+section.content ul.entrees li.icon span.name {
 	background: url(../images/fleurDeLis.png) no-repeat top left;
 	font-size: 25px;
 	padding-left: 45px;
 }
 
-section.content ul.foodMenu li span.description {
-	display: block;
-	font-size: 15px;
-	margin-top: 15px;
-	padding: 0px 0px 25px 60px;
+section.content ul.foodMenu li span.tagline {
+	font-size: 20px;
 }
 
-section.content ul.foodMenu li ul.details {
+section.content ul.foodMenu li span.description,
+section.content ul.entrees li span.description {
+	display: block;
+	font-size: 20px;
+	margin-top: 15px;
+	padding: 0px 0px 10px 60px;
+}
+
+section.content ul.foodMenu li span:last-child,
+section.content ul.entrees li span:last-child {
+	padding-bottom: 25px;
+}
+
+section.content ul.entrees li span.prices {
+	display: block;
+	font-family: LucidaCalligraphy;
+	font-size: 13px;
+	font-style: normal;
+	padding-left: 60px;
+	text-align: center;
+}
+
+section.content ul.foodMenu li ul.details,
+section.content ul.entrees li ul.details {
 	clear: both;
 	display: block;
 	list-style: none;
@@ -294,17 +325,53 @@ section.content ul.foodMenu li ul.details {
 	width: 100%;
 }
 
-section.content ul.foodMenu li ul.details li {
+section.content ul.foodMenu li ul.details li,
+section.content ul.entrees li ul.details li {
 	display: inline;
 }
 
-section.content ul.foodMenu li ul.details li img {
+section.content ul.foodMenu li ul.details li img,
+section.content ul.entrees li ul.details li img {
 	float: left;
 	padding-right: 15px;
 }
 
-section.content ul.foodMenu li ul.details li span.description {
+section.content ul.foodMenu li ul.details li span.description,
+section.content ul.entrees li ul.details li span.description {
 	margin-top: 0px;
+}
+
+section.content ul.entrees li ul.details li span.prices {
+	display: block;
+	font-family: LucidaCalligraphy;
+	font-size: 13px;
+	font-style: normal;
+	padding-left: 60px;
+	text-align: center;
+}
+
+/**
+ * Entrees module only
+ * -------------------------
+*/
+
+section.content span.servingHeader {
+	color: #FFFFFF;
+	display: inline-block;
+	font-family: LucidaCalligraphy;
+	font-size: 15px;
+	font-style: normal;
+	height: 30px;
+	line-height: 400%;
+	margin-left: -12%;
+}
+
+section.content p.footnotes {
+	color: #FFFFFF;
+	font-family: "Times New Roman", Times, serif;
+	font-size: 25px;
+	font-style: italic;
+	text-align: center;
 }
 
 /**

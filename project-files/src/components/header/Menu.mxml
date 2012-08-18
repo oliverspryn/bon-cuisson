@@ -36,6 +36,9 @@
 		//During initialization, track whether the user clicked on a menu item
 			private var userSelected:Boolean = false;
 			
+		//Whether or not the pointer is set to currently show
+			private var showPointer:Boolean = true;
+			
 		//Hide the menu scrollbars, configure this component, and initialize SWFAddress
 			private function init(e:Event):void {	
 				this.configure();
@@ -150,7 +153,12 @@
 				
 			//Place the arrow under the active menu item
 				this.pointer.x = this.getArrowPositionAtIndex(this.selected);
-				this.selected = this.selected; //Doesn't move the pointer, just fades it into view
+				
+				if (this.showPointer) {
+					TweenMax.to(this.pointer, this.main.config.menuPointerTransitionDuration / 1000, {
+						alpha : 1
+					});
+				}
 				
 			//Dispatch a render complete event
 				super.dispatchEvent(new Event("renderComplete"));
@@ -179,16 +187,30 @@
 			
 		//Set the selected menu item and slide the arrow to a new menu item
 			public function set selected(index:int):void {
-			//Don't do anything if the pointer has not be created
+			//Make sure the pointer doesn't transition in, if it is still being built
+				if (index == -1) {
+					this.showPointer = false;
+				}
+				
 				if (this.pointer != null) {
 					list.selectedIndex = index;
 					
-					var xPos:Number = this.getArrowPositionAtIndex(this.selected);
-					
-					TweenMax.to(this.pointer, this.main.config.menuPointerTransitionDuration / 1000, {
-						alpha : 1,
-						x : xPos
-					});
+					if (index != -1) {
+						this.showPointer = true;
+						var xPos:Number = this.getArrowPositionAtIndex(this.selected);
+						
+						TweenMax.to(this.pointer, this.main.config.menuPointerTransitionDuration / 1000, {
+							alpha : 1,
+							x : xPos
+						});
+					} else {
+					//By default the first menu item is selected. This makes sure that NO item is selected
+						list.requireSelection = false;
+						
+						TweenMax.to(this.pointer, this.main.config.menuPointerTransitionDuration / 1000, {
+							alpha : 0
+						});
+					}
 				}
 			}
 			
@@ -205,6 +227,8 @@
 			
 		//Get information about the currently selected menu item by index
 			public function getInfoForItemByIndex(currentlySelected:Boolean = true, index:int = 0):NavigationItemData {
+				var info:NavigationItemData = new NavigationItemData();
+				
 				if (this.data && this.data != null) {
 					var item:int;
 					
@@ -215,9 +239,9 @@
 					}
 					
 					if (item >= 0) {
-						var info:NavigationItemData = new NavigationItemData();
 						info.category = this.data.item[item].category;
 						info.menuIndex = item;
+						info.pageExist = true;
 						info.pageID = this.data.item[item].id;
 						info.pageTitle = this.data.item[item].title;
 						info.pageType = this.data.item[item].type;
@@ -225,17 +249,23 @@
 						
 						return info;
 					} else {
-						return new NavigationItemData();
+						info.pageExist = false;
+						
+						return info;
 					}
 				}
 				
-				return new NavigationItemData();
+				info.pageExist = false;
+				
+				return info;
 			}
 			
 		//Get information about the currently selected menu item by URL
 			public function getInfoForItemByURL(URL:String = ""):NavigationItemData {
+				var info:NavigationItemData = new NavigationItemData();
+				
 				if (this.data && this.data != null) {
-					var item:int;
+					var item:int = -1;
 					
 				//Find the index of the item by its URL or just use the currently selected item
 					if (URL != "") {
@@ -251,9 +281,9 @@
 					
 				//Return data about the menu item
 					if (item >= 0) {
-						var info:NavigationItemData = new NavigationItemData();
 						info.category = this.data.item[item].category;
 						info.menuIndex = item;
+						info.pageExist = true;
 						info.pageID = this.data.item[item].id;
 						info.pageTitle = this.data.item[item].title;
 						info.pageType = this.data.item[item].type;
@@ -261,11 +291,15 @@
 						
 						return info;
 					} else {
-						return new NavigationItemData();
+						info.pageExist = false;
+						
+						return info;
 					}
 				}
 				
-				return new NavigationItemData();
+				info.pageExist = false;
+				
+				return info;
 			}
 			
 		//Let the application know that the user has selected a menu item

@@ -46,11 +46,19 @@ section.content div.homeBanner img {
 }
 
 /**
- * Food menu module
+ * Food menu and entrees
+ * modules
  * -------------------------
 */
 
-section.content ul.foodMenu li a h3 {
+section.content ul.foodMenu li a h3,
+section.content ul.entrees li a h3 {
+	margin: 0px;
+}
+
+section.content ul.entrees li a p.serving {
+	font-weight: bold;
+	line-height: 100%;
 	margin: 0px;
 }
 
@@ -62,26 +70,49 @@ section.content ul.foodMenu li a p.description {
 	width: 100%;
 }
 
+section.content ul.entrees li a p.description {
+	margin: 0px;
+	overflow: hidden;
+	padding-top: 25px;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	width: 100%;
+}
+
 section.content ul.foodMenu li a p.price {
 	font-weight: bold;
 	margin: 0px;
 	padding-top: 13px;
 }
 
-section.content ul.foodMenu li a img {
-	padding: 5px 0px 0px 5px;
-}
-
-section.menuData h3 {
+section.content ul.entrees li a p.price {
+	font-weight: bold;
 	margin: 0px;
 }
 
-section.menuData p.price {
+section.content ul.foodMenu li a img,
+section.content ul.entrees li a img {
+	padding: 5px 0px 0px 5px;
+}
+
+section.menuData h3,
+section.entreeData h3 {
+	margin: 0px;
+}
+
+section.entreeData p.serving {
+	font-size: 12px;
+	font-weight: bold;
+	margin: 0px;
+	padding-bottom: 10px;
+}
+
+section.menuData p.price,
+section.entreeData p.price {
 	font-size: 12px;
 	font-weight: bold;
 	margin: 0px 0px 7px 0px;
 }
-
 
 section.menuData p.variation {
 	font-size: 12px;
@@ -94,11 +125,13 @@ section.menuData p.tagline {
 	margin: 0px;
 }
 
-section.menuData p.description {
+section.menuData p.description,
+section.sectionData p.description {
 	margin: 15px 0px 0px 0px;
 }
 
-section.menuData ul {
+section.menuData ul,
+section.entreeData ul {
 	clear: both;
 	display: block;
 	list-style: none;
@@ -108,15 +141,18 @@ section.menuData ul {
 	width: 100%;
 }
 
-section.menuData ul li {
+section.menuData ul li,
+section.entreeData ul li {
 	display: inline;
 }
 
-section.menuData ul li:last-child {
+section.menuData ul li:last-child,
+section.entreeData ul li:last-child {
 	padding-left: 15px;
 }
 
-section.menuData ul li img {
+section.menuData ul li img,
+section.entreeData ul li img {
 	float: left;
 	max-height: 80px;
 	max-width: 80px;

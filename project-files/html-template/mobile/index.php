@@ -55,6 +55,10 @@
 				require_once("mobile/modules/food-menu.php");
 				break;
 				
+			case "entrees" : 
+				require_once("mobile/modules/entrees.php");
+				break;
+				
 			case "reviews" : 
 				require_once("mobile/modules/reviews.php");
 				break;
@@ -68,11 +72,11 @@
 <li data-role="list-divider">Our Menu</li>
 <?php
 //Generate the menu
-	while ($menu = mysql_fetch_array($menuGrabber)) {
-		if ($menu['count'] > 0) {
-			echo "<li><a class=\"multi-page-link\" href=\"" . ROOT . strip($menu['URL']) . "\">" . strip($menu['title']) .  "<span class=\"ui-li-count\">" . $menu['count'] . "</span></a></li>\n";
+	while ($mainMenu = mysql_fetch_array($mainMenuGrabber)) {
+		if ($mainMenu['count'] > 0) {
+			echo "<li><a class=\"multi-page-link\" href=\"" . ROOT . strip($mainMenu['URL']) . "\">" . strip($mainMenu['title']) .  "<span class=\"ui-li-count\">" . $mainMenu['count'] . "</span></a></li>\n";
 		} else {
-			echo "<li><a href=\"" . ROOT . strip($menu['URL']) . "\">" . strip($menu['title']) .  "</a></li>\n";
+			echo "<li><a href=\"" . ROOT . strip($mainMenu['URL']) . "\">" . strip($mainMenu['title']) .  "</a></li>\n";
 		}
 	}
 ?>

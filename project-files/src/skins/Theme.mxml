@@ -46,7 +46,10 @@
 		<s:Group id="superContainer">
 			<header:Logo id="logo" left="{width / 6}" top="0"/>
 			<header:Contact id="contact" right="{width / 6}" top="10"/>
-			<s:Group bottom="10" id="contentGroup" left="10" right="10" top="160"/>
+			
+			<s:VGroup left="10" paddingBottom="15" right="10" top="160">
+				<s:Group height="100%" id="contentGroup" width="100%"/>
+			</s:VGroup>
 		</s:Group>
 	</s:Scroller>
 </s:Skin>

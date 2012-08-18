@@ -12,7 +12,7 @@
 	echo "<ul class=\"foodMenu\">";
 	
 	while ($menu = mysql_fetch_array($menuGrabber)) {
-	//Show a Fleur de lis icon show?
+	//Should a Fleur de lis icon show?
 		if ($menu['showIcon'] == "1") {
 			echo "
 <li class=\"icon\">
@@ -71,7 +71,7 @@
 		if ($menu['imageURL'] != "") {
 			echo "
 <ul class=\"details\">
-<li><img alt=\"" . strip($menu['name']) . " image\" src=\"" . strip($menu['imageURL']) . "\" /></li>
+<li><img alt=\"" . htmlentities(strip($menu['name'])) . " image\" src=\"" . strip($menu['imageURL']) . "\" /></li>
 <li>";
 
 		//Don't show a description if no description is avaliable
@@ -86,7 +86,7 @@
 		} else {
 		//Don't show a description if no description is avaliable
 			if ($menu['description'] != "") {
-				echo "<span class=\"description image\">" . strip($menu['description']) . "</span>
+				echo "<span class=\"description\">" . strip($menu['description']) . "</span>
 ";
 			}
 			

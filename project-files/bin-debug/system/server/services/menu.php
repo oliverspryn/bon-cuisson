@@ -5,7 +5,7 @@
 //Output this file as XML
 	header("Content-type: text/xml");
 	
-//Fetch the menu
+//Fetch the navigation menu
 	$menuGrabber = mysql_query("SELECT * FROM `pages` WHERE `visible` = '1' ORDER BY `position` ASC", $db);
 	$XML = "<root>";
 	

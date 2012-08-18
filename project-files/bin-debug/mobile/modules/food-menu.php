@@ -1,16 +1,16 @@
 <?php
 //Fetch the food menu data
 	$type = escape($page['category']);
-	$foodMenuGrabber = mysql_query("SELECT * FROM `menu` WHERE `visible` = '1' AND `type` = '{$type}' ORDER BY `position` ASC", $db);
+	$menuGrabber = mysql_query("SELECT * FROM `menu` WHERE `visible` = '1' AND `type` = '{$type}' ORDER BY `position` ASC", $db);
 	
 	$internalPage = "";
 	
 //Construct the menu items
 	echo "<ul class=\"foodMenu\" data-role=\"listview\">";
 
-	while ($foodMenu = mysql_fetch_array($foodMenuGrabber)) {
+	while ($menu = mysql_fetch_array($menuGrabber)) {
 	//Allow only letters, with dashes in place of spaces, and all lowercase letters in the URL
-		$URL = "#" . preg_replace("/[^a-zA-Z\-]+/", "", strtolower(str_replace(" ", "-", strip($foodMenu['name']))));
+		$URL = "#" . preg_replace("/[^a-zA-Z\-]+/", "", strtolower(str_replace(" ", "-", strip($menu['name']))));
 		
 	/**
 	 * Build the menu item
@@ -21,18 +21,18 @@
 ";
 
 	//Don't link to an internal page if no description is avaliable
-		if ($foodMenu['description'] != "") {
+		if ($menu['description'] != "") {
 			echo "<a href=\"" . $URL . "\">
 ";
 		}
 		
-		echo "<h3>" . strip($foodMenu['name']) . "</h3>
-<p class=\"description\">" . strip($foodMenu['description']) . "</p>
+		echo "<h3>" . strip($menu['name']) . "</h3>
+<p class=\"description\">" . strip($menu['description']) . "</p>
 <p class=\"price\">";
 
 	//Display pricing variations, or just the standard, depending on what information is avaliable
-		if ($foodMenu['variations'] != "") {
-			$variations = json_decode(strip($foodMenu['variations']));
+		if ($menu['variations'] != "") {
+			$variations = json_decode(strip($menu['variations']));
 			
 		/**
 		 * We can navigate the above object like a multi-dimensional array:
@@ -49,10 +49,10 @@
 				}
 			}
 		} else {
-			echo "$ " . intval(strip($foodMenu['price']));
+			echo "$ " . intval(strip($menu['price']));
 			
-			if ($foodMenu['perUnit'] != "") {
-				echo " " . strip($foodMenu['perUnit']);
+			if ($menu['perUnit'] != "") {
+				echo " " . strip($menu['perUnit']);
 			}
 		}
 		
@@ -60,13 +60,13 @@
 ";
 
 	//Conditionally display an image, if one is avaliable
-		if ($foodMenu['imageURL'] != "") {
-			echo "<img alt=\"" . strip($foodMenu['name']) . " image\" src=\"" . strip($foodMenu['imageURL']) . "\"/>
+		if ($menu['imageURL'] != "") {
+			echo "<img alt=\"" . htmlentities(strip($menu['name'])) . " image\" src=\"" . strip($menu['imageURL']) . "\"/>
 ";
 		}
 		
 	//Don't link to an internal page if no description is avaliable
-		if ($foodMenu['description'] != "") {
+		if ($menu['description'] != "") {
 			echo "</a>
 ";
 		}
@@ -81,7 +81,7 @@
 	*/
 		
 	//Don't create an internal page if no description is avaliable
-		if ($foodMenu['description'] != "") {
+		if ($menu['description'] != "") {
 			$internalPage .= "
 <section class=\"menuData\" data-role=\"page\" id=\"" . ltrim($URL, "#") . "\">
 <header data-role=\"header\">
@@ -94,19 +94,19 @@
 ";
 
 		//Display the image in its own column, if one is avaliable
-			if ($foodMenu['imageURL'] != "") {
+			if ($menu['imageURL'] != "") {
 				$internalPage .= "<ul>
-	<li><img alt=\"" . strip($foodMenu['name']) . " image\" src=\"" . strip($foodMenu['imageURL']) . "\"/></li>
-	<li>
-	";
+<li><img alt=\"" . htmlentities(strip($menu['name'])) . " image\" src=\"" . strip($menu['imageURL']) . "\"/></li>
+<li>
+";
 			}
 		
-			$internalPage .= "<h3>" . strip($foodMenu['name']) . "</h3>
+			$internalPage .= "<h3>" . strip($menu['name']) . "</h3>
 ";
 
 		//Display pricing variations, or just the standard price, depending on what information is avaliable
-			if ($foodMenu['variations'] != "") {
-				$variations = json_decode(strip($foodMenu['variations']));
+			if ($menu['variations'] != "") {
+				$variations = json_decode(strip($menu['variations']));
 				
 			/**
 			 * We can navigate the above object like a multi-dimensional array:
@@ -120,10 +120,10 @@
 ";
 				}
 			} else {
-				$internalPage .= "<p class=\"price\">$ " . intval(strip($foodMenu['price']));
+				$internalPage .= "<p class=\"price\">$ " . intval(strip($menu['price']));
 				
-				if ($foodMenu['perUnit'] != "") {
-					$internalPage .= " " . strip($foodMenu['perUnit']);
+				if ($menu['perUnit'] != "") {
+					$internalPage .= " " . strip($menu['perUnit']);
 				}
 				
 				$internalPage .= "</p>
@@ -131,20 +131,20 @@
 			}
 
 		//Display the tagline, if one is avaliable
-			if ($foodMenu['tagline'] != "") {
-				$internalPage .= "<p class=\"tagline\">~ " . strip($foodMenu['tagline']) . "</p>
+			if ($menu['tagline'] != "") {
+				$internalPage .= "<p class=\"tagline\">~ " . strip($menu['tagline']) . "</p>
 ";
 			}
 			
 		//Display the image in its own column, if one is avaliable
-			if ($foodMenu['imageURL'] != "") {
+			if ($menu['imageURL'] != "") {
 				$internalPage .= "</li>
 </ul>
 
 ";
 			}
 		
-			$internalPage .= "<p class=\"description\">" . strip($foodMenu['description']) . "</p>
+			$internalPage .= "<p class=\"description\">" . strip($menu['description']) . "</p>
 </section>
 		
 <footer>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<utils:ModuleBase xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 xmlns:utils="com.forwardfour.utils.*"
+		 creationComplete="init(event)"
+		 width="100%">
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.core.UIComponent;
+			import mx.events.FlexEvent;
+			
+		//Fun!!! Pick a face to show!!!
+			private function init(event:FlexEvent):void {
+				var random:Number = Math.round(Math.random() * 2); //0, 1, or 2
+				
+				switch (random) {
+					case 0 : 
+						this.restoreImage(crying);
+						break;
+					
+					case 1 : 
+						this.restoreImage(shocked);
+						break;
+					
+					case 2 : 
+						this.restoreImage(surprised);
+						break;
+					
+					default : 
+						break;
+				}
+			}
+			
+		//Restore the visual appearance of a face
+			private function restoreImage(object:UIComponent):void {
+				object.visible = true;
+				object.width = NaN;
+				object.invalidateSize();
+				object.width = object.measuredWidth;
+			}
+		]]>
+	</fx:Script>
+	
+	<s:BorderContainer left="{width * 0.2}" right="{width * 0.2}">
+		<s:HGroup bottom="20" left="20" right="20" top="20">
+			<s:Group>
+				<s:Image id="crying" source="@Embed('assets/images/error/crying.png')" visible="false" width="0"/>
+				<s:Image id="shocked" source="@Embed('assets/images/error/shocked.png')" visible="false" width="0"/>
+				<s:Image id="surprised" source="@Embed('assets/images/error/surprised.png')" visible="false" width="0"/>
+			</s:Group>
+			
+			<s:VGroup gap="35">
+				<s:Label text="Sorry, nothing yummy here!" styleName="h1"/>
+				<s:Label text="We couldn't find the page you are looking for. Perhaps the link has expired link or was typed incorrectly."
+						 styleName="description"/>
+				<s:Button label="Go Home"/>
+			</s:VGroup>
+		</s:HGroup>
+			
+	</s:BorderContainer>
+</utils:ModuleBase>

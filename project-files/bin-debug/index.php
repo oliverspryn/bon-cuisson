@@ -3,7 +3,9 @@
 	require_once("system/server/root.php");
 		
 //Fetch all of the menu items
-	$menuGrabber = mysql_query("SELECT id, visible, position, URL, type, title, content, category, menuTotal+entreesTotal as count FROM (SELECT pages.*, COUNT(menu.type) AS menuTotal, COUNT(entrees.id) AS entreesTotal FROM `pages` LEFT JOIN (menu) ON pages.category = menu.type LEFT JOIN (entrees) ON pages.type = 'lunch' WHERE pages.visible = '1' GROUP BY pages.id ORDER BY position ASC) subquery", $db);
+	$now = strtotime("now");
+	$oneMonth = strtotime("+1 month");
+	$mainMenuGrabber = mysql_query("SELECT id, visible, position, URL, type, title, content, category, menuTotal+entreesTotal as count FROM (SELECT pages.*, IFNULL((SELECT COUNT(menu.type) FROM `menu` WHERE pages.category = menu.type AND menu.visible = '1' GROUP BY type), 0) AS menuTotal, IFNULL((SELECT COUNT(entrees.id) FROM `entrees` WHERE pages.type = 'entrees' AND entrees.visible = '1' AND entrees.serving > {$now} AND entrees.serving < {$oneMonth}), 0) AS entreesTotal FROM `pages` WHERE pages.visible = '1' GROUP BY pages.id ORDER BY position ASC) subquery", $db);
 	
 //Obtain a reference to the URL and page data
 	if (isset($_GET['url']) && $_GET['url'] != "") {
@@ -98,6 +100,10 @@
 				
 			case "menu" : 
 				require_once("modules/food-menu.php");
+				break;
+				
+			case "entrees" : 
+				require_once("modules/entrees.php");
 				break;
 				
 			case "reviews" : 

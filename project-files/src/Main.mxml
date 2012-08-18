@@ -17,6 +17,7 @@
 			import components.pages.Entrees;
 			import components.pages.FoodMenu;
 			import components.pages.Home;
+			import components.pages.NotFound;
 			import components.pages.Reviews;
 			
 		//Globalize a reference to the page content
@@ -73,45 +74,53 @@
 				this.oldPageObject = this.pageObject;
 				this.pageIndex = pageData.menuIndex;
 				
-				switch(pageType) {
-					case "home" : 
-						this.pageObject = new Home();
-						this.pageObject.alpha = 0;
-						this.pageObject.y = 80;
-						this.pageObject.load("system/server/services/home.php");
-						this.pageObject.addEventListener("loadComplete", transitionPages);
-						this.addElement(this.pageObject);
-						break;
-					
-					case "menu" : 
-						this.pageObject = new FoodMenu();
-						this.pageObject.alpha = 0;
-						this.pageObject.y = 80;
-						this.pageObject.load("system/server/services/food-menu.php?type=" + pageData.category);
-						this.pageObject.addEventListener("loadComplete", transitionPages);
-						this.addElement(this.pageObject);
-						break;
+				if (pageData.pageExist) {
+					switch(pageType) {
+						case "home" : 
+							this.pageObject = new Home();
+							this.pageObject.alpha = 0;
+							this.pageObject.y = 80;
+							this.pageObject.load("system/server/services/home.php");
+							this.pageObject.addEventListener("loadComplete", transitionPages);
+							this.addElement(this.pageObject);
+							break;
 						
-					case "entrees" : 
-						this.pageObject = new Entrees();
-						this.pageObject.alpha = 0;
-						this.pageObject.y = 80;
-						this.pageObject.load("system/server/services/entrees.php");
-						this.pageObject.addEventListener("loadComplete", transitionPages);
-						this.addElement(this.pageObject);
-						break;
-					
-					case "reviews" : 
-						this.pageObject = new Reviews();
-						this.pageObject.alpha = 0;
-						this.pageObject.y = 80;
-						this.pageObject.load("system/server/services/reviews.php");
-						this.pageObject.addEventListener("loadComplete", transitionPages);
-						this.addElement(this.pageObject);
-						break;
-					
-					default : 
-						break;
+						case "menu" : 
+							this.pageObject = new FoodMenu();
+							this.pageObject.alpha = 0;
+							this.pageObject.y = 80;
+							this.pageObject.load("system/server/services/food-menu.php?type=" + pageData.category);
+							this.pageObject.addEventListener("loadComplete", transitionPages);
+							this.addElement(this.pageObject);
+							break;
+							
+						case "entrees" : 
+							this.pageObject = new Entrees();
+							this.pageObject.alpha = 0;
+							this.pageObject.y = 80;
+							this.pageObject.load("system/server/services/entrees.php");
+							this.pageObject.addEventListener("loadComplete", transitionPages);
+							this.addElement(this.pageObject);
+							break;
+						
+						case "reviews" : 
+							this.pageObject = new Reviews();
+							this.pageObject.alpha = 0;
+							this.pageObject.y = 80;
+							this.pageObject.load("system/server/services/reviews.php");
+							this.pageObject.addEventListener("loadComplete", transitionPages);
+							this.addElement(this.pageObject);
+							break;
+						
+						default : 
+							break;
+					}
+				} else {
+					this.pageObject = new NotFound();
+					this.pageObject.alpha = 0;
+					this.pageObject.y = 80;
+					this.addElement(this.pageObject);
+					this.transitionPages(new NetworkEvent("loadComplete")); //Fake fire ;)
 				}
 			}
 			
@@ -138,10 +147,17 @@
 				
 				SWFAddress.removeEventListener(SWFAddressEvent.CHANGE, URLNavigateToPageHandler);
 				
-				var info:NavigationItemData = menu.getInfoForItemByIndex(false, this.pageIndex);
-				SWFAddress.setTitle(info.pageTitle);
-				SWFAddress.setValue(info.pageURL);
-				menu.selected = info.menuIndex;
+			//If the transitioned object is of type NotFound, set the title of the page only and remove the selected arrow
+				if (this.pageObject is NotFound) {
+					SWFAddress.setTitle("Not Found");
+					menu.selected = -1;
+				} else {
+					var info:NavigationItemData = menu.getInfoForItemByIndex(false, this.pageIndex);
+					SWFAddress.setTitle(info.pageTitle);
+					SWFAddress.setValue(info.pageURL);
+					menu.selected = info.menuIndex;
+				}
+				
 				this.pageObject.transitionIn();
 				
 				SWFAddress.addEventListener(SWFAddressEvent.CHANGE, URLNavigateToPageHandler);
