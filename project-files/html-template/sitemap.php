@@ -25,7 +25,7 @@
 				break;
 				
 			case "menu" : 
-			case "lunch" : 
+			case "entrees" : 
 				echo "<priority>0.8</priority>
 <changefreq>weekly</changefreq>\n";
 				break;

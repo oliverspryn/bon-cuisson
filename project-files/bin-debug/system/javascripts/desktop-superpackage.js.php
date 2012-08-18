@@ -65,7 +65,7 @@ if(typeof asual=="undefined"){var asual={}}if(typeof asual.util=="undefined"){as
     swfobject.createCSS('#container', 'display:block;text-align:left;');
 
 (function($) {
-	$(document).ready(function() {
+	$(document).ready(function() {	
 	/**
 	 * Rating selector
 	 * ---------------------------
@@ -199,6 +199,16 @@ if(typeof asual=="undefined"){var asual={}}if(typeof asual.util=="undefined"){as
 					'review' : review
 				}
 			});
+		});
+		
+	/**
+	 * Control the go home button
+	 * on the not found page
+	 * ---------------------------
+	*/
+		
+		$('button.goHome').click(function() {
+			document.location.href = '<?php echo ROOT; ?>';
 		});
     });
 })(jQuery);

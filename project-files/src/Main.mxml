@@ -68,6 +68,12 @@
 				this.navigateToPage(menu.getInfoForItemByURL(this.URL));
 			}
 			
+		//Go to the home page whenever a NotFound component sends this request
+			private function NotFoundGoHomeHandler(e:Event):void {
+				this.pageObject.removeEventListener("goHome", NotFoundGoHomeHandler);
+				this.navigateToPage(menu.getInfoForItemByIndex(false, 0));
+			}
+			
 		//Process the page navigation request
 			private function navigateToPage(pageData:NavigationItemData):void {
 				var pageType:String = pageData.pageType;
@@ -113,10 +119,17 @@
 							break;
 						
 						default : 
+							this.pageObject = new NotFound();
+							this.pageObject.addEventListener("goHome", NotFoundGoHomeHandler);
+							this.pageObject.alpha = 0;
+							this.pageObject.y = 80;
+							this.addElement(this.pageObject);
+							this.transitionPages(new NetworkEvent("loadComplete")); //Fake fire ;)
 							break;
 					}
 				} else {
 					this.pageObject = new NotFound();
+					this.pageObject.addEventListener("goHome", NotFoundGoHomeHandler);
 					this.pageObject.alpha = 0;
 					this.pageObject.y = 80;
 					this.addElement(this.pageObject);

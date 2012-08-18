@@ -17,7 +17,6 @@
 		$XML .= "<URL>" . strip($menu['URL']) . "</URL>";
 		$XML .= "<type>" . strip($menu['type']) . "</type>";
 		$XML .= "<title>" . strip($menu['title']) . "</title>";
-		$XML .= "<content>" . strip($menu['content']) . "</content>";
 		$XML .= "<category>" . strip($menu['category']) . "</category>";
 		$XML .= "</item>";
 	}

@@ -1,0 +1,29 @@
+# Allow access to all PHP files
+<Files ~ "\.(php)$">
+	order allow,deny
+	allow from all
+</Files>
+
+# Deny access to all .htaccess files
+<Files ~ "\.(htaccess)$">
+	order deny,allow
+	deny from all
+</Files>
+
+<IfModule mod_rewrite.c>
+	RewriteEngine On
+	
+# Direct to the dynamically created robots.txt file
+	Options +FollowSymlinks
+	RewriteRule ^robots.txt$ robots.php [QSA,L] 
+	
+# Direct to the dynamically created sitemap.xml file
+	Options +FollowSymlinks
+	RewriteRule ^sitemap.xml$ sitemap.php [QSA,L] 
+	
+# Create SEO friendly URLs
+	RewriteCond %{REQUEST_FILENAME} !-d
+	RewriteCond %{REQUEST_FILENAME} !-f
+	RewriteRule ^(.*)$ index.php?url=$1 [QSA,L]
+	Options -Indexes
+</IfModule>

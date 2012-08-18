@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en-US"> 
 <head>
-<title><?php echo strip($page['title']); ?></title>
+<title><?php echo $title; ?></title>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="HandheldFriendly" content="true">
@@ -17,10 +17,10 @@
 <link rel="apple-touch-startup-image" href="<?php echo ROOT; ?>system/images/mobile-app/startup-small-landscape.jpg"  media="screen and (max-device-width: 320px) and (orientation:landscape)" />
 <link rel="apple-touch-startup-image" href="<?php echo ROOT; ?>system/images/mobile-app/startup-small-portrait.jpg"  media="screen and (max-device-width: 320px) and (orientation:portrait)" />
 
-<link href="<?php echo ROOT; ?>system/stylesheets/mobile.css" rel="stylesheet" />
+<link href="<?php echo ROOT; ?>system/stylesheets/mobile.min.css" rel="stylesheet" />
 <link rel="stylesheet" href="http://code.jquery.com/mobile/1.1.1/jquery.mobile-1.1.1.min.css" />
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
-<script src="<?php echo ROOT; ?>system/javascripts/mobile-superpackage.js"></script>
+<script src="<?php echo ROOT; ?>system/javascripts/mobile-superpackage.min.js"></script>
 <script src="http://code.jquery.com/mobile/1.1.1/jquery.mobile-1.1.1.min.js"></script>
 </head>
 
@@ -33,7 +33,7 @@
 		echo "<a data-direction=\"back\" data-icon=\"arrow-l\" data-iconpos=\"left\" data-rel=\"back\" href=\"#\">Back</a>\n";
 	}
 ?>
-<h1><?php echo strip($page['title']); ?></h1>
+<h1><?php echo $title; ?></h1>
 <?php
 //Display a home button, if this isn't the start page
 	if ($page['position'] != "1") {
@@ -62,7 +62,13 @@
 			case "reviews" : 
 				require_once("mobile/modules/reviews.php");
 				break;
+				
+			default : 
+				require_once("mobile/modules/not-found.php");
+				break;
 		}
+	} else {
+		require_once("mobile/modules/not-found.php");
 	}
 ?>
 

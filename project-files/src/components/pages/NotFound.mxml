@@ -14,50 +14,51 @@
 		//Fun!!! Pick a face to show!!!
 			private function init(event:FlexEvent):void {
 				var random:Number = Math.round(Math.random() * 2); //0, 1, or 2
+				var faces:Array = new Array(crying, shocked, surprised);
 				
-				switch (random) {
-					case 0 : 
-						this.restoreImage(crying);
-						break;
-					
-					case 1 : 
-						this.restoreImage(shocked);
-						break;
-					
-					case 2 : 
-						this.restoreImage(surprised);
-						break;
-					
-					default : 
-						break;
-				}
+				this.restoreImage(faces[random]);
 			}
 			
 		//Restore the visual appearance of a face
 			private function restoreImage(object:UIComponent):void {
 				object.visible = true;
+				
 				object.width = NaN;
 				object.invalidateSize();
 				object.width = object.measuredWidth;
 			}
+			
+		//Dispatch an event to the main application to go home
+			private function goHomeHandler(e:MouseEvent):void {
+				super.dispatchEvent(new Event("goHome"));
+			}
 		]]>
 	</fx:Script>
 	
-	<s:BorderContainer left="{width * 0.2}" right="{width * 0.2}">
+	<fx:Metadata>
+		[Event(name="goHome", type="flash.events.Event")]
+	</fx:Metadata>
+	
+	<fx:Style source="../../assets/styles/pages/NotFoundStyles.css"/>
+	
+	<s:BorderContainer left="{width * 0.2}" right="{width * 0.2}" styleName="notFoundContainer">
 		<s:HGroup bottom="20" left="20" right="20" top="20">
-			<s:Group>
-				<s:Image id="crying" source="@Embed('assets/images/error/crying.png')" visible="false" width="0"/>
-				<s:Image id="shocked" source="@Embed('assets/images/error/shocked.png')" visible="false" width="0"/>
-				<s:Image id="surprised" source="@Embed('assets/images/error/surprised.png')" visible="false" width="0"/>
+			<s:Group height="100%">
+				<s:Image id="crying" source="@Embed('assets/images/error/crying.png')" verticalAlign="middle"
+						 visible="false" width="0"/>
+				<s:Image id="shocked" source="@Embed('assets/images/error/shocked.png')" verticalAlign="middle"
+						 visible="false" width="0"/>
+				<s:Image id="surprised" source="@Embed('assets/images/error/surprised.png')" verticalAlign="middle"
+						 visible="false" width="0"/>
 			</s:Group>
 			
-			<s:VGroup gap="35">
-				<s:Label text="Sorry, nothing yummy here!" styleName="h1"/>
-				<s:Label text="We couldn't find the page you are looking for. Perhaps the link has expired link or was typed incorrectly."
-						 styleName="description"/>
-				<s:Button label="Go Home"/>
+			<s:VGroup width="100%">
+				<s:Label styleName="h1" text="Sorry, nothing yummy here!"/>
+				<s:Label paddingBottom="35" styleName="whyNotFound"
+						 text="We couldn't find the page you are looking for. Perhaps the link has expired or it was entered incorrectly."
+						 width="100%"/>
+				<s:Button click="goHomeHandler(event)" label="Go Home"/>
 			</s:VGroup>
-		</s:HGroup>
-			
+		</s:HGroup>	
 	</s:BorderContainer>
 </utils:ModuleBase>

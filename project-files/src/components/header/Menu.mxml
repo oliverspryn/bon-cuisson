@@ -96,16 +96,16 @@
 		//Handle data loading errors
 			private function dataFaultHandler(e:FaultEvent):void {
 				Alert.show("Data for the Menu could not be fetched.\n\nFault code: " +
-							e.fault.faultCode + "\nFault details: " + e.fault.faultDetail, e.fault.faultString);
+					e.fault.faultCode + "\nFault details: " + e.fault.faultDetail, e.fault.faultString);
 			}
 			
-		/**
-		 * Perform the following actions to transitioning the menu into view
-		 *  - [1] slide the out horizontally to full width
-		 *  - [2] roll the menu down to full height
-		 *  - [3] build the menu items (performed by each item renderer)
-		 *  - [4] build the current page pointer arrow
-		*/
+			/**
+			 * Perform the following actions to transitioning the menu into view
+			 *  - [1] slide the out horizontally to full width
+			 *  - [2] roll the menu down to full height
+			 *  - [3] build the menu items (performed by each item renderer)
+			 *  - [4] build the current page pointer arrow
+			 */
 			
 			private function slideOut():void {
 				TweenMax.to(this.background, (this.main.config.menuInitDuration / 1000) / 2, {
@@ -164,10 +164,10 @@
 				super.dispatchEvent(new Event("renderComplete"));
 			}
 			
-		/**
-		 * Getters and setters
-		 * -------------------------------
-		*/
+			/**
+			 * Getters and setters
+			 * -------------------------------
+			 */
 			
 		//Get the hijacked URL of the current page
 			private function get URL():String {
@@ -187,9 +187,14 @@
 			
 		//Set the selected menu item and slide the arrow to a new menu item
 			public function set selected(index:int):void {
-			//Make sure the pointer doesn't transition in, if it is still being built
+			//Do this, even if the pointer doesn't exist yet
 				if (index == -1) {
+				//By default the first menu item is selected. This makes sure that NO item is selected
+					list.requireSelection = false;
+					
+				//Make sure the pointer doesn't transition in, if it is still being built
 					this.showPointer = false;
+					list.selectedIndex = index;
 				}
 				
 				if (this.pointer != null) {
@@ -204,9 +209,6 @@
 							x : xPos
 						});
 					} else {
-					//By default the first menu item is selected. This makes sure that NO item is selected
-						list.requireSelection = false;
-						
 						TweenMax.to(this.pointer, this.main.config.menuPointerTransitionDuration / 1000, {
 							alpha : 0
 						});
@@ -346,9 +348,8 @@
 	
 <!-- The styled list which will act as the menu -->
 	<s:List borderVisible="false" change="menuItemSelectedHandler(event)" contentBackgroundAlpha="0"
-			dataProvider="{this.data.item}" horizontalScrollPolicy="off" id="list"
-			itemRenderer="renderers.header.MenuRenderer" left="{width * 0.1}" requireSelection="true"
-			right="{width * 0.1}" verticalScrollPolicy="off">
+			dataProvider="{this.data.item}" id="list" itemRenderer="renderers.header.MenuRenderer"
+			left="{width * 0.1}" requireSelection="true" right="{width * 0.1}" verticalScrollPolicy="off">
 		<s:layout>
 			<s:HorizontalLayout gap="30"/>
 		</s:layout>

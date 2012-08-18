@@ -169,7 +169,7 @@ section.content section.empty {
 }
 
 section.content section.empty p {
-	background: url(../images/reviews-mobile.png) no-repeat top left;
+	background: url(../images/mobile/reviews.png) no-repeat top left;
 	display: inline-block;
 	height: 28px;
 	line-height: 150%;
@@ -226,4 +226,28 @@ section.content ul.reviews li span.date {
 
 section.content h3.reviewTitle {
 	font-style: italic;
+}
+
+/**
+ * Not found styles
+ * -------------------------
+*/
+
+section.content section.notFound h3 {
+	background: no-repeat top left;
+	height: 32px;
+	line-height: 160%;
+	padding-left: 45px;
+}
+
+section.content section.notFound.crying h3 {
+	background-image: url(../images/mobile/crying.png);
+}
+
+section.content section.notFound.shocked h3 {
+	background-image: url(../images/mobile/shocked.png);
+}
+
+section.content section.notFound.surprised h3 {
+	background-image: url(../images/mobile/surprised.png);
 }

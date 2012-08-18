@@ -5,7 +5,7 @@
 //Fetch all of the menu items
 	$now = strtotime("now");
 	$oneMonth = strtotime("+1 month");
-	$mainMenuGrabber = mysql_query("SELECT id, visible, position, URL, type, title, content, category, menuTotal+entreesTotal as count FROM (SELECT pages.*, IFNULL((SELECT COUNT(menu.type) FROM `menu` WHERE pages.category = menu.type AND menu.visible = '1' GROUP BY type), 0) AS menuTotal, IFNULL((SELECT COUNT(entrees.id) FROM `entrees` WHERE pages.type = 'entrees' AND entrees.visible = '1' AND entrees.serving > {$now} AND entrees.serving < {$oneMonth}), 0) AS entreesTotal FROM `pages` WHERE pages.visible = '1' GROUP BY pages.id ORDER BY position ASC) subquery", $db);
+	$mainMenuGrabber = mysql_query("SELECT id, visible, position, URL, type, title, category, menuTotal+entreesTotal as count FROM (SELECT pages.*, IFNULL((SELECT COUNT(menu.type) FROM `menu` WHERE pages.category = menu.type AND menu.visible = '1' GROUP BY type), 0) AS menuTotal, IFNULL((SELECT COUNT(entrees.id) FROM `entrees` WHERE pages.type = 'entrees' AND entrees.visible = '1' AND entrees.serving > {$now} AND entrees.serving < {$oneMonth}), 0) AS entreesTotal FROM `pages` WHERE pages.visible = '1' GROUP BY pages.id ORDER BY position ASC) subquery", $db);
 	
 //Obtain a reference to the URL and page data
 	if (isset($_GET['url']) && $_GET['url'] != "") {
@@ -15,8 +15,10 @@
 		
 		if (mysql_num_rows($pageGrabber)) {
 			$page = mysql_fetch_array($pageGrabber);
+			$title = strip($page['title']);
 		} else {
 			$page = false;
+			$title = "Not Found";
 		}
 	} else {
 		$URL = "";
@@ -24,8 +26,10 @@
 		
 		if (mysql_num_rows($pageGrabber)) {
 			$page = mysql_fetch_array($pageGrabber);
+			$title = strip($page['title']);
 		} else {
 			$page = false;
+			$title = "Not Found";
 		}
 	}
 	
@@ -41,7 +45,7 @@
 <!DOCTYPE html>
 <html lang="en-US"> 
 <head>
-<title><?php echo strip($page['title']); ?></title>
+<title><?php echo $title; ?></title>
 <meta charset="UTF-8" />
 <meta name="HandheldFriendly" content="true">
 <meta name="apple-touch-fullscreen" content="yes" />
@@ -56,7 +60,7 @@
 <link rel="apple-touch-startup-image" href="<?php echo ROOT; ?>system/images/mobile-app/startup-small-landscape.jpg"  media="screen and (max-device-width: 320px) and (orientation:landscape)" />
 <link rel="apple-touch-startup-image" href="<?php echo ROOT; ?>system/images/mobile-app/startup-small-portrait.jpg"  media="screen and (max-device-width: 320px) and (orientation:portrait)" />
 
-<link href="<?php echo ROOT; ?>system/stylesheets/desktop.css" rel="stylesheet" />
+<link href="<?php echo ROOT; ?>system/stylesheets/desktop.min.css" rel="stylesheet" />
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js"></script>
 <script src="<?php echo ROOT; ?>system/javascripts/desktop-superpackage.min.js"></script>
@@ -77,7 +81,7 @@
 <ul>
 <?php
 //Generate the menu
-	while ($menu = mysql_fetch_array($menuGrabber)) {
+	while ($menu = mysql_fetch_array($mainMenuGrabber)) {
 		if ($URL == strip($menu['URL']) || ($URL == "" && $menu['position'] == "1")) {
 			echo "<li><a class=\"selected\" href=\"" . ROOT . strip($menu['URL']) . "\">" . strip($menu['title']) . "</a></li>\n";
 		} else {
@@ -109,7 +113,13 @@
 			case "reviews" : 
 				require_once("modules/reviews.php");
 				break;
+				
+			default : 
+				require_once("modules/not-found.php");
+				break;
 		}
+	} else {
+		require_once("modules/not-found.php");
 	}
 ?>
 

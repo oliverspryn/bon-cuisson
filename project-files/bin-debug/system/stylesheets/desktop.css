@@ -4,6 +4,7 @@
 */
 
 html, body {
+	display: block;
 	height: 100%;
 	margin: 0px;
 	padding: 0px;
@@ -12,6 +13,7 @@ html, body {
 
 body {
 	background-color: #141414;
+	margin: 0px;
 	overflow-x: hidden;
 	overflow-y: auto;
 }
@@ -102,7 +104,8 @@ button.disabled:active, input[type=submit].disabled:active, input[type=reset].di
 }
 
 header {
-	margin: 20px 17% 0px 17%;
+	margin: 0px 17% 0px 17%;
+	padding-top: 20px;
 }
 
 header h1 {
@@ -512,4 +515,46 @@ section.content section.form textarea {
 
 section.content section.form button.submit {
 	margin: 35px 0px 0px 83px;
+}
+
+/**
+ * Not found styles
+ * -------------------------
+*/
+
+section.content section.notFound {
+	background: no-repeat center left;
+	border: 2px solid #999999;
+	border-radius: 10px;
+	margin: 20px 10% 0px 10%;
+	padding: 20px 20px 20px 140px;
+}
+
+section.content section.notFound.crying {
+	background-image: url(../images/error/crying.png);
+}
+
+section.content section.notFound.shocked {
+	background-image: url(../images/error/shocked.png);
+}
+
+section.content section.notFound.surprised {
+	background-image: url(../images/error/surprised.png);
+}
+
+section.content section.notFound h3 {
+	color: #FFFFFF;
+	font-family: LucidaCalligraphy;
+	font-size: 16px;
+	margin: 0px;
+	padding-bottom: 5px;
+}
+
+section.content section.notFound p {
+	color: #FFFFFF;
+	font-family: "Times New Roman", Times, serif;
+	font-size: 14px;
+	font-style: italic;
+	margin: 0px;
+	padding-bottom: 35px;
 }
