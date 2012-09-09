@@ -11,14 +11,15 @@
 <link rel="shortcut icon" href="<?php echo ROOT; ?>system/images/favicon.ico" />
 <link rel="apple-touch-icon" href="<?php echo ROOT; ?>system/images/mobile-app/favicon-57.jpg" />
 <link rel="apple-touch-icon" sizes="72×72" href="<?php echo ROOT; ?>system/images/mobile-app/favicon-72.jpg" />
-<link rel="apple-touch-icon" sizes="114×114" href="<?php echo ROOT; ?>system/images/mobile-app/favicon-114.jpg" )" />
+<link rel="apple-touch-icon" sizes="114×114" href="<?php echo ROOT; ?>system/images/mobile-app/favicon-114.jpg" />
 <link rel="apple-touch-startup-image" href="<?php echo ROOT; ?>system/images/mobile-app/startup-large-landscape.jpg" media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:landscape)" />
 <link rel="apple-touch-startup-image" href="<?php echo ROOT; ?>system/images/mobile-app/startup-large-portrait.jpg" media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:portrait)" />
 <link rel="apple-touch-startup-image" href="<?php echo ROOT; ?>system/images/mobile-app/startup-small-landscape.jpg"  media="screen and (max-device-width: 320px) and (orientation:landscape)" />
 <link rel="apple-touch-startup-image" href="<?php echo ROOT; ?>system/images/mobile-app/startup-small-portrait.jpg"  media="screen and (max-device-width: 320px) and (orientation:portrait)" />
 
 <link href="<?php echo ROOT; ?>system/stylesheets/mobile.min.css" rel="stylesheet" />
-<link rel="stylesheet" href="http://code.jquery.com/mobile/1.1.1/jquery.mobile-1.1.1.min.css" />
+<link rel="stylesheet" href="<?php echo ROOT; ?>system/stylesheets/bc-swatch-mobile.min.css" />
+<link rel="stylesheet" href="http://code.jquery.com/mobile/1.1.1/jquery.mobile.structure-1.1.1.min.css" />
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
 <script src="<?php echo ROOT; ?>system/javascripts/mobile-superpackage.min.js"></script>
 <script src="http://code.jquery.com/mobile/1.1.1/jquery.mobile-1.1.1.min.js"></script>

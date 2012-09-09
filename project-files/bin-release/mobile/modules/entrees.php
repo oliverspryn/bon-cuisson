@@ -6,6 +6,13 @@
 	
 	$internalPage = "";
 	
+//Display the header text, if some is avaliable
+	if ($page['pageTop'] != "") {
+		echo "<p class=\"headerText\">" . nl2br(strip($page['pageTop'])) . "</p>
+	
+";
+	}
+	
 //Construct the entree items
 	echo "<ul class=\"entrees\" data-role=\"listview\">";
 
@@ -157,4 +164,11 @@
 	}
 
 	echo "</ul>";
+	
+//Display the footer text, if some is avaliable
+	if ($page['pageBottom'] != "") {
+		echo "
+		
+<p class=\"footerText\">" . nl2br(strip($page['pageBottom'])) . "</p>";
+	}
 ?>
