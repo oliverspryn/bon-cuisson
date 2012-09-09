@@ -4,13 +4,19 @@
 		 xmlns:mx="library://ns.adobe.com/flex/mx"
 		 xmlns:utils="com.forwardfour.utils.*"
 		 creationComplete="init(event)"
+		 initialize="setResizer(event)"
 		 width="100%">
 	
 	<fx:Script>
 		<![CDATA[
 			import mx.events.FlexEvent;
 			
-			//Hide the "Serving on:" label, if no entrees were fetched
+		//Resize this component as more and more images are loaded into the <s:List>
+			private function setResizer(e:FlexEvent):void {
+				super.enableSizeAdjustment();
+			}
+			
+		//Hide the "Serving on:" label, if no entrees were fetched
 			private function init(event:FlexEvent):void {
 				if (!this.data.root.item || (this.data.root.item && this.data.root.item == null)) {
 					servingHeader.visible = false;
@@ -19,12 +25,17 @@
 		]]>
 	</fx:Script>
 	
-<!-- Include the required style sheet -->
+<!-- Include the required style sheets -->
+	<fx:Style source="../../assets/styles/pages/GeneralStyles.css"/>
 	<fx:Style source="../../assets/styles/pages/EntreesStyles.css"/>
 	
 	<utils:layout>
-		<s:VerticalLayout gap="75" />
+		<s:VerticalLayout />
 	</utils:layout>
+	
+<!-- Display the header text -->
+	<s:RichText paddingLeft="{width * 0.1}" styleName="header" text="{pageTop}" textAlign="center" width="90%"/>
+	<s:Spacer height="1" id="headerSpacer" width="1"/>
 			 
 <!-- Display the list of menu items -->
 	<s:VGroup gap="15" left="0" width="90%">
@@ -38,12 +49,7 @@
 		</s:List>
 	</s:VGroup>
 			
-<!-- Display the footer items, &#13; are new line characters -->
-	<s:Label paddingLeft="{width * 0.1}" styleName="footer" 
-			 text="Orders need to be placed 24 hours in advance... Thank you&#13;
-There is a minimum of four lunches required for a delivery&#13;
-And...&#13;
-I will continue to update the entree menu. With the cooler months coming, look forward to
-home made soups, stews, pirogues, cabbage rolls and much more."
-			 textAlign="center" width="90%"/>
+<!-- Display the footer text -->
+	<s:Spacer height="1" id="footerSpacer" width="1"/>
+	<s:RichText id="footerText" paddingLeft="{width * 0.1}" styleName="footer" text="{pageBottom}" textAlign="center" width="90%"/>
 </utils:ModuleBase>

@@ -26,6 +26,23 @@ img {
 	border: none;
 }
 
+p.headerText, p.footerText {
+	color: #FFFFFF;
+	font-family: "Times New Roman", Times, serif;
+	font-size: 25px;
+	font-style: italic;
+	text-align: center;
+	width: 100%;
+}
+
+p.headerText {
+	padding-bottom: 50px;
+}
+
+p.footerText {
+	padding-top: 50px;
+}
+
 /**
  * Button styles
  * from Delfini UI
@@ -367,14 +384,6 @@ section.content span.servingHeader {
 	height: 30px;
 	line-height: 400%;
 	margin-left: -12%;
-}
-
-section.content p.footnotes {
-	color: #FFFFFF;
-	font-family: "Times New Roman", Times, serif;
-	font-size: 25px;
-	font-style: italic;
-	text-align: center;
 }
 
 /**

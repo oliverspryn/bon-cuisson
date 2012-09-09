@@ -20,13 +20,6 @@
 	fontSize: 15;
 }
 
-.footer {
-	color: #FFFFFF;
-	fontFamily: TimesNewRomanItalic;
-	fontLookup: embeddedCFF;
-	fontSize: 25;
-}
-
 .name {
 	color: #FFFFFF;
 	fontFamily: LucidaCalligraphy;

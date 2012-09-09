@@ -7,6 +7,13 @@
 	echo "<h2>" . strip($page['title']) . "</h2>
 
 ";
+
+//Display the header text, if some is avaliable
+	if ($page['pageTop'] != "") {
+		echo "<p class=\"headerText\">" . nl2br(strip($page['pageTop'])) . "</p>
+	
+";
+	}
 	
 //Construct the menu items
 	echo "<ul class=\"foodMenu\">";
@@ -96,4 +103,11 @@
 	}
 	
 	echo "</ul>";
+	
+//Display the footer text, if some is avaliable
+	if ($page['pageBottom'] != "") {
+		echo "
+		
+<p class=\"footerText\">" . nl2br(strip($page['pageBottom'])) . "</p>";
+	}
 ?>

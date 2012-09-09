@@ -1,16 +1,17 @@
 -- phpMyAdmin SQL Dump
--- version 3.3.9
+-- version 3.5.1
 -- http://www.phpmyadmin.net
 --
--- Host: localhost
--- Generation Time: Aug 18, 2012 at 07:00 PM
--- Server version: 5.5.8
--- PHP Version: 5.3.5
+-- Host: localhost:3306
+-- Generation Time: Sep 09, 2012 at 11:18 PM
+-- Server version: 5.5.24-log
+-- PHP Version: 5.4.3
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+SET time_zone = "+00:00";
 
 --
--- Database: `boncuissondev`
+-- Database: `boncuisson`
 --
 
 -- --------------------------------------------------------
@@ -26,7 +27,7 @@ CREATE TABLE IF NOT EXISTS `config` (
   `email` varchar(255) NOT NULL COMMENT 'The primary email of the company, displayed in the header',
   `phone` varchar(255) NOT NULL COMMENT 'The primary phone number of the company, displayed in the header',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
 
 -- --------------------------------------------------------
 
@@ -45,7 +46,7 @@ CREATE TABLE IF NOT EXISTS `entrees` (
   `description` longtext NOT NULL COMMENT 'The description of the entree item',
   `imageURL` longtext NOT NULL COMMENT 'The URL of the image for this entree item',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=19 ;
 
 -- --------------------------------------------------------
 
@@ -62,7 +63,7 @@ CREATE TABLE IF NOT EXISTS `home` (
   `image2` longtext NOT NULL COMMENT 'The second image to display on the home page',
   `image3` longtext NOT NULL COMMENT 'The third image to display on the home page',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
 
 -- --------------------------------------------------------
 
@@ -84,7 +85,7 @@ CREATE TABLE IF NOT EXISTS `menu` (
   `variations` longtext NOT NULL COMMENT 'A JSON array storing pricing for additional sizes of this particular food item',
   `imageURL` longtext NOT NULL COMMENT 'Optional. The URL of the image showing the food item',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=63 ;
 
 -- --------------------------------------------------------
 
@@ -97,11 +98,13 @@ CREATE TABLE IF NOT EXISTS `pages` (
   `visible` int(1) NOT NULL COMMENT 'Set whether or not a page should display in the menu',
   `position` int(11) NOT NULL COMMENT 'The numerical position of the page on the menu',
   `URL` varchar(255) NOT NULL COMMENT 'The SEO friendly URL of the page',
-  `type` varchar(255) NOT NULL COMMENT 'The type of page that this is: a regular page, food menu, reviews, entrees, or home',
+  `type` varchar(255) NOT NULL COMMENT 'The type of page: menu, reviews, entrees, or home',
   `title` varchar(255) NOT NULL COMMENT 'The title of the page',
   `category` varchar(255) NOT NULL COMMENT 'Used only for type "menu", which will indicate what kind of menu type should be fetched from the menu table',
+  `pageTop` longtext NOT NULL COMMENT 'The text for this value will display above the main content of each module, except for the home and not found modules',
+  `pageBottom` longtext NOT NULL COMMENT 'The text for this value will display below the main content of each module, except for the home and not found modules',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=12 ;
 
 -- --------------------------------------------------------
 
@@ -117,7 +120,7 @@ CREATE TABLE IF NOT EXISTS `reviews` (
   `rating` int(1) NOT NULL COMMENT 'The numerical rating from the user, valid values range from 0 to 5',
   `review` longtext NOT NULL COMMENT 'The review from the user',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
 
 -- --------------------------------------------------------
 

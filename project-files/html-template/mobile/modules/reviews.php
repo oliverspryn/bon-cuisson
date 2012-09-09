@@ -3,6 +3,13 @@
 	$history = strtotime("-1 month");
 	$reviewsGrabber = mysql_query("SELECT * FROM `reviews` WHERE `timestamp` > '{$history}' ORDER BY `timestamp` ASC LIMIT 25", $db);
 	
+//Display the header text, if some is avaliable
+	if ($page['pageTop'] != "") {
+		echo "<p class=\"headerText\">" . nl2br(strip($page['pageTop'])) . "</p>
+	
+";
+	}
+	
 //Display the list of comments
 	if (mysql_num_rows($reviewsGrabber)) {
 		echo "<ul class=\"reviews\">";
@@ -71,4 +78,11 @@
 <br>
 
 <button class="submit" data-theme="b">Share</button>
-</section>
+</section><?php
+//Display the footer text, if some is avaliable
+	if ($page['pageBottom'] != "") {
+		echo "
+		
+<p class=\"footerText\">" . nl2br(strip($page['pageBottom'])) . "</p>";
+	}
+?>

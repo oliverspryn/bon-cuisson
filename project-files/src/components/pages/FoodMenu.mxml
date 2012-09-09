@@ -3,11 +3,39 @@
 		 xmlns:s="library://ns.adobe.com/flex/spark" 
 		 xmlns:mx="library://ns.adobe.com/flex/mx"
 		 xmlns:utils="com.forwardfour.utils.*"
+		 initialize="init(event)"
 		 width="100%">
+	
+<!-- Include the required style sheet -->
+	<fx:Style source="../../assets/styles/pages/GeneralStyles.css"/>
+	<fx:Script>
+		<![CDATA[
+			import mx.events.FlexEvent;
+			
+		//Resize this component as more and more images are loaded into the <s:List>
+			private function init(e:FlexEvent):void {
+				super.enableSizeAdjustment();
+			}
+		]]>
+	</fx:Script>
+	
+	<utils:layout>
+		<s:VerticalLayout />
+	</utils:layout>
+	
+<!-- Display the header text -->
+	<s:RichText paddingLeft="{width * 0.1}" styleName="header" text="{pageTop}" textAlign="center" width="90%"/>
+	<s:Spacer height="1" id="headerSpacer" width="1"/>
+	
+<!-- Display the list of food menu items -->
 	<s:List borderVisible="false" contentBackgroundAlpha="0" dataProvider="{this.data.root.item}" horizontalScrollPolicy="off"
 			id="list" itemRenderer="renderers.pages.FoodMenuRenderer" top="10" width="90%">
 		<s:layout>
 			<s:VerticalLayout gap="45"/>
 		</s:layout>
 	</s:List>
+	
+<!-- Display the footer text -->
+	<s:Spacer height="1" id="footerSpacer" width="1"/>
+	<s:RichText id="footerText" paddingLeft="{width * 0.1}" styleName="footer" text="{pageBottom}" textAlign="center" width="90%"/>
 </utils:ModuleBase>

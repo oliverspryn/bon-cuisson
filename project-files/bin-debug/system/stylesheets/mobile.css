@@ -24,6 +24,21 @@ footer ul li:last-child {
 	padding-left: 10px;
 }
 
+p.headerText, p.footerText {
+	font-family: "Times New Roman", Times, serif;
+	font-style: italic;
+	text-align: center;
+	width: 100%;
+}
+
+p.headerText {
+	padding-bottom: 30px;
+}
+
+p.footerText {
+	padding-top: 30px;
+}
+
 /**
  * Home module
  * -------------------------
@@ -218,7 +233,6 @@ section.content ul.reviews li span.review {
 }
 
 section.content ul.reviews li span.date {
-	color: #333333;
 	display: block;
 	font-size: 10px;
 	padding-left: 25px;

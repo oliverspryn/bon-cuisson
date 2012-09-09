@@ -15,8 +15,10 @@
 		 *  - format the serving date
 		 *  - assign the <s:Image> a source, if there is one, so that a broken image icon isn't shown for
 		 *    a blank image source
+		 *  - if there is an image for the <s:Image> component, then add an event listener for when the
+		 *    image has loaded, otherwise dispatch a load complete event to the containing list 
 		 *  - format the pricing and suggested serving sizes
-		 */
+		*/
 			 
 			private function init(e:FlexEvent):void {
 			//Should a Fleur de Lis appear?
@@ -34,8 +36,10 @@
 			//Assign the <s:Image> a source
 				if (data.imageURL != null && data.imageURL != "") {
 					image.source = data.imageURL;
+					image.addEventListener(Event.COMPLETE, imageLoadCompleteHandler);
 				} else {
 					image.source = null; //Wipe out the old image
+					this.imageLoadCompleteHandler(new Event("complete")); //Fake fire ;)
 				}
 				
 			//Format the pricing and suggested serving sizes
@@ -63,6 +67,15 @@
 				}
 				
 				pricing.text = returnString;
+			}
+			
+		//Share with the parent <s:List> when the <s:Image> has been loaded
+			private function imageLoadCompleteHandler(e:Event):void {
+				if (image.hasEventListener(Event.COMPLETE)) {
+					image.removeEventListener(Event.COMPLETE, imageLoadCompleteHandler);
+				}
+				
+				dispatchEvent(new Event("imageLoadComplete", true));
 			}
 		]]>
 	</fx:Script>

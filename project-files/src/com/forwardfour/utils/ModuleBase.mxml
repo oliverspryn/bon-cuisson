@@ -15,11 +15,14 @@
 			
 			import mx.collections.ArrayCollection;
 			import mx.controls.Alert;
+			import mx.controls.Spacer;
 			import mx.core.FlexGlobals;
 			import mx.events.FlexEvent;
 			import mx.rpc.events.FaultEvent;
 			import mx.rpc.events.ResultEvent;
 			import mx.utils.ArrayUtil;
+			
+			import spark.components.List;
 			
 		//Globalize a reference to the main application, so that the instantiated Config class can be accessed
 			private var main:Main;
@@ -27,6 +30,23 @@
 		//Globalize a reference to the loaded data
 			[Bindable]
 			protected var data:Object;
+			
+		//Globalize a reference to the top and bottom content of the page
+			[Bindable]
+			public var pageBottom:String;
+			
+			[Bindable]
+			public var pageTop:String;
+			
+		//Hold references to the spacers in between the main body content and the header/footer texts in the child-compnent
+			public var headerSpacer:Spacer;
+			public var footerSpacer:Spacer;
+			
+		//Hold references to the list item in the child component
+			public var list:List;
+			
+		//Hold a reference to the number of images loaded in the child-compoent's list
+			private var loadedImages:int = 0;
 			
 		//Hold the data from the server but do not share it with the child component... yet
 			private var delayedData:Object;
@@ -136,6 +156,19 @@
 				
 				super.dispatchEvent(eventData);
 				
+			//Add some padding above or below the page text on the top or bottom of the page, if it present	
+				if (this.pageTop && this.pageTop != null) {
+					headerSpacer.height = 50;
+				} else {
+					headerSpacer.height = 1;
+				}
+				
+				if (this.pageBottom && this.pageBottom != null) {
+					footerSpacer.height = 50;
+				} else {
+					footerSpacer.height = 1;
+				}
+				
 			//Should the component be transitioned into place?
 				if (this.transitionOnComplete) {
 					this.transitionIn();
@@ -230,6 +263,30 @@
 				
 			//Dispatch the restored event
 				super.dispatchEvent(new ComponentStateEvent("componentRestored"));
+			}
+			
+		//Certain modules will require a listener to resize itself once all of its images have been loaded
+			protected function enableSizeAdjustment():void {
+				list.addEventListener("imageLoadComplete", loadCompleteHandler);
+			}
+			
+		//Wain until all of the images have been loaded, before resizing this component
+			private function loadCompleteHandler(e:Event):void {
+				this.loadedImages ++;
+				
+				if (this.loadedImages == list.dataProvider.length) {
+					list.removeEventListener("imageLoadComplete", loadCompleteHandler);
+					
+					var timer:Timer = new Timer(500, 1);
+					timer.addEventListener(TimerEvent.TIMER_COMPLETE, timerCompleteHandler);
+					timer.start();
+				}
+			}
+			
+		//Give the <s:Image> components half of a second to render before resizing the component
+			private function timerCompleteHandler(e:TimerEvent):void {
+				e.target.removeEventListener(TimerEvent.TIMER_COMPLETE, timerCompleteHandler);
+				this.restore();
 			}
 		]]>
 	</fx:Script>

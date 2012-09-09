@@ -5,12 +5,19 @@
 	$entreeGrabber = mysql_query("SELECT * FROM `entrees` WHERE `serving` > '{$now}' AND `serving` < '{$oneMonth}' AND `visible` = '1' ORDER BY `serving` ASC", $db);
 	
 //Display a title for SEO
-	echo "<h2>" . strip($page['title']) . "</h2>";
+	echo "<h2>" . strip($page['title']) . "</h2>
+";
+
+//Display the header text, if some is avaliable
+	if ($page['pageTop'] != "") {
+		echo "<p class=\"headerText\">" . nl2br(strip($page['pageTop'])) . "</p>
+	
+";
+	}
 
 //Were any entree items fetched?
 	if (mysql_num_rows($entreeGrabber)) {
-		echo "
-<span class=\"servingHeader\">Serving on:</span>";	
+		echo "<span class=\"servingHeader\">Serving on:</span>";	
 	}
 	
 //Construct the entree items
@@ -100,8 +107,11 @@
 	}
 	
 	echo "</ul>";
+	
+//Display the footer text, if some is avaliable
+	if ($page['pageBottom'] != "") {
+		echo "
+		
+<p class=\"footerText\">" . nl2br(strip($page['pageBottom'])) . "</p>";
+	}
 ?>
-
-
-<p class="footnotes">Orders need to be placed 24 hours in advance... Thank you<br>There is a minimum of four lunches required for a delivery<br>
-And...<br>I will continue to update the entree menu. With the cooler months coming, look forward to home made soups, stews, pirogues, cabbage rolls and much more.</p>

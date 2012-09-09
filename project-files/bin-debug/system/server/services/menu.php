@@ -18,6 +18,8 @@
 		$XML .= "<type>" . strip($menu['type']) . "</type>";
 		$XML .= "<title>" . strip($menu['title']) . "</title>";
 		$XML .= "<category>" . strip($menu['category']) . "</category>";
+		$XML .= "<pageTop>" . strip($menu['pageTop']) . "</pageTop>";
+		$XML .= "<pageBottom>" . strip($menu['pageBottom']) . "</pageBottom>";
 		$XML .= "</item>";
 	}
 	

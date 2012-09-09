@@ -5,6 +5,13 @@
 	
 	$internalPage = "";
 	
+//Display the header text, if some is avaliable
+	if ($page['pageTop'] != "") {
+		echo "<p class=\"headerText\">" . nl2br(strip($page['pageTop'])) . "</p>
+	
+";
+	}
+	
 //Construct the menu items
 	echo "<ul class=\"foodMenu\" data-role=\"listview\">";
 
@@ -160,4 +167,11 @@
 	}
 
 	echo "</ul>";
+	
+//Display the footer text, if some is avaliable
+	if ($page['pageBottom'] != "") {
+		echo "
+		
+<p class=\"footerText\">" . nl2br(strip($page['pageBottom'])) . "</p>";
+	}
 ?>

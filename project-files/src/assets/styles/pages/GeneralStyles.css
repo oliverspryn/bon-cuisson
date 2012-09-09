@@ -1,0 +1,12 @@
+@font-face {
+	embed-as-cff: true;
+	fontFamily: "TimesNewRomanItalic";
+	src: url("../../fonts/timesi.ttf");
+}
+
+.header, .footer {
+	color: #FFFFFF;
+	fontFamily: TimesNewRomanItalic;
+	fontLookup: embeddedCFF;
+	fontSize: 25;
+}

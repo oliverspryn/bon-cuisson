@@ -3,12 +3,16 @@ package com.forwardfour.events {
 	
 	public class MenuEvent extends Event {
 	//These attributes are the destinctive features of this class which will store custom information about the dispatched event
-		public var category:String;
 		public var menuIndex:uint;
+		public var pageBottom:String;
+		public var pageCategory:String;
 		public var pageID:int;
+		public var pagePosition:int;
 		public var pageTitle:String;
+		public var pageTop:String;
 		public var pageType:String;
 		public var pageURL:String;
+		public var pageVisible:Boolean;
 		
 	//The constructor must call the super constructor
 		public function MenuEvent(type:String, bubbles:Boolean = false, cancelable:Boolean = false) {

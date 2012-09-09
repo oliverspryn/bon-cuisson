@@ -241,13 +241,17 @@
 					}
 					
 					if (item >= 0) {
-						info.category = this.data.item[item].category;
 						info.menuIndex = item;
+						info.pageBottom = this.data.item[item].pageBottom;
+						info.pageCategory = this.data.item[item].category;
 						info.pageExist = true;
-						info.pageID = this.data.item[item].id;
+						info.pageID = this.data.item[item].id as int;
+						info.pagePosition = this.data.item[item].position as int;
 						info.pageTitle = this.data.item[item].title;
+						info.pageTop = this.data.item[item].pageTop;
 						info.pageType = this.data.item[item].type;
 						info.pageURL = this.data.item[item].URL;
+						info.pageVisible = this.data.item[item].visible as Boolean;
 						
 						return info;
 					} else {
@@ -282,14 +286,18 @@
 					}
 					
 				//Return data about the menu item
-					if (item >= 0) {
-						info.category = this.data.item[item].category;
+					if (item >= 0) {						
 						info.menuIndex = item;
+						info.pageBottom = this.data.item[item].pageBottom;
+						info.pageCategory = this.data.item[item].category;
 						info.pageExist = true;
-						info.pageID = this.data.item[item].id;
+						info.pageID = this.data.item[item].id as int;
+						info.pagePosition = this.data.item[item].position as int;
 						info.pageTitle = this.data.item[item].title;
+						info.pageTop = this.data.item[item].pageTop;
 						info.pageType = this.data.item[item].type;
 						info.pageURL = this.data.item[item].URL;
+						info.pageVisible = this.data.item[item].visible as Boolean;
 						
 						return info;
 					} else {
@@ -311,14 +319,18 @@
 			//wanted
 				this.userSelected = true;
 				
-			//Collect the event data
+			//Collect the event data				
 				var event:MenuEvent = new MenuEvent("menuItemClicked");
-				event.category = this.data.item[list.selectedIndex].category;
 				event.menuIndex = list.selectedIndex;
-				event.pageID = this.data.item[list.selectedIndex].id;
+				event.pageBottom = this.data.item[list.selectedIndex].pageBottom;
+				event.pageCategory = this.data.item[list.selectedIndex].category;
+				event.pageID = this.data.item[list.selectedIndex].id as int;
+				event.pagePosition = this.data.item[list.selectedIndex].position as int;
 				event.pageTitle = this.data.item[list.selectedIndex].title;
+				event.pageTop = this.data.item[list.selectedIndex].pageTop;
 				event.pageType = this.data.item[list.selectedIndex].type;
 				event.pageURL = this.data.item[list.selectedIndex].URL;
+				event.pageVisible = this.data.item[list.selectedIndex].visible as Boolean;
 				
 			//Dispatch the event
 				super.dispatchEvent(event);

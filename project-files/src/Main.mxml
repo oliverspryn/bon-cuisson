@@ -85,6 +85,8 @@
 						case "home" : 
 							this.pageObject = new Home();
 							this.pageObject.alpha = 0;
+							this.pageObject.pageBottom = pageData.pageBottom;
+							this.pageObject.pageTop = pageData.pageTop;
 							this.pageObject.y = 80;
 							this.pageObject.load("system/server/services/home.php");
 							this.pageObject.addEventListener("loadComplete", transitionPages);
@@ -94,8 +96,10 @@
 						case "menu" : 
 							this.pageObject = new FoodMenu();
 							this.pageObject.alpha = 0;
+							this.pageObject.pageBottom = pageData.pageBottom;
+							this.pageObject.pageTop = pageData.pageTop;
 							this.pageObject.y = 80;
-							this.pageObject.load("system/server/services/food-menu.php?type=" + pageData.category);
+							this.pageObject.load("system/server/services/food-menu.php?type=" + pageData.pageCategory);
 							this.pageObject.addEventListener("loadComplete", transitionPages);
 							this.addElement(this.pageObject);
 							break;
@@ -103,6 +107,8 @@
 						case "entrees" : 
 							this.pageObject = new Entrees();
 							this.pageObject.alpha = 0;
+							this.pageObject.pageBottom = pageData.pageBottom;
+							this.pageObject.pageTop = pageData.pageTop;
 							this.pageObject.y = 80;
 							this.pageObject.load("system/server/services/entrees.php");
 							this.pageObject.addEventListener("loadComplete", transitionPages);
@@ -112,6 +118,8 @@
 						case "reviews" : 
 							this.pageObject = new Reviews();
 							this.pageObject.alpha = 0;
+							this.pageObject.pageBottom = pageData.pageBottom;
+							this.pageObject.pageTop = pageData.pageTop;
 							this.pageObject.y = 80;
 							this.pageObject.load("system/server/services/reviews.php");
 							this.pageObject.addEventListener("loadComplete", transitionPages);
@@ -122,6 +130,8 @@
 							this.pageObject = new NotFound();
 							this.pageObject.addEventListener("goHome", NotFoundGoHomeHandler);
 							this.pageObject.alpha = 0;
+							this.pageObject.pageBottom = pageData.pageBottom;
+							this.pageObject.pageTop = pageData.pageTop;
 							this.pageObject.y = 80;
 							this.addElement(this.pageObject);
 							this.transitionPages(new NetworkEvent("loadComplete")); //Fake fire ;)
@@ -131,6 +141,8 @@
 					this.pageObject = new NotFound();
 					this.pageObject.addEventListener("goHome", NotFoundGoHomeHandler);
 					this.pageObject.alpha = 0;
+					this.pageObject.pageBottom = pageData.pageBottom;
+					this.pageObject.pageTop = pageData.pageTop;
 					this.pageObject.y = 80;
 					this.addElement(this.pageObject);
 					this.transitionPages(new NetworkEvent("loadComplete")); //Fake fire ;)

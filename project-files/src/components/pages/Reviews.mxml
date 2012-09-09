@@ -78,10 +78,19 @@
 		]]>
 	</fx:Script>
 	
-<!-- Include the required style sheet -->
+<!-- Include the required style sheets -->
+	<fx:Style source="../../assets/styles/pages/GeneralStyles.css"/>
 	<fx:Style source="../../assets/styles/pages/ReviewStyles.css"/>
 	
-	<s:VGroup gap="55" id="container" left="{width * 0.1}" width="90%">
+	<utils:layout>
+		<s:VerticalLayout />
+	</utils:layout>
+	
+<!-- Display the header text -->
+	<s:RichText paddingLeft="{width * 0.1}" styleName="header" text="{pageTop}" textAlign="center" width="90%"/>
+	<s:Spacer height="1" id="headerSpacer" width="1"/>
+	
+	<s:VGroup gap="55" id="container" paddingLeft="{width * 0.1}" width="90%">
 	<!-- Display a notification that no reviews are present, if none are present -->
 		<s:Group id="empty" width="100%">
 			<s:HGroup gap="40" horizontalCenter="0" verticalAlign="middle" width="600">
@@ -104,4 +113,8 @@
 			<reviews:ReviewForm id="form" reviewProcessed="processedHandler(event)" width="90%"/>
 		</s:VGroup>
 	</s:VGroup>
+	
+<!-- Display the footer text -->
+	<s:Spacer height="1" id="footerSpacer" width="1"/>
+	<s:RichText id="footerText" paddingLeft="{width * 0.1}" styleName="footer" text="{pageBottom}" textAlign="center" width="90%"/>
 </utils:ModuleBase>

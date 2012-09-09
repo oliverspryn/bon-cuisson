@@ -37,10 +37,10 @@
 	require_once("system/server/third-party/Mobile_Detect.php");
 	$detect = new Mobile_Detect();
 	
-	if ($detect->isMobile() && !$detect->isTablet()) {
+	//if ($detect->isMobile() && !$detect->isTablet()) {
 		require_once("mobile/index.php");
 		exit;
-	}
+	//}
 ?>
 <!DOCTYPE html>
 <html lang="en-US"> 
@@ -50,7 +50,7 @@
 <link rel="shortcut icon" href="<?php echo ROOT; ?>system/images/favicon.ico" />
 <link rel="apple-touch-icon" href="<?php echo ROOT; ?>system/images/mobile-app/favicon-57.jpg" />
 <link rel="apple-touch-icon" sizes="72×72" href="<?php echo ROOT; ?>system/images/mobile-app/favicon-72.jpg" />
-<link rel="apple-touch-icon" sizes="114×114" href="<?php echo ROOT; ?>system/images/mobile-app/favicon-114.jpg" )" />
+<link rel="apple-touch-icon" sizes="114×114" href="<?php echo ROOT; ?>system/images/mobile-app/favicon-114.jpg" />
 
 <link href="<?php echo ROOT; ?>system/stylesheets/desktop.min.css" rel="stylesheet" />
 <?php
