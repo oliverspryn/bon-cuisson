@@ -37,10 +37,10 @@
 	require_once("system/server/third-party/Mobile_Detect.php");
 	$detect = new Mobile_Detect();
 	
-	//if ($detect->isMobile() && !$detect->isTablet()) {
+	if ($detect->isMobile() && !$detect->isTablet()) {
 		require_once("mobile/index.php");
 		exit;
-	//}
+	}
 ?>
 <!DOCTYPE html>
 <html lang="en-US"> 
@@ -60,6 +60,7 @@
 ";
 	}
 ?>
+<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js"></script>
 <script src="<?php echo ROOT; ?>system/javascripts/desktop-superpackage.min.js"></script>
