@@ -2,30 +2,48 @@
 <s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		 xmlns:s="library://ns.adobe.com/flex/spark" 
 		 xmlns:mx="library://ns.adobe.com/flex/mx"
-		 creationComplete="configure(event)">
+		 creationComplete="load(event)">
 	<fx:Script>
 		<![CDATA[
 			import flash.net.navigateToURL;
 			
-			import mx.core.FlexGlobals;
+			import mx.controls.Alert;
 			import mx.events.FlexEvent;
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
 			
-		//Use the configuration class to set the values for each of the elements
-			private function configure(e:FlexEvent):void {
-				var main:Main = Main(FlexGlobals.topLevelApplication);
+		//Load the data from the server
+			private function load(e:FlexEvent):void {
+				this.contactResponder.token = this.contactLoader.send();
+			}
+			
+		//Set the values for each of the elements
+			private function dataResultHandler(e:ResultEvent):void {
+				var data:Object = e.result.root.item;
 				
-				address.text = main.config.address;
-				phone.text = "Tele: " + main.config.phone;
-				email.text = main.config.email;
+				address.text = data.address;
+				phone.text = "Tele: " + data.phone;
+				email.text = data.email;
+			}
+			
+		//Handle data loading errors
+			private function dataFaultHandler(e:FaultEvent):void {
+				Alert.show("Data for the Contact module could not be fetched.\n\nFault code: " +
+					e.fault.faultCode + "\nFault details: " + e.fault.faultDetail, e.fault.faultString);
 			}
 			
 		//Open the user's email
 			private function sendEmail(e:MouseEvent):void {
 				var loader:URLRequest = new URLRequest("mailto:" + e.currentTarget.text);
 				navigateToURL(loader, "_blank");
-			}
+			}			
 		]]>
 	</fx:Script>
+	
+	<fx:Declarations>
+		<s:CallResponder fault="dataFaultHandler(event)" id="contactResponder" result="dataResultHandler(event)"/>
+		<s:HTTPService id="contactLoader" url="system/server/services/contact.php"/>
+	</fx:Declarations>
 	
 <!-- Include the required stylesheet -->
 	<fx:Style source="../../assets/styles/header/ContactStyles.css"/>

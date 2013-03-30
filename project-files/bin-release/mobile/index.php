@@ -19,10 +19,10 @@
 
 <link href="<?php echo ROOT; ?>system/stylesheets/mobile.min.css" rel="stylesheet" />
 <link rel="stylesheet" href="<?php echo ROOT; ?>system/stylesheets/bc-swatch-mobile.min.css" />
-<link rel="stylesheet" href="http://code.jquery.com/mobile/1.1.1/jquery.mobile.structure-1.1.1.min.css" />
+<link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.0/jquery.mobile.structure-1.3.0.min.css" />
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
 <script src="<?php echo ROOT; ?>system/javascripts/mobile-superpackage.min.js"></script>
-<script src="http://code.jquery.com/mobile/1.1.1/jquery.mobile-1.1.1.min.js"></script>
+<script src="http://code.jquery.com/mobile/1.3.0/jquery.mobile-1.3.0.min.js"></script>
 </head>
 
 <body>

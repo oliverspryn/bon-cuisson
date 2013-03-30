@@ -10,7 +10,7 @@
 	mysql_select_db($databaseName, $db);
 	
 //Define the root information for the site
-	define('ROOT', 'http://' . $_SERVER['HTTP_HOST'] . '/Bon%20Cuisson/project-files/bin-debug/');
+	define('ROOT', 'http://' . $_SERVER['HTTP_HOST'] . '/Bon-Cuisson/project-files/bin-debug/');
 	
 //Set the timezone of this application
 	date_default_timezone_set("America/New_York");
